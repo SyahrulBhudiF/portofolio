@@ -1,0 +1,38 @@
+---
+import AboutMotion from '../AboutMotion';
+import TechStack from '../TechStack.astro';
+
+const techStack = [
+    "Laravel",
+    "Golang",
+    "NextJS",
+    "SvelteKit",
+    "Astro",
+    "React",
+    "Javascript",
+    "Typescript",
+    "Bun",
+    "PHP",
+    "Java",
+    "Python",
+    "TailwindCSS",
+    "bootstrap",
+    "Prisma",
+    "MySQL",
+    "PostgreSQL",
+    "Redis",
+    "Docker"
+];
+---
+<section
+        class="w-full h-screen bg-gradient-to-b from-black via-gray-800 to-gray-950 px-16 flex justify-center"
+        id="about"
+>
+    <AboutMotion client:load>
+        {
+            techStack.map((tech: string) => (
+                    <TechStack tech={tech} size="medium"/>
+            ))
+        }
+    </AboutMotion>
+</section>
