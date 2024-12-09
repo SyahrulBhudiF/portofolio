@@ -3,7 +3,7 @@ import {motion} from "motion/react"
 
 const AboutMotion = ({children}: { children: ReactNode }) => {
     return (
-        <div className="w-full flex flex-col items-center justify-center gap-16 text-white">
+        <div className="w-full flex flex-col items-center justify-center gap-16 text-white z-10">
             <motion.div className="flex flex-col w-3/4 items-center gap-4"
                         initial={{opacity: 0, y: 50}}
                         whileInView={{
@@ -16,13 +16,13 @@ const AboutMotion = ({children}: { children: ReactNode }) => {
                         }}
                         viewport={{once: true, amount: 0.2}}
             >
-                <div className="text-6xl font-bold text-retro">About Me</div>
-                <div className="text-lg  text-center">
+                <div className="text-6xl font-bold text-retro self-start">About Me</div>
+                <div className="text-lg">
                     As an Informatics Engineering student at Politeknik Negeri Malang, I am passionate about advancing
                     my career in Full-Stack Development. With a strong foundation in both frontend and backend
                     technologies, I have hands-on experience with JavaScript frameworks like Next.js and SvelteKit,
                     using
-                    TypeScript, as well as backend development with Laravel and Golang. <br/> I am a quick learner, able
+                    TypeScript, as well as backend development with Laravel and Golang. <br/><br/> I am a quick learner, able
                     to
                     adapt
                     to complex projects and deliver innovative solutions. Committed to continuous growth, I am eager to

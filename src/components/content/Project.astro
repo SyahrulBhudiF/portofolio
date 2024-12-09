@@ -1,0 +1,33 @@
+---
+import CloudParallax from '@/components/CloudParallax'
+import ProjectSlider from '@/components/ProjectSlider'
+import {getCollection} from "astro:content";
+import type {Project} from "@/model/projects";
+import ProjectCard from "@/components/ProjectCard";
+import React from "react";
+
+const personalProjects = await getCollection("projects");
+const sortedPersonalProjects = personalProjects.sort(
+    (a: Project, b: Project) => (a.data.date > b.data.date ? -1 : 1)
+);
+---
+<section
+        class="text-white bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 w-full h-fit flex justify-center relative p-16"
+        id="projects">
+    <CloudParallax client:load/>
+    <div class="flex flex-col gap-10 z-10 items-center w-full">
+        <p class="text-retro text-6xl">Projects</p>
+        {
+            sortedPersonalProjects.map(
+                (project: Project, index: number) => (
+                        <ProjectCard
+                                project={project.data}
+                                href={`assets/projects/${project.slug}/cover.webp`}
+                                isReverse={index % 2 === 0}
+                                client:load
+                        />
+                )
+            )
+        }
+    </div>
+</section>

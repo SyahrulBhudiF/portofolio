@@ -46,7 +46,7 @@ const ParticlesHome: React.FC = () => {
                 },
                 move: {
                     enable: true,
-                    speed: 0.7,
+                    speed: 0.2,
                     direction: MoveDirection.none,
                     outModes: {
                         default: OutMode.bounce,
@@ -80,7 +80,7 @@ const ParticlesHome: React.FC = () => {
                 id="tsparticles"
                 particlesLoaded={particlesLoaded}
                 options={options}
-                className="-z-10 overflow-hidden"
+                className="-z-10 overflow-hidden absolute"
             />
         );
     }

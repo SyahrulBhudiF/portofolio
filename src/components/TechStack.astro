@@ -30,51 +30,6 @@ const {tech, size, isLazy = true} = Astro.props;
 </div>
 
 <style>
-    .retro-tech-block {
-        transition: all 0.3s ease;
-        box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.1),
-        8px 8px 0 rgba(255, 255, 255, 0.05),
-        12px 12px 0 rgba(255, 255, 255, 0.025);
-        border-color: rgba(255, 255, 255, 0.1);
-        perspective: 500px;
-    }
-
-    .retro-tech-block::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.05) 0%,
-                rgba(255, 255, 255, 0.025) 100%
-        );
-        mix-blend-mode: overlay;
-        z-index: 1;
-        pointer-events: none;
-    }
-
-    .retro-tech-block:hover {
-        position: relative;
-        z-index: 50;
-        transform: translateY(-15px) rotateX(5deg) scale(1.05);
-        box-shadow: 6px 6px 0 rgba(255, 255, 255, 0.15),
-        12px 12px 0 rgba(255, 255, 255, 0.1),
-        18px 18px 0 rgba(255, 255, 255, 0.05);
-        background-color: rgba(156, 81, 224, 0.3);
-    }
-
-    .retro-tech-block:hover p {
-        color: white;
-    }
-
-    .retro-block-inner {
-        position: relative;
-        z-index: 2;
-    }
-
     .small {
         font-size: 0.875rem;
     }
