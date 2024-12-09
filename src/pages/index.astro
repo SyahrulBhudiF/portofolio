@@ -4,11 +4,15 @@ import Home from "../components/content/Home.astro";
 import About from "../components/content/About.astro";
 import Project from '@/components/content/Project.astro';
 import Experience from "../components/content/Experience.astro";
+import SplashScreen from "../components/SplashScreen";
 ---
 
-<Layout>
-    <Home/>
-    <About/>
-    <Project client:visible/>
-    <Experience client:visible/>
-</Layout>
+<div>
+    <SplashScreen client:load/>
+    <Layout>
+        <Home/>
+        <About/>
+        <Project client:visible/>
+        <Experience client:visible/>
+    </Layout>
+</div>
