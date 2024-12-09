@@ -3,10 +3,12 @@ import Layout from '../layouts/Layout.astro';
 import Home from "../components/content/Home.astro";
 import About from "../components/content/About.astro";
 import Project from '@/components/content/Project.astro';
+import Experience from "../components/content/Experience.astro";
 ---
 
 <Layout>
     <Home/>
     <About/>
-    <Project/>
+    <Project client:visible/>
+    <Experience client:visible/>
 </Layout>

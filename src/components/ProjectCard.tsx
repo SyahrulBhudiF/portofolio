@@ -19,10 +19,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
             initial={{x: isReverse ? "10vw" : "-10vw", opacity: 0}}
             animate={inView ? {x: 0, opacity: 1} : {}}
             transition={{type: "spring", stiffness: 40, damping: 30, duration: 0.8, delay: 0.1}}
-            className="flex items-center justify-center w-3/4">
-            <div className={cn("flex gap-4", isReverse ? "flex-row-reverse" : "flex-row")}>
+            className="flex items-center justify-center w-3/4 mt-10 max-md:mt-0">
+            <div
+                className={cn("flex gap-4", isReverse ? "flex-row-reverse max-lg:flex-col" : "flex-row max-lg:flex-col-reverse")}>
                 <div className="w-full flex flex-col gap-4">
-                    <img src={href} alt="cover" className="rounded-lg shadow-xl"/>
+                    <img src={href} alt="cover" className="rounded-lg shadow-xl" loading="eager"/>
                     <div className="flex flex-wrap gap-4">
                         {project.stack.map((stack, index) => (
                             <div
@@ -54,13 +55,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                     <p className="font-semibold text-3xl text-gray-100">{project.title}</p>
                     <p className="text-xl text-purple-300">{project.type}</p>
                     <p className="text-base text-gray-300 mt-4 leading-relaxed">{project.description}</p>
-                    <div className="flex gap-4 mt-4">
+                    <div className="flex gap-4 mt-4 max-sm:flex-col">
                         {project.sourceClient && (
                             <a
                                 href={project.sourceClient}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 bg-transparent text-white px-4 py-2 hover:scale-105 rounded-lg transition-all duration-300 border-2 border-purple-800 hover:border-2  bg-opacity-60"
+                                className="flex items-center w-fit gap-2 bg-transparent text-white px-4 py-2 hover:scale-105 rounded-lg transition-all duration-300 border-2 border-purple-800 hover:border-2  bg-opacity-60"
                             >
                                 <img
                                     src="/assets/icon/github.svg"
@@ -77,7 +78,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                                 href={project.sourceServer}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 bg-transparent text-white px-4 py-2 hover:scale-105 rounded-lg transition-all duration-300 border-2 border-purple-800 hover:border-2 bg-opacity-60"
+                                className="flex items-center w-fit gap-2 bg-transparent text-white px-4 py-2 hover:scale-105 rounded-lg transition-all duration-300 border-2 border-purple-800 hover:border-2 bg-opacity-60"
                             >
                                 <img
                                     src="/assets/icon/github.svg"
@@ -94,7 +95,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                                 href={project.sourceModel}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 bg-transparent text-white px-4 py-2 hover:scale-105 rounded-lg transition-all duration-300 border-2 border-purple-800 hover:border-2 bg-opacity-60"
+                                className="flex items-center w-fit gap-2 bg-transparent text-white px-4 py-2 hover:scale-105 rounded-lg transition-all duration-300 border-2 border-purple-800 hover:border-2 bg-opacity-60"
                             >
                                 <img
                                     src="/assets/icon/github.svg"

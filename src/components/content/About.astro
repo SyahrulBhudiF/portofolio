@@ -2,7 +2,6 @@
 import AboutMotion from '../AboutMotion';
 import TechStack from '../TechStack.astro';
 import StarBackground from '../StarBackground';
-import MountainSVG from '../MountainSVG';
 
 const techStack = [
     "Laravel",
@@ -27,7 +26,7 @@ const techStack = [
 ];
 ---
 <section
-        class="w-full h-screen bg-gradient-to-b from-black via-gray-950 to-gray-900 px-16 flex justify-center relative overflow-hidden"
+        class="w-full h-screen max-lg:h-fit bg-gradient-to-b from-black via-gray-950 to-gray-900 px-16 max-sm:px-8 flex justify-center relative overflow-hidden"
         id="about"
 >
     <StarBackground client:load/>

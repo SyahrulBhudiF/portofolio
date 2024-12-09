@@ -14,7 +14,7 @@ const MountainSVG: React.FC = () => {
     const y3 = useTransform(scrollYProgress, [0, 1], [0, 150]);
 
     return (
-        <div className="absolute bottom-0 w-full h-full overflow-hidden" ref={ref}>
+        <div className="absolute bottom-0 w-full h-full overflow-hidden z-0" ref={ref}>
             <motion.svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 1440 320"
@@ -28,8 +28,8 @@ const MountainSVG: React.FC = () => {
                 />
                 <defs>
                     <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#111827" />
-                        <stop offset="100%" stopColor="#1F2937" />
+                        <stop offset="0%" stopColor="#111827"/>
+                        <stop offset="100%" stopColor="#1F2937"/>
                     </linearGradient>
                 </defs>
             </motion.svg>
@@ -47,8 +47,8 @@ const MountainSVG: React.FC = () => {
                 />
                 <defs>
                     <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#1F2937" />
-                        <stop offset="100%" stopColor="#111827" />
+                        <stop offset="0%" stopColor="#1F2937"/>
+                        <stop offset="100%" stopColor="#111827"/>
                     </linearGradient>
                 </defs>
             </motion.svg>
@@ -66,8 +66,8 @@ const MountainSVG: React.FC = () => {
                 />
                 <defs>
                     <linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#1F2937" />
-                        <stop offset="100%" stopColor="#000000" />
+                        <stop offset="0%" stopColor="#1F2937"/>
+                        <stop offset="100%" stopColor="#000000"/>
                     </linearGradient>
                 </defs>
             </motion.svg>

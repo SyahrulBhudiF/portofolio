@@ -16,8 +16,8 @@ const AboutMotion = ({children}: { children: ReactNode }) => {
                         }}
                         viewport={{once: true, amount: 0.2}}
             >
-                <div className="text-6xl font-bold text-retro self-start">About Me</div>
-                <div className="text-lg">
+                <div className="text-6xl font-bold text-retro self-start max-sm:text-4xl">About Me</div>
+                <div className="text-lg max-sm:text-base">
                     As an Informatics Engineering student at Politeknik Negeri Malang, I am passionate about advancing
                     my career in Full-Stack Development. With a strong foundation in both frontend and backend
                     technologies, I have hands-on experience with JavaScript frameworks like Next.js and SvelteKit,
@@ -44,7 +44,7 @@ const AboutMotion = ({children}: { children: ReactNode }) => {
                         }}
                         viewport={{once: true, amount: 0.2}}
             >
-                <div className="text-6xl font-bold text-retro">Tech Stack</div>
+                <div className="text-6xl font-bold text-retro max-sm:text-4xl">Tech Stack</div>
                 <div className="flex gap-4 flex-wrap justify-center">
                     {children}
                 </div>

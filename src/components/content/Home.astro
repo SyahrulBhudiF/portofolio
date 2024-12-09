@@ -2,23 +2,28 @@
 import SliderHome from '../SliderHome';
 import rinGif from '@/assets/rin.gif';
 import ParticlesHome from '../ParticlesHome';
-import { Image } from 'astro:assets';
+import {Image} from 'astro:assets';
+import Contact from "../Contact";
 ---
 
 <section class="w-full h-screen overflow-hidden relative overflow-hidden" id="home">
     <ParticlesHome client:load/>
-    <div class="flex justify-center h-full items-center p-16 z-10">
-        <div class="w-1/2">
-            <h1 class="text-6xl font-bold text-white">Hello, I'm <span
-                    class="text-[#CDA6ED]"><span class="text-retro"><</span>Syahrul<span
-                    class="text-retro">/></span><br> Bhudi Ferdiansyah</span></h1>
-            <div class="text-3xl text-white flex gap-3 items-center">
+    <div class="flex justify-center h-full items-center p-16 z-10 max-md:flex-col-reverse max-md:gap-4 max-lg:gap-10 max-md:p-8">
+        <div class="2xl:w-1/2 max-2xl:w-full max-xl:w-1/2 max-md:w-full">
+            <h1 class="text-6xl font-bold text-white max-sm:text-4xl">Hello, I'm <span
+                    class="text-[#CDA6ED]">
+                <span class="text-retro"><</span>Syahrul<span
+                    class="text-retro">/></span>
+                <br class="max-md:hidden"> Bhudi Ferdiansyah</span>
+            </h1>
+            <div class="text-3xl text-white flex gap-3 items-center max-sm:text-lg">
                 <p class="whitespace-nowrap">I'm a</p>
                 <SliderHome client:load/>
+
             </div>
         </div>
-        <div class="rounded border-purple-800 border-2 p-2 shadow-lg shadow-purple-900">
-            <Image src={rinGif} alt="Rin Gif" class="rounded" loading="eager"/>
+        <div class="rounded border-purple-800 border-2 p-2 shadow-lg shadow-purple-900 max-2xl:w-full">
+            <Image src={rinGif} alt="Rin Gif" class="rounded max-2xl:w-full" loading="eager" fetchpriority={"high"}/>
         </div>
     </div>
 </section>
