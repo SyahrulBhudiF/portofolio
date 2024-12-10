@@ -10,7 +10,7 @@ const SliderHome = () => {
                     Web Developer
                 </CarouselItem>
                 <CarouselItem className="text-white font-bold text-3xl max-sm:text-xl w-fit text-carousel">
-                    Full Stack Developer
+                    Full-Stack Developer
                 </CarouselItem>
                 <CarouselItem className="text-white font-bold text-3xl max-sm:text-xl w-fit text-carousel">
                     Frontend Developer

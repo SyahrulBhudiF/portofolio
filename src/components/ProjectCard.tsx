@@ -55,7 +55,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                     <p className="font-semibold text-3xl text-gray-100">{project.title}</p>
                     <p className="text-xl text-purple-300">{project.type}</p>
                     <p className="text-base text-gray-300 mt-4 leading-relaxed">{project.description}</p>
-                    <div className="flex gap-4 mt-4 max-sm:flex-col">
+                    <div className="grid grid-cols-2 gap-4 w-fit mt-4 max-sm:grid-cols-1">
                         {project.sourceClient && (
                             <a
                                 href={project.sourceClient}

@@ -39,7 +39,7 @@ const AboutMotion = ({children}: { children: ReactNode }) => {
                             transition: {
                                 duration: 0.8,
                                 ease: "easeOut",
-                                delay: 0.5
+                                delay: 0.3
                             }
                         }}
                         viewport={{once: true, amount: 0.2}}
