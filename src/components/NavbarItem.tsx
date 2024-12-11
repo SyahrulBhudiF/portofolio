@@ -35,9 +35,9 @@ export default function NavbarItem({href, label}: Props) {
     }, [sectionId]);
 
     return (
-        <li onClick={() => document.getElementById(sectionId)?.click()}>
+        <li onClick={() => document.getElementById(sectionId + "1")?.click()}>
             <a
-                id={sectionId}
+                id={sectionId + "1"}
                 href={href}
                 className={`px-4 py-2 rounded hover:border-b-2 max-sm:text-xs max-sm:px-2 hover:border-purple-950 transition duration-500 ease-in-out ${
                     isActive ? 'border-b-2 border-purple-950' : 'border-b-black'
