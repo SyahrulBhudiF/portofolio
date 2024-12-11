@@ -17,7 +17,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
         <motion.div
             ref={ref}
             initial={{translateX: isReverse ? 50 : -50, opacity: 0}}
-            animate={inView ? {x: 0, opacity: 1} : {}}
+            animate={inView ? {translateX: 0, opacity: 1} : {}}
             transition={{type: "spring", stiffness: 40, damping: 30, duration: 0.8, delay: 0.1}}
             className="flex items-center justify-center w-3/4 max-md:w-full max-md:p-4 mt-10 max-md:mt-0">
             <div
