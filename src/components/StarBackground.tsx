@@ -24,7 +24,7 @@ const StarBackground: React.FC = () => {
             }));
         };
 
-        setStars(generateStars(150));
+        setStars(generateStars(100));
     }, []);
 
     return (
@@ -38,6 +38,7 @@ const StarBackground: React.FC = () => {
                     key={index}
                     className="absolute bg-white rounded-full"
                     style={{
+                        willChange: "transform, opacity",
                         width: `${star.size}px`,
                         height: `${star.size}px`,
                         left: `${star.x}%`,
@@ -50,7 +51,7 @@ const StarBackground: React.FC = () => {
                         opacity: [star.opacity, star.opacity * 0.5, star.opacity]
                     }}
                     transition={{
-                        duration: Math.random() * 2 + 1,
+                        duration: Math.random() * 2 + 2,
                         repeat: Infinity,
                         repeatType: 'loop',
                         delay: Math.random()

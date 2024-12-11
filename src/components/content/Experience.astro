@@ -10,19 +10,19 @@ const experienceDetails = {
     description: `Developed a comprehensive web platform to streamline the registration, management, and administration
                 of training sessions and seminars for healthcare professionals at RSUD Prambanan, Yogyakarta. This
                 platform improves operational efficiency, simplifies participant management, and supports seamless
-                administration for the hospital’s professional development initiatives.`,
+                administration for the hospitals professional development initiatives.`,
     technologies: ['Laravel', 'InertiaJS', 'React', 'TypeScript', 'TailwindCSS', 'MySQL'],
 };
 ---
 
 <section
-        class="text-white bg-gradient-to-b from-gray-700 to-gray-600 w-full h-screen max-lg:h-fit max-lg:pb-24 flex flex-col items-center justify-between relative px-16 pb-20 max-sm:px-8"
+        class="text-white bg-gradient-to-b from-gray-700 to-gray-600 w-full h-screen max-xl:h-fit max-lg:pb-24 flex flex-col items-center justify-between relative px-16 pb-20 max-md:px-4"
         id="experience">
-    <div class="w-1/2 z-20 mt-10">
+    <div class="w-full 2xl:w-3/4 z-20 mt-10">
         <h2 class="text-retro text-6xl text-center max-sm:text-4xl">Experience</h2>
         <div class="flex justify-between gap-4 mt-6">
             <article class="flex flex-col items-start w-full gap-1">
-                <div class="flex gap-2 items-center max-md:flex-col max-md:items-start">
+                <div class="flex gap-2 items-center max-lg:flex-col max-lg:items-start">
                     <p class="font-medium text-xl">{experienceDetails.company}</p>
                     <div class="px-3 py-1 rounded-lg border bg-white text-black text-sm opacity-65">Remote</div>
                     <div class="px-3 py-1 rounded-lg border bg-white text-black text-sm opacity-65">Freelance</div>
@@ -31,7 +31,7 @@ const experienceDetails = {
                 <p class="font-medium text-sm text-white text-opacity-50">{experienceDetails.duration}</p>
                 <p class="font-medium text-sm text-white text-opacity-50">{experienceDetails.location}</p>
                 <p class="font-medium text-sm mt-2 text-white">{experienceDetails.description}</p>
-                <div class="flex gap-2 items-center max-md:grid max-md:grid-cols-2 max-sm:grid-cols-1">
+                <div class="flex gap-2 items-center flex-wrap">
                     {experienceDetails.technologies.map((tech) => (
                             <div class="px-3 py-1 max-sm:px-1 max-sm:text-sm rounded-lg border border-dashed text-sm opacity-65 w-fit">{tech}</div>
                     ))}

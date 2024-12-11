@@ -18,7 +18,7 @@ export default function NavbarItem({href, label}: Props) {
 
         const observer = new IntersectionObserver(
             ([entry]) => {
-                    setIsActive(entry.isIntersecting);
+                setIsActive(entry.isIntersecting);
             },
             {
                 threshold: [0.2, 0.5, 0.8],
@@ -35,11 +35,12 @@ export default function NavbarItem({href, label}: Props) {
     }, [sectionId]);
 
     return (
-        <li>
+        <li onClick={() => document.getElementById(sectionId)?.click()}>
             <a
+                id={sectionId}
                 href={href}
                 className={`px-4 py-2 rounded hover:border-b-2 max-sm:text-xs max-sm:px-2 hover:border-purple-950 transition duration-500 ease-in-out ${
-                    isActive ? 'border-b-2 border-purple-950' :'border-b-black'
+                    isActive ? 'border-b-2 border-purple-950' : 'border-b-black'
                 }`}
             >
                 {label}

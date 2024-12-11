@@ -19,9 +19,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
             initial={{x: isReverse ? "10vw" : "-10vw", opacity: 0}}
             animate={inView ? {x: 0, opacity: 1} : {}}
             transition={{type: "spring", stiffness: 40, damping: 30, duration: 0.8, delay: 0.1}}
-            className="flex items-center justify-center w-3/4 mt-10 max-md:mt-0">
+            className="flex items-center justify-center w-3/4 max-md:w-full max-md:p-4 mt-10 max-md:mt-0">
             <div
-                className={cn("flex gap-4", isReverse ? "flex-row-reverse max-lg:flex-col" : "flex-row max-lg:flex-col-reverse")}>
+                className={cn("flex gap-4 max-lg:flex-col-reverse", isReverse ? "flex-row-reverse" : "flex-row")}>
                 <div className="w-full flex flex-col gap-4">
                     <img src={href} alt="cover" className="rounded-lg shadow-xl" loading="eager"/>
                     <div className="flex flex-wrap gap-4">

@@ -51,7 +51,7 @@ const SplashScreen = () => {
         <AnimatePresence>
             {showSplash && (
                 <motion.div
-                    className="splash-screen flex justify-center items-center w-full h-screen bg-black z-20 inset-0 fixed"
+                    className="splash-screen flex justify-center items-center w-full h-full bg-black z-40 inset-0 fixed"
                     initial={{opacity: 1}}
                     exit={{opacity: 0, transition: {duration: 1.5}}}
                 >
