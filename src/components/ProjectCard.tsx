@@ -13,10 +13,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
     const ref = useRef(null);
     const inView = useInView(ref, {amount: 0.2, once: true});
 
+    const variants = {
+        hidden: (isReverse: boolean) => ({
+            x: isReverse ? "10vw" : "-10vw",
+            opacity: 0,
+        }),
+        visible: {
+            x: 0,
+            opacity: 1,
+        },
+    };
+
     return (
         <motion.div
             ref={ref}
-            initial={{x: isReverse ? "10vw" : "-10vw", opacity: 0}}
+            custom={isReverse}
+            variants={variants}
             animate={inView ? {x: 0, opacity: 1} : {}}
             transition={{type: "spring", stiffness: 40, damping: 30, duration: 0.8, delay: 0.1}}
             className="flex items-center justify-center w-3/4 max-md:w-full max-md:p-4 mt-10 max-md:mt-0">
