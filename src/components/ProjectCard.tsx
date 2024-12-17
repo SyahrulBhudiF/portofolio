@@ -14,7 +14,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
     const inView = useInView(ref, {amount: 0.2, once: true});
 
     return (
-        <div className="w-full flex justify-center overflow-hidden">
+        <div className="w-full flex justify-center">
             <motion.div
                 ref={ref}
                 initial={{translateX: isReverse ? 50 : -50, opacity: 0}}
@@ -55,6 +55,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                     <div className={cn("w-full text-white flex flex-col gap-2")}>
                         <p className="font-semibold text-3xl text-gray-100">{project.title}</p>
                         <p className="text-xl text-purple-300">{project.type}</p>
+                        <p className="text-md text-gray-400 font-semibold">{project.role}</p>
                         <p className="text-base text-gray-300 mt-4 leading-relaxed">{project.description}</p>
                         <div className="grid grid-cols-2 gap-4 w-fit mt-4 max-sm:grid-cols-1">
                             {project.sourceClient && (
