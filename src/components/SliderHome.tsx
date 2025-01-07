@@ -26,5 +26,4 @@ const SliderHome = () => {
     );
 };
 
-// @ts-ignore
 export default SliderHome;
