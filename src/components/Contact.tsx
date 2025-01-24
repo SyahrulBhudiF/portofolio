@@ -4,7 +4,7 @@ import cv from "@/assets/cv.pdf";
 
 const social = [
     {
-        href: "mailto:syahrul@gmail.com",
+        href: "mailto:syahrul4w@gmail.com",
         title: "email",
         ariaLabel: "email",
         icon: Mail,
