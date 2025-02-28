@@ -9,9 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "4.0.7",
-    "@astrojs/react": "4.1.6",
-    "@astrojs/tailwind": "5.1.5",
+    "@astrojs/mdx": "4.1.0",
+    "@astrojs/react": "4.2.1",
+    "@astrojs/tailwind": "6.0.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@react-spring/web": "^9.7.5",
     "@tsparticles/engine": "^3.7.1",
@@ -21,7 +21,7 @@
     "@types/react": "^18.3.14",
     "@types/react-dom": "^18.3.2",
     "@vercel/speed-insights": "^1.1.0",
-    "astro": "5.1.9",
+    "astro": "5.4.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.5.1",

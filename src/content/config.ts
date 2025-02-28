@@ -13,6 +13,11 @@ const projectCollection = defineCollection({
         sourceClient: z.string().url().nullable().default(null),
         sourceServer: z.string().url().nullable().default(null),
         stack: z.array(z.string()),
+        contributors: z.array(z.object({
+            role: z.string(),
+            name: z.string(),
+            link: z.string().url().nullable().default(null),
+        })).optional()
     }),
 });
 
