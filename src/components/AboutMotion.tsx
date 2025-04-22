@@ -31,7 +31,7 @@ const AboutMotion = ({children}: { children: ReactNode }) => {
                 </div>
             </motion.div>
 
-            <motion.div className="flex flex-col max-w-screen-xl items-center gap-4"
+            <motion.div className="flex flex-col max-w-(--breakpoint-xl) items-center gap-4"
                         initial={{opacity: 0, y: 50}}
                         whileInView={{
                             opacity: 1,

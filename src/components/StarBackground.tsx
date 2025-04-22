@@ -30,7 +30,7 @@ const StarBackground: React.FC = () => {
     return (
         <motion.div
             ref={ref}
-            className="absolute inset-0 overflow-hidden z-[0] h-1/2"
+            className="absolute inset-0 overflow-hidden z-0 h-1/2"
             style={{y}}
         >
             {stars.map((star, index) => (
