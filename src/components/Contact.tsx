@@ -34,7 +34,7 @@ const Contact: React.FC = () => {
         <div className="flex flex-col items-center gap-6">
             <a
                 href={social.find(({title}) => title === "cv")?.href}
-                download
+                download="Syahrul_CV.pdf"
                 className="mt-4 px-6 py-2 max-sm:p-3 max-sm:text-sm bg-white opacity-50 text-black rounded-md flex gap-2 items-center transition-transform duration-300 ease-in-out hover:-translate-y-1"
             >
                 Download CV
