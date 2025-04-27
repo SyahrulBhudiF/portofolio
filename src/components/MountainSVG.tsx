@@ -20,7 +20,6 @@ const MountainSVG: React.FC = () => {
                 viewBox="0 0 1440 320"
                 preserveAspectRatio="none"
                 className="absolute bottom-0 w-full"
-                // style={{y: y1}}
             >
                 <path
                     d="M0,64 L360,128 L720,64 L1080,160 L1440,64 V320 H0 Z"

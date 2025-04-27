@@ -128,6 +128,7 @@
 @layer base {
     * {
         @apply border-border;
+        overflow-anchor: none;
     }
 
     body {
@@ -136,7 +137,7 @@
 
     .text-carousel {
         font-family: 'VT323', monospace;
-        text-shadow: 6px 6px 0px #CDA6ED;
+        text-shadow: 4px 4px 0px #CDA6ED;
     }
 
     .text-retro {

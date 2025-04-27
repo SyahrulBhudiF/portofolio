@@ -1,20 +1,17 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface Props {
     href: string;
     label: string;
 }
 
-export default function NavbarItem({href, label}: Props) {
+export default function NavbarItem({ href, label }: Props) {
     const [isActive, setIsActive] = useState(false);
     const sectionId = href.replace("#", "");
 
     useEffect(() => {
         const section = document.getElementById(sectionId);
-        if (!section) {
-            console.warn(`Section with ID "${sectionId}" not found`);
-            return;
-        }
+        if (!section) return;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -35,12 +32,11 @@ export default function NavbarItem({href, label}: Props) {
     }, [sectionId]);
 
     return (
-        <li onClick={() => document.getElementById(sectionId + "1")?.click()}>
+        <li>
             <a
-                id={sectionId + "1"}
                 href={href}
-                className={`px-4 py-2 rounded hover:border-b-2 max-sm:text-xs max-sm:px-2 hover:border-purple-950 transition duration-500 ease-in-out ${
-                    isActive ? 'border-b-2 border-purple-950' : 'border-b-black'
+                className={`block px-4 py-2 rounded hover:border-b-2 max-sm:text-xs max-sm:px-2 hover:border-purple-950 transition duration-500 ease-in-out ${
+                    isActive ? 'border-b-2 border-purple-950' : 'border-b-2 border-transparent'
                 }`}
             >
                 {label}
