@@ -1,32 +1,28 @@
 ---
-import CloudParallax from '@/components/CloudParallax'
+import CloudParallax from '@/components/CloudParallax';
 import {getCollection} from "astro:content";
 import type {Project} from "@/model/projects";
-import ProjectCard from "@/components/ProjectCard";
+import ProjectsContainer from "@/components/ProjectsContainer";
 import React from "react";
 
 const personalProjects = await getCollection("projects");
 const sortedPersonalProjects = personalProjects.sort(
     (a: Project, b: Project) => (a.data.date > b.data.date ? -1 : 1)
 );
+
+const initialProjects = sortedPersonalProjects.slice(0, 3);
+const remainingProjects = sortedPersonalProjects.slice(3);
 ---
 <section
-        class="text-white bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 w-full h-fit flex justify-center relative max-xl:p-16 max-md:p-4"
+        class="text-white bg-linear-to-b from-gray-900 via-gray-800 to-gray-700 w-full h-fit flex justify-center relative max-xl:p-16 max-md:p-4 pb-26"
         id="projects">
     <CloudParallax client:load/>
     <div class="flex flex-col gap-10 max-md:gap-14 z-10 items-center w-full">
         <p class="text-retro text-6xl max-sm:text-5xl">Projects</p>
-        {
-            sortedPersonalProjects.map(
-                (project: Project, index: number) => (
-                        <ProjectCard
-                                project={project.data}
-                                href={`assets/projects/${project.slug}/cover.webp`}
-                                isReverse={index % 2 === 0}
-                                client:load
-                        />
-                )
-            )
-        }
+        <ProjectsContainer
+                initialProjects={initialProjects}
+                remainingProjects={remainingProjects}
+                client:load
+        />
     </div>
 </section>
