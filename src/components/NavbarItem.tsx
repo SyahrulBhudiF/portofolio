@@ -14,12 +14,14 @@ export default function NavbarItem({ href, label }: Props) {
         if (!section) return;
 
         const observer = new IntersectionObserver(
-            ([entry]) => {
-                setIsActive(entry.isIntersecting);
+            (entries) => {
+                entries.forEach(entry => {
+                    setIsActive(entry.isIntersecting);
+                });
             },
             {
-                threshold: [0.2, 0.5, 0.8],
-                rootMargin: "-20% 0px -20% 0px",
+                threshold: 0.1,
+                rootMargin: "-25% 0px -25% 0px",
             }
         );
 

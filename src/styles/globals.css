@@ -8,6 +8,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+.splash-screen {
+  visibility: hidden;
+}
+
 @theme {
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);

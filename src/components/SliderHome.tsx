@@ -4,7 +4,7 @@ import Autoplay from "embla-carousel-autoplay";
 
 const SliderHome = () => {
     return (
-        <Carousel className="w-fit" plugins={[Autoplay({playOnInit: true, delay: 1500})]}>
+        <Carousel className="w-fit pointer-events-none" plugins={[Autoplay({playOnInit: true, delay: 1500})]}>
             <CarouselContent>
                 <CarouselItem className="text-white font-bold text-3xl max-sm:text-xl w-fit text-carousel">
                     Web Developer

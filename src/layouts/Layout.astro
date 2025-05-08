@@ -26,6 +26,14 @@ import logo from '@/assets/logo.svg';
 <slot/>
 <Navbar/>
 <SpeedInsights/>
+<script is:inline>
+    document.addEventListener('DOMContentLoaded', function() {
+        const splashScreen = document.querySelector('.splash-screen');
+        if (splashScreen) {
+            splashScreen.style.visibility = 'visible';
+        }
+    });
+</script>
 </body>
 </html>
 
