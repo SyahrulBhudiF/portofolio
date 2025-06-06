@@ -8,7 +8,6 @@ import cloud4 from '../assets/cloud4.png';
 const CloudParallax = () => {
     const {scrollYProgress} = useScroll();
 
-    // Lintasan parallax yang sangat panjang untuk efek dramatis
     const y1 = useTransform(scrollYProgress, [0, 1], [300, -600]); // total 900px
     const y2 = useTransform(scrollYProgress, [0, 1], [-200, 700]); // total 900px
     const y3 = useTransform(scrollYProgress, [0, 1], [250, -550]); // total 800px
@@ -22,7 +21,7 @@ const CloudParallax = () => {
             position: "left-[1%]",
             top: "top-[20%]",
             y: y1,
-            size: "w-1/12 max-sm:w-1/5 max-lg:w-1/6"
+            size: "w-1/12 max-sm:w-1/8 max-lg:w-1/6"
         },
         {
             id: 'top-right',
@@ -30,7 +29,7 @@ const CloudParallax = () => {
             position: "right-[2%]",
             top: "top-[30%]",
             y: y2,
-            size: "w-1/10 max-sm:w-1/5 max-lg:w-1/6"
+            size: "w-1/10 max-lg:w-1/6"
         },
         {
             id: 'middle-left',
@@ -38,7 +37,7 @@ const CloudParallax = () => {
             position: "left-[3%]",
             top: "top-[50%]",
             y: y3,
-            size: "w-1/8 max-sm:w-1/4 max-lg:w-1/5"
+            size: "w-1/8 max-lg:w-1/5"
         },
         {
             id: 'middle-right',
@@ -46,15 +45,15 @@ const CloudParallax = () => {
             position: "right-[1%]",
             top: "top-[60%]",
             y: y4,
-            size: "w-1/12 max-sm:w-1/5 max-lg:w-1/6"
+            size: "w-1/12 max-lg:w-1/6"
         },
         {
             id: 'center',
             image: cloud1,
             position: "left-[45%]",
-            top: "top-[40%]",
+            top: "top-[55%]",
             y: y5,
-            size: "w-1/14 max-sm:w-1/6 max-lg:w-1/8"
+            size: "w-1/14 max-lg:w-1/8"
         }
     ], [y1, y2, y3, y4, y5]);
 
@@ -69,7 +68,7 @@ const CloudParallax = () => {
                         willChange: "transform"
                     }}
                     initial={false}
-                    transition={{ type: "tween", ease: "linear", duration: 0 }}
+                    transition={{type: "tween", ease: "linear", duration: 0}}
                 >
                     <img
                         src={cloud.image.src}

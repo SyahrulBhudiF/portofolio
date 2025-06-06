@@ -4,7 +4,6 @@ import {motion, AnimatePresence} from 'framer-motion';
 import type {Project} from '@/model/projects';
 import {LucideChevronDown} from "lucide-react";
 import {Collapsible, CollapsibleTrigger} from "@/components/ui/collapsible.tsx";
-import {Button} from "@/components/ui/button.tsx";
 
 interface ProjectsContainerProps {
     initialProjects: Project[];

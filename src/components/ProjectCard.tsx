@@ -12,12 +12,21 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => {
     const ref = useRef(null);
     const [isMobile, setIsMobile] = useState(false);
-    const inView = useInView(ref, {
-        amount: isMobile ? 0.1 : 0.2,
-        once: true,
-        margin: "0px 0px -50px 0px" // Trigger 50px sebelum masuk viewport
-    });
     const [imageExists, setImageExists] = useState<boolean | null>(null);
+
+    // Check mobile on mount and resize
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    const inView = useInView(ref, {
+        amount: isMobile ? 0.15 : 0.25,
+        once: true,
+        margin: isMobile ? "0px 0px -30px 0px" : "0px 0px -80px 0px"
+    });
 
     useEffect(() => {
         if (!href) {
@@ -65,7 +74,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center w-fit gap-2 bg-transparent text-white px-4 py-2 rounded-lg border-2 border-purple-800 bg-opacity-60 transition-all duration-300 ease-out hover:scale-105 hover:border-2"
-            // 🔧 PERUBAHAN: GPU acceleration untuk smooth scaling
             style={{willChange: 'transform'}}
         >
             <img
@@ -79,29 +87,36 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
         </a>
     ));
 
+    // Clean modern animation variants
+    const cardVariants = {
+        hidden: {
+            opacity: 0,
+            y: isMobile ? 20 : 30,
+            scale: 0.98
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: {
+                duration: isMobile ? 0.6 : 0.8,
+                ease: [0.16, 1, 0.3, 1], // Clean easeOutExpo
+                opacity: { duration: isMobile ? 0.4 : 0.6 },
+                scale: {
+                    duration: isMobile ? 0.5 : 0.7,
+                    ease: [0.25, 0.1, 0.25, 1] // No bounce, pure smooth
+                }
+            }
+        }
+    };
+
     return (
         <div className="w-full flex justify-center overflow-hidden max-md:p-4">
             <motion.div
                 ref={ref}
-                initial={{
-                    translateX: isReverse ? 30 : -30,
-                    opacity: 0,
-                    scale: 0.95
-                }}
-                animate={inView ? {
-                    translateX: 0,
-                    opacity: 1,
-                    scale: 1
-                } : {}}
-                transition={{
-                    type: "spring",
-                    damping: 25,
-                    stiffness: 120,
-                    mass: 1,
-                    duration: 0.6,
-                    delay: 0.1,
-                    ease: [0.25, 0.46, 0.45, 0.94]
-                }}
+                variants={cardVariants}
+                initial="hidden"
+                animate={inView ? "visible" : "hidden"}
                 className="flex items-center justify-center w-3/4 max-xl:w-full mt-10 max-md:mt-0"
                 style={{willChange: 'transform, opacity'}}
             >
