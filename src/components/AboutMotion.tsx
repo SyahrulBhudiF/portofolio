@@ -20,9 +20,9 @@ const AboutMotion = ({children}: { children: ReactNode }) => {
     };
 
     return (
-        <div className="w-full h-fit flex flex-col items-center justify-center gap-16 text-white z-10">
+        <div className="w-full h-full flex flex-col items-center justify-center gap-16 text-white z-10">
             <motion.div
-                className="flex flex-col w-full 2xl:w-3/4 items-center gap-4"
+                className="flex flex-col w-full h-fit 2xl:w-3/4 items-center gap-4"
                 variants={fadeUpVariants}
                 initial="hidden"
                 whileInView="visible"
