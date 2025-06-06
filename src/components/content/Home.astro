@@ -5,12 +5,10 @@ import ParticlesHome from '../ParticlesHome';
 import {Image} from 'astro:assets';
 import {FileUser} from "lucide-react";
 import React from "react";
-import cv from "@/assets/cv.pdf";
-import StarBackground from "../StarBackground";
 ---
 
 <section class="w-full h-screen overflow-hidden relative" id="home">
-    <ParticlesHome client:load/>
+    <ParticlesHome client:idle/>
     <div class="flex justify-center h-full items-center p-16 z-10 max-lg:flex-col-reverse max-md:gap-4 max-lg:gap-10 max-lg:p-8">
         <div class="2xl:w-1/2 max-2xl:w-full max-xl:w-1/2 max-lg:w-full max-lg:px-10 max-md:px-0">
             <h1 class="text-6xl font-bold text-white max-md:text-4xl max-sm:text-3xl text-wrap">Hello, I'm <span

@@ -11,7 +11,12 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => {
     const ref = useRef(null);
-    const inView = useInView(ref, {amount: 0.2, once: true});
+    const [isMobile, setIsMobile] = useState(false);
+    const inView = useInView(ref, {
+        amount: isMobile ? 0.1 : 0.2,
+        once: true,
+        margin: "0px 0px -50px 0px" // Trigger 50px sebelum masuk viewport
+    });
     const [imageExists, setImageExists] = useState<boolean | null>(null);
 
     useEffect(() => {
@@ -26,10 +31,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
         img.src = href;
     }, [href]);
 
-
-    const TechStack = ({stack}: { stack: string }) => (
+    const TechStack = React.memo(({stack}: { stack: string }) => (
         <div
-            className="retro-tech-block relative m-2 flex justify-center items-center gap-2 text-white border-2 border-purple-700/30 rounded-lg cursor-pointer overflow-hidden p-2 bg-purple-900/20 group">
+            className="retro-tech-block relative m-2 flex justify-center items-center gap-2 text-white border-2 border-purple-700/30 rounded-lg cursor-pointer overflow-hidden p-2 bg-purple-900/20 group"
+            style={{willChange: 'transform'}}
+        >
             <div className="retro-block-inner flex items-center justify-center gap-2">
                 <div className="relative block mr-1">
                     <img
@@ -38,11 +44,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                         width={24}
                         height={24}
                         loading="lazy"
-                        className="w-6 h-6 brightness-150 group-hover:scale-110 transition-transform"
+                        className="w-6 h-6 brightness-150 transition-transform duration-200 ease-out group-hover:scale-110"
+                        style={{willChange: 'transform'}}
                     />
                 </div>
                 <p className={cn(
-                    "text-lg text-purple-200 group-hover:text-white transition-colors",
+                    "text-lg text-purple-200 group-hover:text-white transition-colors duration-200 ease-out",
                     stack === "medium" && "md:text-xl",
                     stack === "large" && "lg:text-2xl"
                 )}>
@@ -50,14 +57,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                 </p>
             </div>
         </div>
-    );
+    ));
 
-    const GithubLink = ({url, text}: { url: string, text: string }) => (
+    const GithubLink = React.memo(({url, text}: { url: string, text: string }) => (
         <a
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center w-fit gap-2 bg-transparent text-white px-4 py-2 hover:scale-105 rounded-lg transition-all duration-300 border-2 border-purple-800 hover:border-2 bg-opacity-60"
+            className="flex items-center w-fit gap-2 bg-transparent text-white px-4 py-2 rounded-lg border-2 border-purple-800 bg-opacity-60 transition-all duration-300 ease-out hover:scale-105 hover:border-2"
+            // 🔧 PERUBAHAN: GPU acceleration untuk smooth scaling
+            style={{willChange: 'transform'}}
         >
             <img
                 src="/assets/icon/github.svg"
@@ -68,16 +77,33 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
             />
             <span>{text}</span>
         </a>
-    );
+    ));
 
     return (
         <div className="w-full flex justify-center overflow-hidden max-md:p-4">
             <motion.div
                 ref={ref}
-                initial={{translateX: isReverse ? 50 : -50, opacity: 0}}
-                animate={inView ? {translateX: 0, opacity: 1} : {}}
-                transition={{type: "spring", damping: 50, duration: 0.2, delay: 0.1}}
+                initial={{
+                    translateX: isReverse ? 30 : -30,
+                    opacity: 0,
+                    scale: 0.95
+                }}
+                animate={inView ? {
+                    translateX: 0,
+                    opacity: 1,
+                    scale: 1
+                } : {}}
+                transition={{
+                    type: "spring",
+                    damping: 25,
+                    stiffness: 120,
+                    mass: 1,
+                    duration: 0.6,
+                    delay: 0.1,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                }}
                 className="flex items-center justify-center w-3/4 max-xl:w-full mt-10 max-md:mt-0"
+                style={{willChange: 'transform, opacity'}}
             >
                 <div className={cn(
                     "flex self-center gap-4 max-lg:flex-col-reverse",
@@ -85,7 +111,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                 )}>
                     {imageExists && (
                         <div className="w-full flex flex-col gap-4">
-                            <img src={href} alt="cover" className="rounded-lg shadow-xl" loading="eager"/>
+                            <img
+                                src={href}
+                                alt="cover"
+                                className="rounded-lg shadow-xl transition-all duration-300 ease-out"
+                                loading="eager"
+                                style={{willChange: 'transform'}}
+                            />
                             <div className="flex flex-wrap gap-4">
                                 {project.stack.map((stack, index) => (
                                     <TechStack key={index} stack={stack}/>
@@ -120,7 +152,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                                            href={contributor.link || "#"}
                                            target="_blank"
                                            rel="noopener noreferrer"
-                                           className="flex items-center gap-3 text-gray-300 hover:text-white bg-purple-900/20 hover:bg-purple-800/30 p-2 rounded-lg transition-all duration-300 border-2 border-purple-700/30 hover:border-purple-700/60"
+                                           className="flex items-center gap-3 text-gray-300 hover:text-white bg-purple-900/20 hover:bg-purple-800/30 p-2 rounded-lg transition-all duration-300 ease-out border-2 border-purple-700/30 hover:border-purple-700/60"
+                                           style={{willChange: 'transform, background-color'}}
                                         >
                                             <div
                                                 className="flex items-center justify-center w-8 h-8 bg-purple-700 rounded-full">

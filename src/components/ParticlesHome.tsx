@@ -19,9 +19,6 @@ const ParticlesHome: React.FC = () => {
         });
     }, []);
 
-    const particlesLoaded = async (container?: Container): Promise<void> => {
-    };
-
     const options: ISourceOptions = useMemo(
         () => ({
             preset: "firefly",
@@ -30,7 +27,7 @@ const ParticlesHome: React.FC = () => {
                     value: "transparent",
                 },
             },
-            fpsLimit: 120,
+            fpsLimit: 60,
             interactivity: {
                 events: {
                     onHover: {
@@ -77,7 +74,6 @@ const ParticlesHome: React.FC = () => {
         return (
             <Particles
                 id="tsparticles"
-                particlesLoaded={particlesLoaded}
                 options={options}
                 className="-z-10 overflow-hidden absolute"
             />

@@ -100,7 +100,7 @@ const educationExperiences = [
                                 description={experience.description}
                                 tags={experience.tags}
                                 skills={experience.technologies}
-                                client:load
+                                client:idle
                         />
                 ))}
             </div>
@@ -118,7 +118,7 @@ const educationExperiences = [
                                 description={education.description}
                                 tags={education.tags}
                                 skills={education.achievements}
-                                client:load
+                                client:idle
                         />
                 ))}
             </div>
@@ -137,5 +137,5 @@ const educationExperiences = [
     <div class="w-full max-w-lg mt-4 z-20">
         <Contact/>
     </div>
-    <MountainSVG client:load/>
+    <MountainSVG client:visible/>
 </section>
