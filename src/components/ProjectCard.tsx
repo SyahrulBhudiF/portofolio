@@ -43,6 +43,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
     const TechStack = React.memo(({stack}: { stack: string }) => (
         <div
             className="retro-tech-block relative m-2 flex justify-center items-center gap-2 text-white border-2 border-purple-700/30 rounded-lg cursor-pointer overflow-hidden p-2 bg-purple-900/20 group"
+            style={{willChange: 'transform'}}
         >
             <div className="retro-block-inner flex items-center justify-center gap-2">
                 <div className="relative block mr-1">
@@ -53,6 +54,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                         height={24}
                         loading="lazy"
                         className="w-6 h-6 brightness-150 transition-transform duration-200 ease-out group-hover:scale-110"
+                        style={{willChange: 'transform'}}
                     />
                 </div>
                 <p className={cn(
@@ -72,6 +74,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center w-fit gap-2 bg-transparent text-white px-4 py-2 rounded-lg border-2 border-purple-800 bg-opacity-60 transition-all duration-300 ease-out hover:scale-105 hover:border-2"
+            style={{willChange: 'transform'}}
         >
             <img
                 src="/assets/icon/github.svg"
@@ -98,7 +101,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
             transition: {
                 duration: isMobile ? 0.6 : 0.8,
                 ease: [0.16, 1, 0.3, 1], // Clean easeOutExpo
-                opacity: {duration: isMobile ? 0.4 : 0.6},
+                opacity: { duration: isMobile ? 0.4 : 0.6 },
                 scale: {
                     duration: isMobile ? 0.5 : 0.7,
                     ease: [0.25, 0.1, 0.25, 1] // No bounce, pure smooth
@@ -115,6 +118,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                 initial="hidden"
                 animate={inView ? "visible" : "hidden"}
                 className="flex items-center justify-center w-3/4 max-xl:w-full mt-10 max-md:mt-0"
+                style={{willChange: 'transform, opacity'}}
             >
                 <div className={cn(
                     "flex self-center gap-4 max-lg:flex-col-reverse",
@@ -127,6 +131,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({project, href, isReverse}) => 
                                 alt="cover"
                                 className="rounded-lg shadow-xl transition-all duration-300 ease-out"
                                 loading="eager"
+                                style={{willChange: 'transform'}}
                             />
                             <div className="flex flex-wrap gap-4">
                                 {project.stack.map((stack, index) => (
