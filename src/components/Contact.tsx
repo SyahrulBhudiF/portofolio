@@ -1,12 +1,24 @@
 import React from 'react';
-import {Github, Linkedin, Mail, FileUser} from "lucide-react";
+import {Github, Linkedin, Mail, FileUser, type LucideIcon} from "lucide-react";
 
-const social = [
+interface SocialLink {
+    href: string;
+    title: string;
+    ariaLabel: string;
+    icon: LucideIcon;
+    emailUser?: string;
+    emailDomain?: string;
+}
+
+
+const social: SocialLink[] = [
     {
-        href: "mailto:syahrul4w@gmail.com",
+        href: "",
         title: "email",
         ariaLabel: "email",
         icon: Mail,
+        emailUser: "syahrulbhudif",
+        emailDomain: "ryuko.my.id",
     },
     {
         href: "https://www.linkedin.com/in/syahrulbhudif/",
@@ -40,17 +52,18 @@ const Contact: React.FC = () => {
                 <FileUser size={20}/>
             </a>
             <div className="flex gap-6">
-                {social.map(({href, title, ariaLabel, icon: Icon}) => (
-                    title !== "cv" &&
+                {social.map((item) => (
+                    item.title !== "cv" &&
                     <a
-                        key={title}
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={ariaLabel}
+                        key={item.title}
+                        href={item.title === "email" ? `mailto:${item.emailUser}@${item.emailDomain}` : item.href}
+                        target={item.title === "email" ? "_self" : "_blank"}
+                        rel={item.title === "email" ? "" : "noopener noreferrer"}
+                        aria-label={item.ariaLabel}
                         className="flex items-center justify-center w-8 h-8 border-2 border-white opacity-50 rounded text-white transition-transform duration-300 ease-in-out hover:-translate-y-1"
                     >
-                        <Icon size={24} className="group-hover:border-purple-700 ease-in-out transition ease-in-out"/>
+                        <item.icon size={24}
+                                   className="group-hover:border-purple-700 ease-in-out transition ease-in-out"/>
                     </a>
                 ))}
             </div>

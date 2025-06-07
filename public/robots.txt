@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ryuko.my.id/sitemap.xml

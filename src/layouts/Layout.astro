@@ -2,7 +2,7 @@
 import '@/styles/globals.css'
 import Navbar from "../components/Navbar.astro";
 import SpeedInsights from "@vercel/speed-insights/astro"
-import logo from '@/assets/logo.svg';
+import Analytics from '@vercel/analytics/astro'
 ---
 
 <!DOCTYPE html>
@@ -16,18 +16,43 @@ import logo from '@/assets/logo.svg';
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
     <link rel="manifest" href="/favicon_io/site.webmanifest">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preload" href="https://fonts.cdnfonts.com/s/9519/SFProDisplay-Regular.woff2" as="font" type="font/woff2"
+          crossorigin>
+    <link rel="preload" href="https://fonts.cdnfonts.com/s/9519/SFProDisplay-Bold.woff2" as="font" type="font/woff2"
+          crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/merriweather/v28/MTh-q_eGTSM-ZzY_yjx8nmQf.woff2" as="font"
+          type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/vt323/v17/pxiKyp4Vp_1x_p0gLwL.woff2" as="font"
+          type="font/woff2" crossorigin>
     <meta name="generator" content={Astro.generator}/>
-    <meta name="description" content="Syahrul Portofolio"/>
+    <meta name="description"
+          content="The official portfolio of Syahrul Bhudi Ferdiansyah, a Full-Stack Developer showcasing technical expertise in building scalable and efficient web applications using modern technologies such as Next.js, SvelteKit, TypeScript, Laravel, and Golang."/>
     <meta name="author" content="Syahrul Bhudi Ferdiansyah"/>
-    <meta name="keywords" content="Syahrul, Bhudi, Ferdiansyah, Portofolio, Web Developer, Software Engineer"/>
-    <title>Syahrul Portofolio</title>
+    <meta name="keywords"
+          content="Syahrul, Bhudi, Ferdiansyah, Portofolio, Web Developer, Software Engineer, Next.js, SvelteKit, TypeScript, Laravel, Golang, DevOps, Web Developer, Backend Developer, Frontend Developer, Database,"/>
+    <title>Syahrul Bhudi Ferdiansyah – Portfolio</title>
+    <script is:inline type="application/ld+json" set:html={`
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Syahrul Bhudi Ferdiansyah",
+  "url": "https://ryuko.my.id/",
+  "sameAs": [
+    "https://www.linkedin.com/in/syahrulbhudif/",
+    "https://github.com/SyahrulBhudiF"
+  ],
+  "jobTitle": "Full-Stack Developer",
+  "email": "mailto:syahrulbhudif@ryuko.my.id"
+}
+`}/>
 </head>
 <body class="bg-black overflow-x-hidden">
 <slot/>
 <Navbar/>
 <SpeedInsights/>
+<Analytics/>
 <script is:inline>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const splashScreen = document.querySelector('.splash-screen');
         if (splashScreen) {
             splashScreen.style.visibility = 'visible';
