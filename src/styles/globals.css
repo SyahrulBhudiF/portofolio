@@ -1,6 +1,6 @@
-@import url('https://fonts.cdnfonts.com/css/sf-pro-display') layer(base);
-@import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap') layer(base);
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap') layer(base);
+/*@import url('https://fonts.cdnfonts.com/css/sf-pro-display') layer(base);*/
+/*@import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap') layer(base);*/
+/*@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap') layer(base);*/
 
 @import 'tailwindcss';
 
@@ -9,7 +9,7 @@
 @custom-variant dark (&:is(.dark *));
 
 .splash-screen {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 @theme {

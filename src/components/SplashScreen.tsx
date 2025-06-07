@@ -280,7 +280,6 @@ const SplashScreen = () => {
                     initial="initial"
                     exit="exit"
                     style={{
-                        willChange: 'transform, opacity',
                         backfaceVisibility: 'hidden',
                         perspective: 1000
                     }}
@@ -291,7 +290,6 @@ const SplashScreen = () => {
                         initial="initial"
                         animate="animate"
                         style={{
-                            willChange: 'transform, opacity',
                             backfaceVisibility: 'hidden'
                         }}
                     >
@@ -319,9 +317,6 @@ const SplashScreen = () => {
                                         initial="initial"
                                         animate="animate"
                                         exit="initial"
-                                        style={{
-                                            willChange: 'opacity'
-                                        }}
                                     >
                                         <span className="text-purple-400 font-semibold">ryuko@fedora</span>
                                         <span className="text-purple-300">:~$</span>

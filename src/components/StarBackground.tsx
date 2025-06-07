@@ -48,7 +48,6 @@ const StarBackground: React.FC = () => {
                         key={`animated-${star.id}`}
                         className="absolute bg-purple-500 rounded-full"
                         style={{
-                            willChange: "opacity",
                             width: `${star.size}px`,
                             height: `${star.size}px`,
                             left: `${star.x}%`,
