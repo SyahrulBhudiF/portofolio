@@ -31,10 +31,10 @@ const AboutMotion = ({children}: { children: ReactNode }) => {
                 <div className="text-6xl font-bold text-retro self-start max-sm:text-5xl">About Me</div>
                 <div className="text-lg max-sm:text-base">
                     As an Informatics Engineering student at Politeknik Negeri Malang, I am passionate about advancing
-                    my career in Full-Stack Development. With a strong foundation in both frontend and backend
+                    my career in Software Development. With a strong foundation in both frontend and backend
                     technologies, I have hands-on experience with JavaScript frameworks like Next.js and SvelteKit,
                     using
-                    TypeScript, as well as backend development with Laravel and Golang. <br/><br/> I am a quick learner,
+                    TypeScript, as well as backend development with Laravel, Golang and Typescript too. <br/><br/> I am a quick learner,
                     able
                     to
                     adapt
