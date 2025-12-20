@@ -1,41 +1,55 @@
 ---
-import AboutMotion from '../AboutMotion';
-import TechStack from '../TechStack.astro';
-import StarBackground from '../StarBackground';
+import AboutMotion from "../AboutMotion";
+import StarBackground from "../StarBackground";
+import TechStackCategory from "../TechStackCategory";
+import TechStackItem from "../TechStackItem";
 
-const techStack = [
-    "Laravel",
-    "Golang",
-    "NextJS",
-    "SvelteKit",
-    "Astro",
-    "React",
-    "Javascript",
-    "Typescript",
-    "Rust",
-    "InertiaJS",
-    "Bun",
-    "Hono",
-    "PHP",
-    "Python",
-    "TailwindCSS",
-    "Bootstrap",
-    "Prisma",
-    "MySQL",
-    "PostgreSQL",
-    "Redis",
-    "Docker"
-];
+const techStackCategories = {
+    languages: {
+        title: "Languages",
+        items: ["Javascript", "Typescript", "PHP", "Python", "Rust", "Golang"],
+    },
+    frameworks: {
+        title: "Frameworks & Libraries",
+        items: [
+            "Tanstack",
+            "Laravel",
+            "NextJS",
+            "SvelteKit",
+            "Astro",
+            "NestJS",
+            "React",
+            "InertiaJS",
+            "Hono",
+            "BiomeJS",
+            "TailwindCSS",
+            "Bootstrap",
+        ],
+    },
+    databases: {
+        title: "Databases",
+        items: ["MySQL", "PostgreSQL", "Redis", "Prisma", "Drizzle"],
+    },
+    devops: {
+        title: "DevOps & Tools",
+        items: ["Docker", "Bun"],
+    },
+};
 ---
+
 <section
-        class="w-full h-screen max-xl:h-fit pb-20 max-md:px-4 bg-linear-to-b from-black via-gray-950 to-gray-900 px-16 max-sm:px-8 flex justify-center items-center relative z-10"
-        id="about"
+    class="w-full h-screen max-xl:h-fit pb-20 max-md:px-4 bg-linear-to-b from-black via-gray-950 to-gray-900 px-16 max-sm:px-8 flex justify-center items-center relative z-10"
+    id="about"
 >
-    <StarBackground client:visible/>
+    <StarBackground client:visible />
     <AboutMotion client:idle>
         {
-            techStack.map((tech: string) => (
-                    <TechStack tech={tech} size="medium"/>
+            Object.entries(techStackCategories).map(([key, category]) => (
+                <TechStackCategory title={category.title} client:idle>
+                    {category.items.map((tech: string) => (
+                        <TechStackItem tech={tech} size="medium" />
+                    ))}
+                </TechStackCategory>
             ))
         }
     </AboutMotion>

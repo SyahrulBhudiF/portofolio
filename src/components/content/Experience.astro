@@ -1,141 +1,194 @@
 ---
-import MountainSVG from '../MountainSVG';
 import Contact from "../Contact";
 import ExperienceCard from "../ExperienceCard";
+import MountainSVG from "../MountainSVG";
 
 // Work Experience Data
 const workExperiences = [
     {
-        company: 'PT Sinergi Informatika Semen Indonesia',
-        position: 'Full-stack Developer',
-        duration: 'Feb 2025 - Present',
-        location: 'Jakarta Selatan, Indonesia',
+        company: "PT Sinergi Informatika Semen Indonesia",
+        position: "Full-stack Developer",
+        duration: "Feb 2025 - Dec 2025",
+        location: "Jakarta Selatan, Indonesia",
         description: [
-            'Designed and implemented a robust backend architecture with an emphasis on writing clean, reusable, and scalable code.',
-            'Refactored legacy code, transitioning it to a more efficient and modern architecture to improve maintainability and performance.',
-            'Redesigned the database schema to optimize performance, improve scalability, and adhere to best practices in data management.',
-            'Implemented a dynamic, role-based access control (RBAC) system, significantly enhancing security and user flexibility.',
-            'Integrated Nextcloud as a cloud-based document storage solution, providing secure, scalable, and efficient file management for the platform.',
-            'Optimized database queries to streamline data retrieval, reducing response times and improving overall system efficiency.'
+            "Designed and implemented a robust backend architecture with an emphasis on writing clean, reusable, and scalable code.",
+            "Refactored legacy code, transitioning it to a more efficient and modern architecture to improve maintainability and performance.",
+            "Redesigned the database schema to optimize performance, improve scalability, and adhere to best practices in data management.",
+            "Implemented a dynamic, role-based access control (RBAC) system, significantly enhancing security and user flexibility.",
+            "Integrated Nextcloud as a cloud-based document storage solution, providing secure, scalable, and efficient file management for the platform.",
+            "Optimized database queries to streamline data retrieval, reducing response times and improving overall system efficiency.",
+            "Enhanced WordPress performance and visibility by implementing SEO optimization strategies, integrating heatmap analytics for user behavior tracking, and developing custom WordPress code solutions to extend functionality and improve user experience.",
         ],
-        technologies: ['Laravel', 'InertiaJS', 'React', 'TypeScript', 'TailwindCSS', 'PostgreSQL', 'Redis', 'WordPress', 'Nextcloud'],
-        tags: ['Hybrid', 'Intern']
+        technologies: [
+            "Laravel",
+            "InertiaJS",
+            "React",
+            "TypeScript",
+            "TailwindCSS",
+            "PostgreSQL",
+            "Redis",
+            "WordPress",
+            "Nextcloud",
+            "Wordpress",
+            "Microsoft Clarify",
+            "Mouseflow",
+        ],
+        tags: ["Hybrid", "Intern"],
     },
     {
-        company: 'Oranji',
-        position: 'Software Developer',
-        duration: 'Sep 2024 - Aug 2025',
-        location: 'Malang, Indonesia',
+        company: "Oranji",
+        position: "Software Developer",
+        duration: "Sep 2024 - Aug 2025",
+        location: "Malang, Indonesia",
         description: [
-            'Developed efficient code and acted as a system analyst to align user requirements with technical solutions.',
-            'Transformed user requirements into software specifications and database designs to meet client needs.',
-            'Led the development team, coordinating tasks and ensuring smooth execution of processes.',
-            'Implemented CI/CD pipelines with GitHub Actions for automated, reliable deployments.',
-            'Set up a Docker-based production environment to optimize workflows and ensure consistency.',
-            'Configured production servers with Nginx as a reverse proxy and integrated FrankenPHP for better performance.'
+            "Developed efficient code and acted as a system analyst to align user requirements with technical solutions.",
+            "Transformed user requirements into software specifications and database designs to meet client needs.",
+            "Led the development team, coordinating tasks and ensuring smooth execution of processes.",
+            "Implemented CI/CD pipelines with GitHub Actions for automated, reliable deployments.",
+            "Set up a Docker-based production environment to optimize workflows and ensure consistency.",
+            "Configured production servers with Nginx as a reverse proxy and integrated FrankenPHP for better performance.",
         ],
-        technologies: ['Laravel', 'InertiaJS', 'React', 'TypeScript', 'Astro', 'TailwindCSS', 'MySQL', 'Docker', 'Nginx', 'FrankenPHP'],
-        tags: ['Remote', 'Part-time']
+        technologies: [
+            "Laravel",
+            "InertiaJS",
+            "React",
+            "TypeScript",
+            "Astro",
+            "TailwindCSS",
+            "MySQL",
+            "Docker",
+            "Nginx",
+            "FrankenPHP",
+        ],
+        tags: ["Remote", "Part-time"],
     },
     {
-        company: 'PT Sthira Teknik Indonesia',
-        position: 'Full-stack Developer',
-        duration: 'Jul 2024 - Des 2024',
-        location: 'Daerah Istimewa Yogyakarta, Indonesia',
+        company: "PT Sthira Teknik Indonesia",
+        position: "Full-stack Developer",
+        duration: "Jul 2024 - Des 2024",
+        location: "Daerah Istimewa Yogyakarta, Indonesia",
         description: [
-            'Developed a comprehensive web platform to streamline the registration, management, and administration of training sessions and seminars for healthcare professionals at RSUD Prambanan, Yogyakarta.',
-            'Enhanced operational efficiency by automating and optimizing key administrative processes.',
-            'Simplified participant management, making it easier to track and handle registrations.',
-            'Supported seamless administration for the hospital’s professional development initiatives, ensuring smooth execution of training sessions and seminars.'
+            "Developed a comprehensive web platform to streamline the registration, management, and administration of training sessions and seminars for healthcare professionals at RSUD Prambanan, Yogyakarta.",
+            "Enhanced operational efficiency by automating and optimizing key administrative processes.",
+            "Simplified participant management, making it easier to track and handle registrations.",
+            "Supported seamless administration for the hospital’s professional development initiatives, ensuring smooth execution of training sessions and seminars.",
         ],
-        technologies: ['Laravel', 'InertiaJS', 'ReactJS', 'TypeScript', 'TailwindCSS', 'MySQL'],
-        tags: ['Remote', 'Freelance']
-    }
+        technologies: [
+            "Laravel",
+            "InertiaJS",
+            "ReactJS",
+            "TypeScript",
+            "TailwindCSS",
+            "MySQL",
+        ],
+        tags: ["Remote", "Freelance"],
+    },
 ];
 
 // Education Data
 const educationExperiences = [
     {
-        institution: 'Politeknik Negeri Malang',
-        degree: 'Bachelor of Applied Informatics Engineering',
-        duration: '2022 - 2026',
-        location: 'Malang, Indonesia',
+        institution: "Politeknik Negeri Malang",
+        degree: "Bachelor of Applied Informatics Engineering",
+        duration: "2022 - 2026",
+        location: "Malang, Indonesia",
         description: [
-            'Focused on software engineering and development, with a strong foundation built through coursework in algorithms, data structures, database design, and practical application development.',
-            'Developed skills in building scalable applications, system analysis, and modern programming practices.'
+            "Focused on software engineering and development, with a strong foundation built through coursework in algorithms, data structures, database design, and practical application development.",
+            "Developed skills in building scalable applications, system analysis, and modern programming practices.",
         ],
         achievements: [],
-        tags: []
+        tags: [],
     },
     {
-        institution: 'SMAN 1 Balongpanggang',
-        degree: 'Mathematics and Science',
-        duration: '2019 - 2022',
-        location: 'Gresik, Indonesia',
+        institution: "SMAN 1 Balongpanggang",
+        degree: "Mathematics and Science",
+        duration: "2019 - 2022",
+        location: "Gresik, Indonesia",
         description: [
-            'Concentrated on mathematics and science, emphasizing critical thinking, logical reasoning, and scientific exploration.',
-            'Gained a comprehensive understanding of mathematics, physics, and chemistry.'
+            "Concentrated on mathematics and science, emphasizing critical thinking, logical reasoning, and scientific exploration.",
+            "Gained a comprehensive understanding of mathematics, physics, and chemistry.",
         ],
         achievements: [],
-        tags: []
+        tags: [],
     },
 ];
 ---
 
 <section
-        class="text-white bg-linear-to-b from-gray-700 to-gray-600 w-full h-full max-xl:h-fit max-lg:pb-24 flex flex-col items-center justify-between relative pb-20 px-16 max-md:px-8"
-        id="experience">
-    <h2 class="text-retro text-6xl text-center max-sm:text-5xl mb-8">Experience</h2>
-    <div class="w-full 2xl:w-3/4 z-20 mt-10 grid grid-cols-2 max-lg:grid-cols-1 gap-4">
-
+    class="text-white bg-linear-to-b from-gray-700 to-gray-600 w-full h-full max-xl:h-fit max-lg:pb-24 flex flex-col items-center justify-between relative pb-20 px-16 max-md:px-8"
+    id="experience"
+>
+    <h2 class="text-retro text-6xl text-center max-sm:text-5xl mb-8">
+        Experience
+    </h2>
+    <div
+        class="w-full 2xl:w-3/4 z-20 mt-10 grid grid-cols-2 max-lg:grid-cols-1 gap-4"
+    >
         <div class="mb-12">
-            <h3 class="text-3xl font-bold text-purple-300 max-sm:text-2xl mb-6 text-center">Work</h3>
+            <h3
+                class="text-3xl font-bold text-purple-300 max-sm:text-2xl mb-6 text-center"
+            >
+                Work
+            </h3>
             <div class="flex flex-col gap-4">
-                {workExperiences.map((experience) => (
+                {
+                    workExperiences.map((experience) => (
                         <ExperienceCard
-                                title={experience.company}
-                                subtitle={experience.position}
-                                duration={experience.duration}
-                                location={experience.location}
-                                description={experience.description}
-                                tags={experience.tags}
-                                skills={experience.technologies}
-                                client:idle
+                            title={experience.company}
+                            subtitle={experience.position}
+                            duration={experience.duration}
+                            location={experience.location}
+                            description={experience.description}
+                            tags={experience.tags}
+                            skills={experience.technologies}
+                            client:idle
                         />
-                ))}
+                    ))
+                }
             </div>
         </div>
 
         <div class="mb-12">
-            <h3 class="text-3xl font-bold text-purple-300 max-sm:text-2xl mb-6 text-center">Education</h3>
+            <h3
+                class="text-3xl font-bold text-purple-300 max-sm:text-2xl mb-6 text-center"
+            >
+                Education
+            </h3>
             <div class="flex flex-col gap-4">
-                {educationExperiences.map((education) => (
+                {
+                    educationExperiences.map((education) => (
                         <ExperienceCard
-                                title={education.institution}
-                                subtitle={education.degree}
-                                duration={education.duration}
-                                location={education.location}
-                                description={education.description}
-                                tags={education.tags}
-                                skills={education.achievements}
-                                client:idle
+                            title={education.institution}
+                            subtitle={education.degree}
+                            duration={education.duration}
+                            location={education.location}
+                            description={education.description}
+                            tags={education.tags}
+                            skills={education.achievements}
+                            client:idle
                         />
-                ))}
+                    ))
+                }
             </div>
         </div>
     </div>
 
     <div class="flex flex-col gap-2 z-20 mt-26 max-xl:mt-30 justify-center">
-        <h2 class="text-retro text-6xl text-center max-sm:text-5xl">Want to Collaborate?</h2>
-        <p class="text-lg text-white/80 text-center mt-4 max-sm:text-base">Let's Have a Chat</p>
+        <h2 class="text-retro text-6xl text-center max-sm:text-5xl">
+            Want to Collaborate?
+        </h2>
+        <p class="text-lg text-white/80 text-center mt-4 max-sm:text-base">
+            Let's Have a Chat
+        </p>
         <p class="text-base text-white/70 text-center max-sm:text-sm">
-            Feel free to reach out to me if you have any questions, want to collaborate on a project, or just want to
-            chat. I'm always open to new opportunities and connections.
+            Feel free to reach out to me if you have any questions, want to
+            collaborate on a project, or just want to chat. I'm always open to
+            new opportunities and connections.
         </p>
     </div>
 
     <div class="w-full max-w-lg mt-4 z-20">
-        <Contact/>
+        <Contact />
     </div>
-    <MountainSVG client:visible/>
+    <MountainSVG client:visible />
 </section>
