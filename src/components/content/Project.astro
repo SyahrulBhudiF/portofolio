@@ -3,7 +3,6 @@ import CloudParallax from '@/components/CloudParallax';
 import {getCollection} from "astro:content";
 import type {Project} from "@/model/projects";
 import ProjectsContainer from "@/components/ProjectsContainer";
-import React from "react";
 
 const personalProjects = await getCollection("projects");
 const sortedPersonalProjects = personalProjects.sort(

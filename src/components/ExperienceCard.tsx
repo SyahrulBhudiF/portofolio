@@ -1,12 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  ChevronsUpDown,
-  LucideCalendar,
-  LucideCalendar1,
-  LucideMapPinned,
-} from "lucide-react";
+import { ChevronsUpDown, LucideCalendar1, LucideMapPinned } from "lucide-react";
 import { type FC, useState } from "react";
-import { Button } from "@/components/ui/button.tsx";
 import {
   Collapsible,
   CollapsibleTrigger,
