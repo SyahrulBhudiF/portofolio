@@ -1,15 +1,17 @@
-@import url('https://fonts.cdnfonts.com/css/sf-pro-display') layer(base);
-@import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap') layer(base);
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap') layer(base);
+@import url("https://fonts.cdnfonts.com/css/sf-pro-display") layer(base);
+@import url("https://fonts.googleapis.com/css2?family=Merriweather&display=swap")
+layer(base);
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap")
+layer(base);
 
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:is(.dark *));
 
 .splash-screen {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 @theme {
@@ -73,7 +75,7 @@
 @layer base {
     :root {
         scroll-behavior: smooth;
-        font-family: 'Merriweather', sans-serif;
+        font-family: "Merriweather", sans-serif;
         --background: 0 0% 100%;
         --foreground: 0 0% 3.9%;
         --card: 0 0% 100%;
@@ -98,7 +100,7 @@
         --chart-3: 197 37% 24%;
         --chart-4: 43 74% 66%;
         --chart-5: 27 87% 67%;
-        --radius: 0.5rem
+        --radius: 0.5rem;
     }
 
     .dark {
@@ -125,7 +127,7 @@
         --chart-2: 160 60% 45%;
         --chart-3: 30 80% 55%;
         --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%
+        --chart-5: 340 75% 55%;
     }
 }
 
@@ -140,36 +142,37 @@
     }
 
     .text-carousel {
-        font-family: 'VT323', monospace;
-        text-shadow: 4px 4px 0px #CDA6ED;
+        font-family: "VT323", monospace;
+        text-shadow: 4px 4px 0px #cda6ed;
     }
 
     .text-retro {
-        font-family: 'VT323', monospace;
-        text-shadow: 5px 5px 0px #CDA6ED;
+        font-family: "VT323", monospace;
+        text-shadow: 5px 5px 0px #cda6ed;
         color: white;
     }
 
     .retro-tech-block {
         transition: all 0.3s ease;
-        box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.1),
-        8px 8px 0 rgba(255, 255, 255, 0.05),
-        12px 12px 0 rgba(255, 255, 255, 0.025);
+        box-shadow:
+            4px 4px 0 rgba(255, 255, 255, 0.1),
+            8px 8px 0 rgba(255, 255, 255, 0.05),
+            12px 12px 0 rgba(255, 255, 255, 0.025);
         border-color: rgba(255, 255, 255, 0.1);
         perspective: 500px;
     }
 
     .retro-tech-block::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
         background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.05) 0%,
-                rgba(255, 255, 255, 0.025) 100%
+            135deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.025) 100%
         );
         mix-blend-mode: overlay;
         z-index: 1;
@@ -180,9 +183,10 @@
         position: relative;
         z-index: 50;
         transform: translateY(-15px) rotateX(5deg) scale(1.05);
-        box-shadow: 6px 6px 0 rgba(255, 255, 255, 0.15),
-        12px 12px 0 rgba(255, 255, 255, 0.1),
-        18px 18px 0 rgba(255, 255, 255, 0.05);
+        box-shadow:
+            6px 6px 0 rgba(255, 255, 255, 0.15),
+            12px 12px 0 rgba(255, 255, 255, 0.1),
+            18px 18px 0 rgba(255, 255, 255, 0.05);
         background-color: rgba(156, 81, 224, 0.3);
     }
 

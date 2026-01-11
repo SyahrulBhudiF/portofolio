@@ -1,86 +1,95 @@
-import React, {useEffect, useMemo, useState} from "react";
-import Particles, {initParticlesEngine} from "@tsparticles/react";
-import {loadFireflyPreset} from "@tsparticles/preset-firefly";
 import {
-    type Container,
-    type ISourceOptions,
-    MoveDirection,
-    OutMode,
+  type ISourceOptions,
+  MoveDirection,
+  OutMode,
 } from "@tsparticles/engine";
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim";
+import { useEffect, useState } from "react";
+
+// Define options outside component to avoid recreation
+const particleOptions: ISourceOptions = {
+  background: {
+    color: {
+      value: "transparent",
+    },
+  },
+  fpsLimit: 30,
+  interactivity: {
+    events: {
+      onHover: {
+        enable: true,
+        mode: "connect",
+      },
+    },
+    modes: {
+      connect: {
+        distance: 80,
+        links: {
+          opacity: 0.2,
+        },
+        radius: 100,
+      },
+    },
+  },
+  particles: {
+    color: {
+      value: "#8A2BE2",
+    },
+    links: {
+      enable: false,
+    },
+    move: {
+      enable: true,
+      speed: 0.3,
+      direction: MoveDirection.none,
+      random: true,
+      straight: false,
+      outModes: {
+        default: OutMode.bounce,
+      },
+    },
+    number: {
+      density: {
+        enable: true,
+      },
+      value: 40,
+    },
+    opacity: {
+      value: { min: 0.2, max: 0.5 },
+    },
+    size: {
+      value: { min: 1, max: 2 },
+    },
+    shape: {
+      type: "circle",
+    },
+  },
+  detectRetina: true,
+};
 
 const ParticlesHome: React.FC = () => {
-    const [init, setInit] = useState(false);
+  const [init, setInit] = useState(false);
 
-    useEffect(() => {
-        initParticlesEngine(async (engine) => {
-            await loadFireflyPreset(engine);
-        }).then(() => {
-            setInit(true);
-        });
-    }, []);
+  useEffect(() => {
+    initParticlesEngine(async (engine) => {
+      await loadSlim(engine);
+    }).then(() => {
+      setInit(true);
+    });
+  }, []);
 
-    const options: ISourceOptions = useMemo(
-        () => ({
-            preset: "firefly",
-            background: {
-                color: {
-                    value: "transparent",
-                },
-            },
-            fpsLimit: 60,
-            interactivity: {
-                events: {
-                    onHover: {
-                        enable: true,
-                        mode: "connect",
-                    },
-                },
-            },
-            particles: {
-                color: {
-                    value: "#8A2BE2",
-                },
-                move: {
-                    enable: true,
-                    speed: 0.2,
-                    direction: MoveDirection.none,
-                    outModes: {
-                        default: OutMode.bounce,
-                    },
-                },
-                number: {
-                    density: {
-                        enable: true,
-                        area: 800,
-                    },
-                    value: 80,
-                },
-                opacity: {
-                    value: {min: 0.2, max: 0.5},
-                },
-                size: {
-                    value: {min: 1, max: 3},
-                },
-                shape: {
-                    type: "circle",
-                },
-            },
-            detectRetina: true,
-        }),
-        []
-    );
-
-    if (init) {
-        return (
-            <Particles
-                id="tsparticles"
-                options={options}
-                className="-z-10 overflow-hidden absolute"
-            />
-        );
-    }
-
+  if (!init) {
     return null;
+  }
+
+  return (
+    <Particles
+      id="tsparticles"
+      options={particleOptions}
+      className="-z-10 overflow-hidden absolute inset-0 w-full h-full"
+    />
+  );
 };
 
 export default ParticlesHome;
