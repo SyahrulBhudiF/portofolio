@@ -1,93 +1,215 @@
 ---
 import { getCollection } from "astro:content";
-import Contact from "../Contact";
-import ExperienceCard from "../ExperienceCard";
-import MountainSVG from "../MountainSVG";
 
-// Get work experiences from content collection
 const workExperiencesRaw = await getCollection("experiences");
-const workExperiences = workExperiencesRaw.sort((a, b) => a.data.order - b.data.order);
+const workExperiences = workExperiencesRaw.sort(
+    (a, b) => a.data.order - b.data.order,
+);
 
-// Get education from content collection
 const educationRaw = await getCollection("education");
-const educationExperiences = educationRaw.sort((a, b) => a.data.order - b.data.order);
+const educationExperiences = educationRaw.sort(
+    (a, b) => a.data.order - b.data.order,
+);
 ---
 
-<section
-    class="text-white bg-linear-to-b from-gray-700 to-gray-600 w-full h-full max-xl:h-fit max-lg:pb-24 flex flex-col items-center justify-between relative pb-20 px-16 max-md:px-8"
-    id="experience"
->
-    <h2 class="text-retro text-6xl text-center max-sm:text-5xl mb-8">
-        Experience
-    </h2>
-    <div
-        class="w-full 2xl:w-3/4 z-20 mt-10 grid grid-cols-2 max-lg:grid-cols-1 gap-4"
-    >
-        <div class="mb-12">
-            <h3
-                class="text-3xl font-bold text-purple-300 max-sm:text-2xl mb-6 text-center"
-            >
-                Work
-            </h3>
-            <div class="flex flex-col gap-4">
+<section id="experience" class="py-24 md:py-32">
+    <div class="max-w-[1100px] mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 md:gap-16">
+            <div class="md:sticky md:top-24 md:self-start">
+                <h2
+                    class="text-2xl font-semibold text-[var(--text)] tracking-tight"
+                >
+                    Experience
+                </h2>
+            </div>
+
+            <div class="flex flex-col">
                 {
-                    workExperiences.map((experience) => (
-                        <ExperienceCard
-                            title={experience.data.company}
-                            subtitle={experience.data.position}
-                            duration={experience.data.duration}
-                            location={experience.data.location}
-                            description={experience.data.description}
-                            tags={experience.data.tags}
-                            skills={experience.data.technologies}
-                            client:idle
-                        />
+                    workExperiences.map((experience, index) => (
+                        <div
+                            class={`relative pl-8 pb-12 ${index === workExperiences.length - 1 ? "pb-0" : ""}`}
+                        >
+                            {index !== workExperiences.length - 1 && (
+                                <div class="absolute left-[5px] top-3 w-px h-full bg-[var(--highlight-low)]" />
+                            )}
+
+                            <div class="absolute left-0 top-2 w-3 h-3 rounded-full bg-[var(--iris)] ring-4 ring-[var(--base)]" />
+
+                            <div class="flex flex-col gap-2">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                    <h3 class="text-lg font-semibold text-[var(--text)]">
+                                        {experience.data.company}
+                                    </h3>
+                                    <span class="text-sm text-[var(--muted)]">
+                                        {experience.data.duration}
+                                    </span>
+                                </div>
+
+                                <p class="text-[var(--iris)] font-medium">
+                                    {experience.data.position}
+                                </p>
+
+                                <p class="text-sm text-[var(--muted)] flex items-center gap-1.5">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="14"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                                        <circle cx="12" cy="10" r="3" />
+                                    </svg>
+                                    {experience.data.location}
+                                </p>
+
+                                {experience.data.tags &&
+                                    experience.data.tags.length > 0 && (
+                                        <div class="flex flex-wrap gap-1.5 mt-1">
+                                            {experience.data.tags.map(
+                                                (tag: string) => (
+                                                    <span class="text-xs px-2 py-0.5 bg-[var(--highlight-low)] text-[var(--subtle)] rounded-full">
+                                                        {tag}
+                                                    </span>
+                                                ),
+                                            )}
+                                        </div>
+                                    )}
+
+                                {experience.data.description &&
+                                    experience.data.description.length > 0 && (
+                                        <ul class="mt-3 space-y-2 text-[var(--subtle)] text-sm leading-relaxed">
+                                            {experience.data.description.map(
+                                                (item: string) => (
+                                                    <li class="relative pl-4 before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-[var(--highlight-med)]">
+                                                        {item}
+                                                    </li>
+                                                ),
+                                            )}
+                                        </ul>
+                                    )}
+
+                                {experience.data.technologies &&
+                                    experience.data.technologies.length > 0 && (
+                                        <div class="flex flex-wrap gap-1.5 mt-3">
+                                            {experience.data.technologies.map(
+                                                (tech: string) => (
+                                                    <span class="text-xs px-2 py-1 border border-dashed border-[var(--highlight-med)] text-[var(--muted)] rounded hover:border-[var(--iris)] hover:text-[var(--iris)] transition-colors">
+                                                        {tech}
+                                                    </span>
+                                                ),
+                                            )}
+                                        </div>
+                                    )}
+                            </div>
+                        </div>
                     ))
                 }
             </div>
         </div>
 
-        <div class="mb-12">
-            <h3
-                class="text-3xl font-bold text-purple-300 max-sm:text-2xl mb-6 text-center"
-            >
-                Education
-            </h3>
-            <div class="flex flex-col gap-4">
+        <div
+            class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 md:gap-16 mt-20 pt-20 border-t border-[var(--highlight-low)]"
+        >
+            <div class="md:sticky md:top-24 md:self-start">
+                <h2
+                    class="text-2xl font-semibold text-[var(--text)] tracking-tight"
+                >
+                    Education
+                </h2>
+            </div>
+
+            <div class="flex flex-col">
                 {
-                    educationExperiences.map((education) => (
-                        <ExperienceCard
-                            title={education.data.institution}
-                            subtitle={education.data.degree}
-                            duration={education.data.duration}
-                            location={education.data.location}
-                            description={education.data.description}
-                            tags={education.data.tags}
-                            skills={education.data.achievements}
-                            client:idle
-                        />
+                    educationExperiences.map((education, index) => (
+                        <div
+                            class={`relative pl-8 pb-12 ${index === educationExperiences.length - 1 ? "pb-0" : ""}`}
+                        >
+                            {index !== educationExperiences.length - 1 && (
+                                <div class="absolute left-[5px] top-3 w-px h-full bg-[var(--highlight-low)]" />
+                            )}
+
+                            <div class="absolute left-0 top-2 w-3 h-3 rounded-full bg-[var(--foam)] ring-4 ring-[var(--base)]" />
+
+                            <div class="flex flex-col gap-2">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                    <h3 class="text-lg font-semibold text-[var(--text)]">
+                                        {education.data.institution}
+                                    </h3>
+                                    <span class="text-sm text-[var(--muted)]">
+                                        {education.data.duration}
+                                    </span>
+                                </div>
+
+                                <p class="text-[var(--iris)] font-medium">
+                                    {education.data.degree}
+                                </p>
+
+                                <p class="text-sm text-[var(--muted)] flex items-center gap-1.5">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="14"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                                        <circle cx="12" cy="10" r="3" />
+                                    </svg>
+                                    {education.data.location}
+                                </p>
+
+                                {education.data.tags &&
+                                    education.data.tags.length > 0 && (
+                                        <div class="flex flex-wrap gap-1.5 mt-1">
+                                            {education.data.tags.map(
+                                                (tag: string) => (
+                                                    <span class="text-xs px-2 py-0.5 bg-[var(--highlight-low)] text-[var(--subtle)] rounded-full">
+                                                        {tag}
+                                                    </span>
+                                                ),
+                                            )}
+                                        </div>
+                                    )}
+
+                                {education.data.description &&
+                                    education.data.description.length > 0 && (
+                                        <ul class="mt-3 space-y-2 text-[var(--subtle)] text-sm leading-relaxed">
+                                            {education.data.description.map(
+                                                (item: string) => (
+                                                    <li class="relative pl-4 before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-[var(--highlight-med)]">
+                                                        {item}
+                                                    </li>
+                                                ),
+                                            )}
+                                        </ul>
+                                    )}
+
+                                {education.data.achievements &&
+                                    education.data.achievements.length > 0 && (
+                                        <div class="flex flex-wrap gap-1.5 mt-3">
+                                            {education.data.achievements.map(
+                                                (achievement: string) => (
+                                                    <span class="text-xs px-2 py-1 border border-dashed border-[var(--highlight-med)] text-[var(--muted)] rounded hover:border-[var(--foam)] hover:text-[var(--foam)] transition-colors">
+                                                        {achievement}
+                                                    </span>
+                                                ),
+                                            )}
+                                        </div>
+                                    )}
+                            </div>
+                        </div>
                     ))
                 }
             </div>
         </div>
     </div>
-
-    <div class="flex flex-col gap-2 z-20 mt-26 max-xl:mt-30 justify-center">
-        <h2 class="text-retro text-6xl text-center max-sm:text-5xl">
-            Want to Collaborate?
-        </h2>
-        <p class="text-lg text-white/80 text-center mt-4 max-sm:text-base">
-            Let's Have a Chat
-        </p>
-        <p class="text-base text-white/70 text-center max-sm:text-sm">
-            Feel free to reach out to me if you have any questions, want to
-            collaborate on a project, or just want to chat. I'm always open to
-            new opportunities and connections.
-        </p>
-    </div>
-
-    <div class="w-full max-w-lg mt-4 z-20">
-        <Contact />
-    </div>
-    <MountainSVG client:visible />
 </section>

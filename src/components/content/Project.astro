@@ -1,27 +1,440 @@
 ---
 import { getCollection } from "astro:content";
-import CloudParallax from "@/components/CloudParallax";
-import ProjectsContainer from "@/components/ProjectsContainer";
 import type { Project } from "@/model/projects";
 
 const personalProjects = await getCollection("projects");
-const sortedPersonalProjects = personalProjects.sort((a: Project, b: Project) =>
-  a.data.date > b.data.date ? -1 : 1,
+const sortedProjects = personalProjects.sort((a: Project, b: Project) =>
+    a.data.date > b.data.date ? -1 : 1,
 );
 
-const initialProjects = sortedPersonalProjects.slice(0, 3);
-const remainingProjects = sortedPersonalProjects.slice(3);
+function getGradientColors(title: string): { from: string; to: string } {
+    const gradients = [
+        { from: "var(--iris)", to: "var(--foam)" },
+        { from: "var(--rose)", to: "var(--iris)" },
+        { from: "var(--pine)", to: "var(--foam)" },
+        { from: "var(--gold)", to: "var(--rose)" },
+        { from: "var(--foam)", to: "var(--pine)" },
+        { from: "var(--iris)", to: "var(--rose)" },
+    ];
+    const index = title.length % gradients.length;
+    return gradients[index];
+}
 ---
-<section
-        class="text-white bg-linear-to-b from-gray-900 via-gray-800 to-gray-700 w-full h-fit flex justify-center relative max-xl:p-16 max-md:p-4 pb-26"
-        id="projects">
-    <CloudParallax client:visible/>
-    <div class="flex flex-col gap-10 max-md:gap-14 z-10 items-center w-full">
-        <p class="text-retro text-6xl max-sm:text-5xl">Projects</p>
-        <ProjectsContainer
-                initialProjects={initialProjects}
-                remainingProjects={remainingProjects}
-                client:idle
-        />
+
+<section id="projects" class="py-24 md:py-32">
+    <div class="max-w-[1100px] mx-auto px-6">
+        <div
+            class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 md:gap-16 mb-12"
+        >
+            <div class="md:sticky md:top-24 md:self-start">
+                <h2
+                    class="text-2xl font-semibold text-[var(--text)] tracking-tight"
+                >
+                    Projects
+                </h2>
+            </div>
+            <p class="text-[var(--subtle)] text-lg">
+                A selection of projects I've worked on, ranging from personal
+                experiments to collaborative team efforts.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {
+                sortedProjects.map((project) => {
+                    const gradient = getGradientColors(project.data.title);
+                    const initials = project.data.title
+                        .split(" ")
+                        .map((word: string) => word[0])
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase();
+
+                    return (
+                        <article class="group flex flex-col bg-[var(--surface)] border border-[var(--highlight-low)] rounded-xl overflow-hidden hover:border-[var(--highlight-med)] hover:-translate-y-1 hover:shadow-lg transition-all duration-500 ease-out">
+                            <div class="aspect-video overflow-hidden relative">
+                                <div
+                                    class="project-fallback absolute inset-0 flex flex-col items-center justify-center gap-3"
+                                    style={`background: linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%);`}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="48"
+                                        height="48"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="text-white/30"
+                                    >
+                                        <polyline points="16 18 22 12 16 6" />
+                                        <polyline points="8 6 2 12 8 18" />
+                                    </svg>
+                                    <span class="text-white/90 text-2xl font-bold tracking-wider">
+                                        {initials}
+                                    </span>
+                                </div>
+
+                                <img
+                                    src={`assets/projects/${project.slug}/cover.webp`}
+                                    alt={`${project.data.title} project screenshot`}
+                                    class="project-image w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 relative z-10"
+                                    loading="lazy"
+                                    onload="this.classList.add('loaded')"
+                                    onerror="this.classList.add('error')"
+                                />
+                            </div>
+
+                            <div class="flex flex-col flex-1 p-6 gap-4">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-[var(--text)] group-hover:text-[var(--iris)] transition-colors">
+                                            {project.data.title}
+                                        </h3>
+                                        <p class="text-sm text-[var(--iris)] font-medium mt-1">
+                                            {project.data.type}
+                                        </p>
+                                    </div>
+                                    <span class="text-xs text-[var(--muted)] whitespace-nowrap">
+                                        {new Date(
+                                            project.data.date,
+                                        ).getFullYear()}
+                                    </span>
+                                </div>
+
+                                <p class="text-[var(--subtle)] text-sm leading-relaxed flex-1">
+                                    {project.data.description}
+                                </p>
+
+                                <div class="tech-stack-container flex flex-wrap gap-1.5">
+                                    {project.data.stack
+                                        .slice(0, 5)
+                                        .map((tech: string) => (
+                                            <span class="tech-visible text-xs text-[var(--muted)] px-2 py-1 bg-[var(--highlight-low)] rounded">
+                                                {tech}
+                                            </span>
+                                        ))}
+                                    {project.data.stack.length > 5 &&
+                                        project.data.stack
+                                            .slice(5)
+                                            .map((tech: string) => (
+                                                <span class="tech-hidden text-xs text-[var(--muted)] px-2 py-1 bg-[var(--highlight-low)] rounded">
+                                                    {tech}
+                                                </span>
+                                            ))}
+                                    {project.data.stack.length > 5 && (
+                                        <button
+                                            type="button"
+                                            class="tech-toggle text-xs text-[var(--iris)] px-2 py-1 hover:bg-[var(--highlight-low)] rounded cursor-pointer transition-colors inline-flex items-center gap-1"
+                                            data-count={
+                                                project.data.stack.length - 5
+                                            }
+                                        >
+                                            <span class="toggle-text">
+                                                +{project.data.stack.length - 5}{" "}
+                                                more
+                                            </span>
+                                            <svg
+                                                class="toggle-icon w-3 h-3 transition-transform duration-200"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M19 9l-7 7-7-7"
+                                                />
+                                            </svg>
+                                        </button>
+                                    )}
+                                </div>
+
+                                {(() => {
+                                    const hasSource =
+                                        project.data.sourceClient ||
+                                        project.data.sourceServer ||
+                                        project.data.sourceModel;
+                                    const hasDemo = project.data.demo;
+                                    const hasAnyLink = hasSource || hasDemo;
+
+                                    return (
+                                        <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-[var(--highlight-low)]">
+                                            {project.data.sourceClient && (
+                                                <a
+                                                    href={
+                                                        project.data
+                                                            .sourceClient
+                                                    }
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    class="inline-flex items-center gap-1.5 text-sm text-[var(--subtle)] hover:text-[var(--iris)] transition-colors"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="16"
+                                                        height="16"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="2"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                    >
+                                                        <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                                                        <path d="M9 18c-4.51 2-5-2-7-2" />
+                                                    </svg>
+                                                    <span>Client</span>
+                                                </a>
+                                            )}
+                                            {project.data.sourceServer && (
+                                                <a
+                                                    href={
+                                                        project.data
+                                                            .sourceServer
+                                                    }
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    class="inline-flex items-center gap-1.5 text-sm text-[var(--subtle)] hover:text-[var(--iris)] transition-colors"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="16"
+                                                        height="16"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="2"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                    >
+                                                        <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                                                        <path d="M9 18c-4.51 2-5-2-7-2" />
+                                                    </svg>
+                                                    <span>Server</span>
+                                                </a>
+                                            )}
+                                            {project.data.sourceModel && (
+                                                <a
+                                                    href={
+                                                        project.data.sourceModel
+                                                    }
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    class="inline-flex items-center gap-1.5 text-sm text-[var(--subtle)] hover:text-[var(--iris)] transition-colors"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="16"
+                                                        height="16"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="2"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                    >
+                                                        <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                                                        <path d="M9 18c-4.51 2-5-2-7-2" />
+                                                    </svg>
+                                                    <span>Model</span>
+                                                </a>
+                                            )}
+                                            {project.data.demo && (
+                                                <a
+                                                    href={project.data.demo}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    class="inline-flex items-center gap-1.5 text-sm text-[var(--subtle)] hover:text-[var(--iris)] transition-colors"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="16"
+                                                        height="16"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="2"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                    >
+                                                        <path d="M15 3h6v6" />
+                                                        <path d="M10 14 21 3" />
+                                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                                    </svg>
+                                                    <span>Live Demo</span>
+                                                </a>
+                                            )}
+                                            {!hasSource && (
+                                                <span class="inline-flex items-center gap-1.5 text-xs text-[var(--muted)] px-2 py-1 bg-[var(--highlight-low)] rounded">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="12"
+                                                        height="12"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="2"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                    >
+                                                        <rect
+                                                            width="18"
+                                                            height="11"
+                                                            x="3"
+                                                            y="11"
+                                                            rx="2"
+                                                            ry="2"
+                                                        />
+                                                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                                    </svg>
+                                                    <span>Closed Source</span>
+                                                </span>
+                                            )}
+                                        </div>
+                                    );
+                                })()}
+
+                                {project.data.contributors &&
+                                    project.data.contributors.length > 0 && (
+                                        <div class="pt-4 border-t border-[var(--highlight-low)]">
+                                            <p class="text-xs text-[var(--muted)] mb-2">
+                                                Contributors
+                                            </p>
+                                            <div class="flex flex-wrap gap-2">
+                                                {project.data.contributors.map(
+                                                    (contributor: {
+                                                        name: string;
+                                                        role: string;
+                                                        link?: string;
+                                                    }) => (
+                                                        <a
+                                                            href={
+                                                                contributor.link ||
+                                                                "#"
+                                                            }
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            class="inline-flex items-center gap-1.5 px-2 py-1 text-xs text-[var(--subtle)] bg-[var(--highlight-low)] rounded hover:bg-[var(--highlight-med)] transition-colors"
+                                                        >
+                                                            <span>
+                                                                {
+                                                                    contributor.name
+                                                                }
+                                                            </span>
+                                                            <span class="text-[var(--muted)]">
+                                                                •{" "}
+                                                                {
+                                                                    contributor.role
+                                                                }
+                                                            </span>
+                                                        </a>
+                                                    ),
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                            </div>
+                        </article>
+                    );
+                })
+            }
+        </div>
     </div>
 </section>
+
+<style>
+    .project-image.loaded + .project-fallback,
+    .project-image.loaded ~ .project-fallback {
+        display: none;
+    }
+
+    .project-image.error {
+        opacity: 0;
+        position: absolute;
+    }
+
+    .project-fallback {
+        z-index: 1;
+    }
+
+    .project-image {
+        z-index: 2;
+        position: relative;
+    }
+
+    .project-image.error {
+        z-index: 0;
+    }
+
+    .tech-stack-container {
+        transition: all 0.4s ease-out;
+    }
+
+    .tech-hidden {
+        opacity: 0;
+        max-width: 0;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        transition:
+            opacity 0.4s ease-out,
+            max-width 0.5s ease-out,
+            padding 0.4s ease-out;
+    }
+
+    .tech-stack-container.expanded .tech-hidden {
+        opacity: 1;
+        max-width: 200px;
+        padding: 0.25rem 0.5rem;
+        margin: 0;
+    }
+
+    .tech-stack-container.expanded .toggle-text {
+        display: none;
+    }
+
+    .tech-stack-container.expanded .tech-toggle::before {
+        content: "Show less";
+    }
+
+    .toggle-icon {
+        transition: transform 0.4s ease-out;
+    }
+
+    .tech-stack-container.expanded .toggle-icon {
+        transform: rotate(180deg);
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const images = document.querySelectorAll(".project-image");
+
+        images.forEach((img) => {
+            const imgElement = img as HTMLImageElement;
+
+            if (imgElement.complete) {
+                if (imgElement.naturalWidth === 0) {
+                    imgElement.classList.add("error");
+                } else {
+                    imgElement.classList.add("loaded");
+                }
+            }
+        });
+
+        const techToggles = document.querySelectorAll(".tech-toggle");
+
+        techToggles.forEach((toggle) => {
+            toggle.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const container = toggle.closest(".tech-stack-container");
+                container?.classList.toggle("expanded");
+            });
+        });
+    });
+</script>

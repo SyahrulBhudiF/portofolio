@@ -2,49 +2,114 @@
 import "@/styles/globals.css";
 import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
-import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
-    <link rel="icon" type="image/svg+xml" href="/logo.svg"/>
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
-    <link rel="manifest" href="/favicon_io/site.webmanifest">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <meta name="generator" content={Astro.generator}/>
-    <meta name="description" content="The official portfolio of Syahrul Bhudi Ferdiansyah, a Full-Stack Developer showcasing technical expertise in building scalable and efficient web applications using modern technologies such as Next.js, SvelteKit, TypeScript, Laravel, and Golang."/>
-    <meta name="author" content="Syahrul Bhudi Ferdiansyah"/>
-    <meta name="keywords" content="Syahrul, Bhudi, Ferdiansyah, Portfolio, Web Developer, Software Engineer, Next.js, SvelteKit, TypeScript, Laravel, Golang, DevOps, Backend Developer, Frontend Developer, Database"/>
-    <title>Syahrul Bhudi Ferdiansyah – Portfolio</title>
-</head>
-<body class="bg-black overflow-x-hidden">
-<a href="#home" class="skip-link">Skip to main content</a>
-<slot/>
-<Navbar/>
-<SpeedInsights/>
-<Analytics/>
-<script is:inline>
-    document.addEventListener('DOMContentLoaded', function () {
-        const splashScreen = document.querySelector('.splash-screen');
-        if (splashScreen) {
-            splashScreen.style.visibility = 'visible';
-        }
-    });
-</script>
-</body>
+<!doctype html>
+<html lang="en" class="no-transitions">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/favicon_io/apple-touch-icon.png"
+        />
+        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon_io/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon_io/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/favicon_io/site.webmanifest" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <meta name="generator" content={Astro.generator} />
+        <meta
+            name="description"
+            content="The official portfolio of Syahrul Bhudi Ferdiansyah, a Full-Stack Developer showcasing technical expertise in building scalable and efficient web applications using modern technologies such as Next.js, SvelteKit, TypeScript, Laravel, and Golang."
+        />
+        <meta name="author" content="Syahrul Bhudi Ferdiansyah" />
+        <meta
+            name="keywords"
+            content="Syahrul, Bhudi, Ferdiansyah, Portfolio, Web Developer, Software Engineer, Next.js, SvelteKit, TypeScript, Laravel, Golang, DevOps, Backend Developer, Frontend Developer, Database"
+        />
+        <meta
+            name="theme-color"
+            content="#191724"
+            media="(prefers-color-scheme: dark)"
+        />
+        <meta
+            name="theme-color"
+            content="#faf4ed"
+            media="(prefers-color-scheme: light)"
+        />
+        <title>Syahrul Bhudi Ferdiansyah – Portfolio</title>
+
+        <!-- Theme initialization script - runs before page renders to prevent flash -->
+        <script is:inline>
+            (function () {
+                const stored = localStorage.getItem("theme");
+                const prefersDark = window.matchMedia(
+                    "(prefers-color-scheme: dark)",
+                ).matches;
+                const shouldBeDark =
+                    stored === "dark" || (!stored && prefersDark);
+
+                if (shouldBeDark) {
+                    document.documentElement.classList.add("dark");
+                }
+
+                // Remove no-transitions class after page load
+                window.addEventListener("load", function () {
+                    requestAnimationFrame(function () {
+                        document.documentElement.classList.remove(
+                            "no-transitions",
+                        );
+                    });
+                });
+            })();
+        </script>
+    </head>
+    <body
+        class="bg-[var(--base)] text-[var(--text)] overflow-x-hidden antialiased"
+    >
+        <a href="#home" class="skip-link">Skip to main content</a>
+
+        <Header />
+
+        <main>
+            <slot />
+        </main>
+
+        <Footer />
+
+        <SpeedInsights />
+        <Analytics />
+    </body>
 </html>
 
 <style>
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 5rem;
+    }
+
     html,
     body {
         margin: 0;
         width: 100%;
-        height: 100%;
-        box-sizing: border-box;
+        min-height: 100vh;
+    }
+
+    main {
+        min-height: 100vh;
     }
 </style>

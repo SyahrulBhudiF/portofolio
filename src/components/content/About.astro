@@ -1,29 +1,79 @@
 ---
 import { getCollection } from "astro:content";
-import AboutMotion from "../AboutMotion";
-import StarBackground from "../StarBackground";
-import TechStackCategory from "../TechStackCategory";
 
 // Get tech stack from content collection
 const techstackRaw = await getCollection("techstack");
-const techStackCategories = techstackRaw.sort((a, b) => a.data.order - b.data.order);
+const techStackCategories = techstackRaw.sort(
+    (a, b) => a.data.order - b.data.order,
+);
 ---
 
-<section
-    class="w-full min-h-screen max-xl:h-fit pb-20 max-md:px-4 bg-linear-to-b from-black via-gray-950 to-gray-900 px-16 max-sm:px-8 flex justify-center items-center relative z-10"
-    id="about"
->
-    <StarBackground client:visible />
-    <AboutMotion client:idle>
-        {
-            techStackCategories.map((category) => (
-                <TechStackCategory
-                    title={category.data.title}
-                    items={category.data.items}
-                    size="medium"
-                    client:idle
-                />
-            ))
-        }
-    </AboutMotion>
+<section id="about" class="py-24 md:py-32">
+    <div class="max-w-[1100px] mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 md:gap-16">
+            <div class="md:sticky md:top-24 md:self-start">
+                <h2
+                    class="text-2xl font-semibold text-[var(--text)] tracking-tight"
+                >
+                    About
+                </h2>
+            </div>
+
+            <div class="flex flex-col gap-6">
+                <p class="text-[var(--subtle)] text-lg leading-relaxed">
+                    As an Informatics Engineering student at Politeknik Negeri
+                    Malang, I am passionate about advancing my career in
+                    Software Development. With a strong foundation in both
+                    frontend and backend technologies, I have hands-on
+                    experience with JavaScript frameworks like
+                    <span class="text-[var(--text)]">Next.js</span> and
+                    <span class="text-[var(--text)]">SvelteKit</span>, using
+                    <span class="text-[var(--text)]">TypeScript</span>, as well
+                    as backend development with
+                    <span class="text-[var(--text)]">Laravel</span>,
+                    <span class="text-[var(--text)]">Golang</span> and
+                    <span class="text-[var(--text)]">TypeScript</span>.
+                </p>
+                <p class="text-[var(--subtle)] text-lg leading-relaxed">
+                    I am a quick learner, able to adapt to complex projects and
+                    deliver innovative solutions. Committed to continuous
+                    growth, I am eager to contribute my skills in a
+                    collaborative, forward-thinking environment where I can make
+                    meaningful contributions to team goals while further
+                    developing my technical expertise.
+                </p>
+            </div>
+        </div>
+
+        <div
+            class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 md:gap-16 mt-20 pt-20 border-t border-[var(--highlight-low)]"
+        >
+            <div class="md:sticky md:top-24 md:self-start">
+                <h2
+                    class="text-2xl font-semibold text-[var(--text)] tracking-tight"
+                >
+                    Tech Stack
+                </h2>
+            </div>
+
+            <div class="flex flex-col gap-8">
+                {
+                    techStackCategories.map((category) => (
+                        <div class="flex flex-col gap-3">
+                            <h3 class="text-sm font-medium text-[var(--muted)] uppercase tracking-wider">
+                                {category.data.title}
+                            </h3>
+                            <div class="flex flex-wrap gap-2">
+                                {category.data.items.map((tech: string) => (
+                                    <span class="inline-flex items-center px-3 py-1.5 text-sm text-[var(--text)] bg-[var(--surface)] border border-[var(--highlight-low)] rounded-lg hover:border-[var(--iris)] hover:text-[var(--iris)] transition-all cursor-default">
+                                        {tech}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
 </section>
