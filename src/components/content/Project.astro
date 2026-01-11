@@ -1,12 +1,12 @@
 ---
-import CloudParallax from '@/components/CloudParallax';
-import {getCollection} from "astro:content";
-import type {Project} from "@/model/projects";
+import { getCollection } from "astro:content";
+import CloudParallax from "@/components/CloudParallax";
 import ProjectsContainer from "@/components/ProjectsContainer";
+import type { Project } from "@/model/projects";
 
 const personalProjects = await getCollection("projects");
-const sortedPersonalProjects = personalProjects.sort(
-    (a: Project, b: Project) => (a.data.date > b.data.date ? -1 : 1)
+const sortedPersonalProjects = personalProjects.sort((a: Project, b: Project) =>
+  a.data.date > b.data.date ? -1 : 1,
 );
 
 const initialProjects = sortedPersonalProjects.slice(0, 3);

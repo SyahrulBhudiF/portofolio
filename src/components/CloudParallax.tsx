@@ -1,5 +1,5 @@
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useState } from "react";
 
 import cloud1 from "../assets/cloud1.png";
 import cloud2 from "../assets/cloud2.png";
@@ -8,23 +8,14 @@ import cloud4 from "../assets/cloud4.png";
 
 const CloudParallax = () => {
   const { scrollYProgress } = useScroll();
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
 
-  // All hooks must be called before any conditional return
   const y1 = useTransform(scrollYProgress, [0, 1], [50, -100]);
   const y2 = useTransform(scrollYProgress, [0, 1], [-40, 80]);
   const y3 = useTransform(scrollYProgress, [0, 1], [60, -90]);
   const y4 = useTransform(scrollYProgress, [0, 1], [-30, 70]);
   const y5 = useTransform(scrollYProgress, [0, 1], [40, -60]);
 
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Conditional return after all hooks
   if (isMobile) return null;
 
   const clouds = [
@@ -85,7 +76,7 @@ const CloudParallax = () => {
         >
           <img
             src={cloud.image.src}
-            alt={`cloud-${cloud.id}`}
+            alt={`Decorative parallax cloud layer ${cloud.id}`}
             loading="lazy"
             decoding="async"
             className="w-full h-auto pointer-events-none select-none"

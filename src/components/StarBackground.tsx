@@ -38,49 +38,27 @@ const StarBackground: React.FC = () => {
   }, []);
 
   return (
-    <>
-      <style>{`
-                @keyframes starTwinkle {
-                    0%, 100% {
-                        transform: scale(1);
-                        opacity: var(--star-opacity);
-                    }
-                    50% {
-                        transform: scale(1.5);
-                        opacity: calc(var(--star-opacity) * 0.5);
-                    }
-                }
-                .star-animated {
-                    animation: starTwinkle var(--animation-duration) ease-in-out infinite;
-                    animation-delay: var(--animation-delay);
-                }
-            `}</style>
-      <motion.div
-        ref={ref}
-        className="absolute inset-0 overflow-hidden z-0 h-1/2"
-        style={{ y }}
-      >
-        {stars.map((star) => (
-          <div
-            key={star.id}
-            className={`absolute bg-purple-500 rounded-full ${star.id % 10 !== 0 ? "star-animated" : ""}`}
-            style={
-              {
-                width: `${star.size}px`,
-                height: `${star.size}px`,
-                left: `${star.x}%`,
-                top: `${star.y}%`,
-                opacity: star.opacity,
-                transform: `translateY(${star.depth * 50}px)`,
-                "--star-opacity": star.opacity,
-                "--animation-delay": star.animationDelay,
-                "--animation-duration": star.animationDuration,
-              } as React.CSSProperties
-            }
-          />
-        ))}
-      </motion.div>
-    </>
+    <motion.div ref={ref} className="absolute inset-0 overflow-hidden z-0 h-1/2" style={{ y }}>
+      {stars.map((star) => (
+        <div
+          key={star.id}
+          className={`absolute bg-purple-500 rounded-full ${star.id % 10 !== 0 ? "star-animated" : ""}`}
+          style={
+            {
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              left: `${star.x}%`,
+              top: `${star.y}%`,
+              opacity: star.opacity,
+              transform: `translateY(${star.depth * 50}px)`,
+              "--star-opacity": star.opacity,
+              "--animation-delay": star.animationDelay,
+              "--animation-duration": star.animationDuration,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+    </motion.div>
   );
 };
 

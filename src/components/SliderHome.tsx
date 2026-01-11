@@ -1,29 +1,36 @@
-import React from 'react';
-import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel.tsx";
 import Autoplay from "embla-carousel-autoplay";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel.tsx";
+
+const ROLES = [
+  "Web Developer",
+  "Full-Stack Developer",
+  "Frontend Developer",
+  "Backend Developer",
+  "Bug Maker :v",
+] as const;
+
+const CAROUSEL_ITEM_CLASS =
+  "text-white font-bold text-3xl max-sm:text-xl w-fit text-carousel";
 
 const SliderHome = () => {
-    return (
-        <Carousel className="w-fit pointer-events-none" plugins={[Autoplay({playOnInit: true, delay: 1500})]}>
-            <CarouselContent>
-                <CarouselItem className="text-white font-bold text-3xl max-sm:text-xl w-fit text-carousel">
-                    Web Developer
-                </CarouselItem>
-                <CarouselItem className="text-white font-bold text-3xl max-sm:text-xl w-fit text-carousel">
-                    Full-Stack Developer
-                </CarouselItem>
-                <CarouselItem className="text-white font-bold text-3xl max-sm:text-xl w-fit text-carousel">
-                    Frontend Developer
-                </CarouselItem>
-                <CarouselItem className="text-white font-bold text-3xl max-sm:text-xl w-fit text-carousel">
-                    Backend Developer
-                </CarouselItem>
-                <CarouselItem className="text-white font-bold text-3xl max-sm:text-xl w-fit text-carousel">
-                    Bug Maker :v
-                </CarouselItem>
-            </CarouselContent>
-        </Carousel>
-    );
+  return (
+    <Carousel
+      className="w-fit pointer-events-none"
+      plugins={[Autoplay({ playOnInit: true, delay: 1500 })]}
+    >
+      <CarouselContent>
+        {ROLES.map((role) => (
+          <CarouselItem key={role} className={CAROUSEL_ITEM_CLASS}>
+            {role}
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+    </Carousel>
+  );
 };
 
 export default SliderHome;

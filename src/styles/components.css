@@ -1,0 +1,173 @@
+/**
+ * Custom Component Styles
+ *
+ * This file contains custom CSS classes used throughout the portfolio.
+ * These styles complement Tailwind CSS utilities.
+ */
+
+/* ==========================================================================
+   Typography - Retro/VT323 Font Styles
+   ========================================================================== */
+
+.text-carousel {
+  font-family: "VT323", monospace;
+  text-shadow: 4px 4px 0px #cda6ed;
+}
+
+.text-retro {
+  font-family: "VT323", monospace;
+  text-shadow: 5px 5px 0px #cda6ed;
+  color: white;
+}
+
+/* ==========================================================================
+   Retro Tech Block - 3D Card Effect
+   ========================================================================== */
+
+.retro-tech-block {
+  transition: all 0.3s ease;
+  box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.1), 8px 8px 0 rgba(255, 255, 255, 0.05), 12px 12px 0
+    rgba(255, 255, 255, 0.025);
+  border-color: rgba(255, 255, 255, 0.1);
+  perspective: 500px;
+}
+
+.retro-tech-block::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.025) 100%);
+  mix-blend-mode: overlay;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.retro-tech-block:hover {
+  position: relative;
+  z-index: 50;
+  transform: translateY(-15px) rotateX(5deg) scale(1.05);
+  box-shadow: 6px 6px 0 rgba(255, 255, 255, 0.15), 12px 12px 0 rgba(255, 255, 255, 0.1), 18px 18px 0
+    rgba(255, 255, 255, 0.05);
+  background-color: rgba(156, 81, 224, 0.3);
+}
+
+.retro-tech-block:hover p {
+  color: white;
+}
+
+.retro-block-inner {
+  position: relative;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   Shadow Effects
+   ========================================================================== */
+
+.shadow-box {
+  -webkit-box-shadow: 5px 6px 9px 0px rgba(89, 28, 135, 1);
+  -moz-box-shadow: 5px 6px 9px 0px rgba(89, 28, 135, 1);
+  box-shadow: 5px 6px 9px 0px rgba(89, 28, 135, 1);
+}
+
+/* ==========================================================================
+   Splash Screen
+   ========================================================================== */
+
+.splash-screen {
+  visibility: hidden;
+}
+
+/* ==========================================================================
+   Accessibility - Skip Links
+   ========================================================================== */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #6b21a8;
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.3s ease;
+  border-radius: 0 0 4px 0;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Loading States / Skeletons
+   ========================================================================== */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 25%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  height: 1em;
+  margin-bottom: 0.5em;
+}
+
+.skeleton-title {
+  height: 1.5em;
+  width: 60%;
+  margin-bottom: 1em;
+}
+
+.skeleton-image {
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.skeleton-card {
+  min-height: 200px;
+  border-radius: 8px;
+}
+
+/* ==========================================================================
+   Star Background Animation
+   ========================================================================== */
+
+@keyframes starTwinkle {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: var(--star-opacity);
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: calc(var(--star-opacity) * 0.5);
+  }
+}
+
+.star-animated {
+  animation: starTwinkle var(--animation-duration) ease-in-out infinite;
+  animation-delay: var(--animation-delay);
+}

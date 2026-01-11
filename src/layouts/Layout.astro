@@ -1,8 +1,8 @@
 ---
-import '@/styles/globals.css'
+import "@/styles/globals.css";
+import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
 import Navbar from "../components/Navbar.astro";
-import SpeedInsights from "@vercel/speed-insights/astro"
-import Analytics from '@vercel/analytics/astro'
 ---
 
 <!DOCTYPE html>
@@ -17,28 +17,13 @@ import Analytics from '@vercel/analytics/astro'
     <link rel="manifest" href="/favicon_io/site.webmanifest">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta name="generator" content={Astro.generator}/>
-    <meta name="description"
-          content="The official portfolio of Syahrul Bhudi Ferdiansyah, a Full-Stack Developer showcasing technical expertise in building scalable and efficient web applications using modern technologies such as Next.js, SvelteKit, TypeScript, Laravel, and Golang."/>
+    <meta name="description" content="The official portfolio of Syahrul Bhudi Ferdiansyah, a Full-Stack Developer showcasing technical expertise in building scalable and efficient web applications using modern technologies such as Next.js, SvelteKit, TypeScript, Laravel, and Golang."/>
     <meta name="author" content="Syahrul Bhudi Ferdiansyah"/>
-    <meta name="keywords"
-          content="Syahrul, Bhudi, Ferdiansyah, Portofolio, Web Developer, Software Engineer, Next.js, SvelteKit, TypeScript, Laravel, Golang, DevOps, Web Developer, Backend Developer, Frontend Developer, Database,"/>
+    <meta name="keywords" content="Syahrul, Bhudi, Ferdiansyah, Portfolio, Web Developer, Software Engineer, Next.js, SvelteKit, TypeScript, Laravel, Golang, DevOps, Backend Developer, Frontend Developer, Database"/>
     <title>Syahrul Bhudi Ferdiansyah – Portfolio</title>
-    <script is:inline type="application/ld+json" set:html={`
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Syahrul Bhudi Ferdiansyah",
-  "url": "https://ryuko.my.id/",
-  "sameAs": [
-    "https://www.linkedin.com/in/syahrulbhudif/",
-    "https://github.com/SyahrulBhudiF"
-  ],
-  "jobTitle": "Full-Stack Developer",
-  "email": "mailto:syahrulbhudif@ryuko.my.id"
-}
-`}/>
 </head>
 <body class="bg-black overflow-x-hidden">
+<a href="#home" class="skip-link">Skip to main content</a>
 <slot/>
 <Navbar/>
 <SpeedInsights/>

@@ -1,31 +1,23 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import React, { type ReactNode, useEffect, useState } from "react";
+import type React from "react";
+import { useState } from "react";
+import TechStackItem from "@/components/ui/TechStackItem";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface Props {
   title: string;
-  children: ReactNode;
-  defaultOpen?: boolean;
+  items: string[];
+  size?: "small" | "medium" | "large";
 }
 
 const TechStackCategory: React.FC<Props> = ({
   title,
-  children,
-  defaultOpen = true,
+  items,
+  size = "medium",
 }) => {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  const isMobile = useIsMobile();
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleToggle = () => {
     if (isMobile) {
@@ -40,6 +32,8 @@ const TechStackCategory: React.FC<Props> = ({
     }
   };
 
+  const categoryId = `tech-stack-${title.toLowerCase().replace(/\s+/g, "-")}`;
+
   return (
     <div className="w-full">
       <button
@@ -48,7 +42,7 @@ const TechStackCategory: React.FC<Props> = ({
         onClick={handleToggle}
         onKeyDown={handleKeyDown}
         aria-expanded={isOpen}
-        aria-controls={`tech-stack-${title.toLowerCase().replace(/\s+/g, "-")}`}
+        aria-controls={categoryId}
       >
         <h3 className="text-2xl font-semibold text-purple-300 max-sm:text-xl">
           {title}
@@ -63,7 +57,7 @@ const TechStackCategory: React.FC<Props> = ({
         )}
       </button>
 
-      <div id={`tech-stack-${title.toLowerCase().replace(/\s+/g, "-")}`}>
+      <div id={categoryId}>
         {isMobile ? (
           <AnimatePresence initial={false}>
             {isOpen && (
@@ -75,13 +69,19 @@ const TechStackCategory: React.FC<Props> = ({
                 className="overflow-hidden"
               >
                 <div className="flex gap-2 flex-wrap justify-start pb-4">
-                  {children}
+                  {items.map((tech) => (
+                    <TechStackItem key={tech} tech={tech} size={size} />
+                  ))}
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         ) : (
-          <div className="flex gap-4 flex-wrap justify-start">{children}</div>
+          <div className="flex gap-4 flex-wrap justify-start">
+            {items.map((tech) => (
+              <TechStackItem key={tech} tech={tech} size={size} />
+            ))}
+          </div>
         )}
       </div>
     </div>

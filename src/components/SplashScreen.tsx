@@ -1,12 +1,5 @@
-import { AnimatePresence, motion } from "motion/react";
-import {
-  type FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { type FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface Config {
   fullText: string;
@@ -179,12 +172,9 @@ const SplashScreen = () => {
     [],
   );
 
-  const getRandomDelay = useCallback(
-    (base: number, variance: number): number => {
-      return Math.max(base + Math.random() * variance - variance / 2, 10);
-    },
-    [],
-  );
+  const getRandomDelay = useCallback((base: number, variance: number): number => {
+    return Math.max(base + Math.random() * variance - variance / 2, 10);
+  }, []);
 
   const clearAllTimers = useCallback((): void => {
     for (const timer of timersRef.current) {
@@ -233,10 +223,7 @@ const SplashScreen = () => {
       return;
     }
 
-    const delay = getRandomDelay(
-      config.timings.typing,
-      config.timings.variance,
-    );
+    const delay = getRandomDelay(config.timings.typing, config.timings.variance);
     const timer = setTimeout(() => {
       animationFrameRef.current = requestAnimationFrame(() => {
         setTypedText((prev) => prev + config.fullText[prev.length]);
@@ -275,10 +262,7 @@ const SplashScreen = () => {
       };
     }
 
-    const delay = getRandomDelay(
-      config.timings.responseTyping,
-      config.timings.responseVariance,
-    );
+    const delay = getRandomDelay(config.timings.responseTyping, config.timings.responseVariance);
     const timer = setTimeout(() => {
       animationFrameRef.current = requestAnimationFrame(() => {
         setTypedResponse((prev) => prev + config.responseText[prev.length]);
@@ -334,16 +318,14 @@ const SplashScreen = () => {
             }}
           >
             <div className="absolute top-2 left-4 flex space-x-2">
-              <div className="w-3 h-3 rounded-full bg-red-500/70"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500/70"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500/70"></div>
+              <div className="w-3 h-3 rounded-full bg-red-500/70" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
+              <div className="w-3 h-3 rounded-full bg-green-500/70" />
             </div>
 
             <div className="mt-8 space-y-2">
-              <div className="command-line text-lg leading-relaxed text-white font-mono break-words">
-                <span className="text-purple-400 font-semibold">
-                  ryuko@fedora
-                </span>
+              <div className="command-line text-lg leading-relaxed text-white font-mono wrap-break-word">
+                <span className="text-purple-400 font-semibold">ryuko@fedora</span>
                 <span className="text-purple-300">:~$</span>
                 <span className="command text-white">{typedText}</span>
                 {!showSecondText && <Cursor show={showCursor} />}
@@ -352,22 +334,16 @@ const SplashScreen = () => {
               <AnimatePresence mode="wait">
                 {showSecondText && (
                   <motion.div
-                    className="command-line text-lg leading-relaxed text-white font-mono break-words"
+                    className="command-line text-lg leading-relaxed text-white font-mono wrap-break-word"
                     variants={variants.secondText}
                     initial="initial"
                     animate="animate"
                     exit="initial"
                   >
-                    <span className="text-purple-400 font-semibold">
-                      ryuko@fedora
-                    </span>
+                    <span className="text-purple-400 font-semibold">ryuko@fedora</span>
                     <span className="text-purple-300">:~$</span>
-                    <span className="command text-gray-300">
-                      {config.promptText}
-                    </span>
-                    <span className="command text-white font-semibold">
-                      {typedResponse}
-                    </span>
+                    <span className="command text-gray-300">{config.promptText}</span>
+                    <span className="command text-white font-semibold">{typedResponse}</span>
                     {typedResponse.length < config.responseText.length && (
                       <Cursor show={showCursor} />
                     )}
