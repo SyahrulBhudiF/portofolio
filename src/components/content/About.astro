@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 
-// Get tech stack from content collection
 const techstackRaw = await getCollection("techstack");
 const techStackCategories = techstackRaw.sort(
     (a, b) => a.data.order - b.data.order,
