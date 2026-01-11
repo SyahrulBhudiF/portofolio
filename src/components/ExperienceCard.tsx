@@ -1,10 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronsUpDown, LucideCalendar1, LucideMapPinned } from "lucide-react";
 import { type FC, useState } from "react";
-import {
-  Collapsible,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible.tsx";
+import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible.tsx";
 
 interface Props {
   title: string;
@@ -36,9 +33,9 @@ const ExperienceCard: FC<Props> = ({
       <div className="flex gap-2 justify-between w-full max-lg:flex-col max-lg:items-start">
         <p className="font-medium text-xl">{title}</p>
         <div className="flex gap-2">
-          {tags.map((tag, index) => (
+          {tags.map((tag) => (
             <div
-              key={index}
+              key={tag}
               className="px-3 py-1 h-fit rounded-lg border bg-white text-black text-sm opacity-80"
             >
               {tag}
@@ -61,10 +58,7 @@ const ExperienceCard: FC<Props> = ({
         <CollapsibleTrigger asChild>
           <div className="flex items-center gap-2 text-purple-200 hover:text-purple-300 hover:bg-transparent transition-colors duration-200 cursor-pointer text-xs">
             <span>{isOpen ? "See Less" : "See More"}</span>
-            <motion.div
-              animate={{ rotate: isOpen ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
               <ChevronsUpDown className="h-4 w-4" />
             </motion.div>
           </div>
@@ -85,7 +79,7 @@ const ExperienceCard: FC<Props> = ({
                 <ul className="list-disc space-y-2">
                   {description.map((item, index) => (
                     <motion.li
-                      key={index}
+                      key={`desc-${item.slice(0, 20)}-${index}`}
                       className="font-medium text-sm text-white ml-4"
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -109,7 +103,7 @@ const ExperienceCard: FC<Props> = ({
                 >
                   {skills.map((skill, index) => (
                     <motion.div
-                      key={index}
+                      key={skill}
                       className="px-3 py-1 max-sm:px-1 max-sm:text-sm rounded-lg border border-dashed text-sm opacity-65 w-fit hover:opacity-100 hover:border-purple-400 hover:text-purple-300 transition-all duration-200"
                       initial={{ y: 150 }}
                       animate={{ y: 0 }}

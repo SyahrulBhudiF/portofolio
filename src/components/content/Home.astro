@@ -1,9 +1,9 @@
 ---
-import SliderHome from '../SliderHome';
-import rinGif from '@/assets/rin.gif';
-import ParticlesHome from '../ParticlesHome';
-import {Image} from 'astro:assets';
-import {FileUser} from "lucide-react";
+import { Image } from "astro:assets";
+import rinGif from "@/assets/rin.gif";
+import { FileUser } from "lucide-react";
+import ParticlesHome from "../ParticlesHome";
+import SliderHome from "../SliderHome";
 ---
 
 <section class="w-full h-screen overflow-hidden relative" id="home">
@@ -18,7 +18,7 @@ import {FileUser} from "lucide-react";
             </h1>
             <div class="text-3xl text-white flex gap-3 items-center max-sm:text-lg">
                 <p class="whitespace-nowrap">I'm a</p>
-                <SliderHome client:load/>
+                <SliderHome client:idle/>
             </div>
             <a
                     href="assets/cv_syahrul.pdf"
@@ -29,7 +29,7 @@ import {FileUser} from "lucide-react";
                 <FileUser size={20}/>
             </a>
         </div>
-        <Image src={rinGif} alt="Rin Gif"
+        <Image src={rinGif} alt="Animated illustration of Rin character waving"
                class="rounded max-lg:w-[90%] max-md:w-full xl:w-full 2xl:w-1/3 object-fill border-purple-800 border-2 p-2 shadow-lg shadow-purple-900"
                loading="eager"
                fetchpriority={"high"}/>

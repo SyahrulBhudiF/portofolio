@@ -1,117 +1,16 @@
 ---
+import { getCollection } from "astro:content";
 import Contact from "../Contact";
 import ExperienceCard from "../ExperienceCard";
 import MountainSVG from "../MountainSVG";
 
-// Work Experience Data
-const workExperiences = [
-    {
-        company: "PT Sinergi Informatika Semen Indonesia",
-        position: "Full-stack Developer",
-        duration: "Feb 2025 - Dec 2025",
-        location: "Jakarta Selatan, Indonesia",
-        description: [
-            "Designed and implemented a robust backend architecture with an emphasis on writing clean, reusable, and scalable code.",
-            "Refactored legacy code, transitioning it to a more efficient and modern architecture to improve maintainability and performance.",
-            "Redesigned the database schema to optimize performance, improve scalability, and adhere to best practices in data management.",
-            "Implemented a dynamic, role-based access control (RBAC) system, significantly enhancing security and user flexibility.",
-            "Integrated Nextcloud as a cloud-based document storage solution, providing secure, scalable, and efficient file management for the platform.",
-            "Optimized database queries to streamline data retrieval, reducing response times and improving overall system efficiency.",
-            "Enhanced WordPress performance and visibility by implementing SEO optimization strategies, integrating heatmap analytics for user behavior tracking, and developing custom WordPress code solutions to extend functionality and improve user experience.",
-        ],
-        technologies: [
-            "Laravel",
-            "InertiaJS",
-            "React",
-            "TypeScript",
-            "TailwindCSS",
-            "PostgreSQL",
-            "Redis",
-            "WordPress",
-            "Nextcloud",
-            "Wordpress",
-            "Microsoft Clarify",
-            "Mouseflow",
-        ],
-        tags: ["Hybrid", "Intern"],
-    },
-    {
-        company: "Oranji",
-        position: "Software Developer",
-        duration: "Sep 2024 - Aug 2025",
-        location: "Malang, Indonesia",
-        description: [
-            "Developed efficient code and acted as a system analyst to align user requirements with technical solutions.",
-            "Transformed user requirements into software specifications and database designs to meet client needs.",
-            "Led the development team, coordinating tasks and ensuring smooth execution of processes.",
-            "Implemented CI/CD pipelines with GitHub Actions for automated, reliable deployments.",
-            "Set up a Docker-based production environment to optimize workflows and ensure consistency.",
-            "Configured production servers with Nginx as a reverse proxy and integrated FrankenPHP for better performance.",
-        ],
-        technologies: [
-            "Laravel",
-            "InertiaJS",
-            "React",
-            "TypeScript",
-            "Astro",
-            "TailwindCSS",
-            "MySQL",
-            "Docker",
-            "Nginx",
-            "FrankenPHP",
-        ],
-        tags: ["Remote", "Part-time"],
-    },
-    {
-        company: "PT Sthira Teknik Indonesia",
-        position: "Full-stack Developer",
-        duration: "Jul 2024 - Des 2024",
-        location: "Daerah Istimewa Yogyakarta, Indonesia",
-        description: [
-            "Developed a comprehensive web platform to streamline the registration, management, and administration of training sessions and seminars for healthcare professionals at RSUD Prambanan, Yogyakarta.",
-            "Enhanced operational efficiency by automating and optimizing key administrative processes.",
-            "Simplified participant management, making it easier to track and handle registrations.",
-            "Supported seamless administration for the hospital’s professional development initiatives, ensuring smooth execution of training sessions and seminars.",
-        ],
-        technologies: [
-            "Laravel",
-            "InertiaJS",
-            "ReactJS",
-            "TypeScript",
-            "TailwindCSS",
-            "MySQL",
-        ],
-        tags: ["Remote", "Freelance"],
-    },
-];
+// Get work experiences from content collection
+const workExperiencesRaw = await getCollection("experiences");
+const workExperiences = workExperiencesRaw.sort((a, b) => a.data.order - b.data.order);
 
-// Education Data
-const educationExperiences = [
-    {
-        institution: "Politeknik Negeri Malang",
-        degree: "Bachelor of Applied Informatics Engineering",
-        duration: "2022 - 2026",
-        location: "Malang, Indonesia",
-        description: [
-            "Focused on software engineering and development, with a strong foundation built through coursework in algorithms, data structures, database design, and practical application development.",
-            "Developed skills in building scalable applications, system analysis, and modern programming practices.",
-        ],
-        achievements: [],
-        tags: [],
-    },
-    {
-        institution: "SMAN 1 Balongpanggang",
-        degree: "Mathematics and Science",
-        duration: "2019 - 2022",
-        location: "Gresik, Indonesia",
-        description: [
-            "Concentrated on mathematics and science, emphasizing critical thinking, logical reasoning, and scientific exploration.",
-            "Gained a comprehensive understanding of mathematics, physics, and chemistry.",
-        ],
-        achievements: [],
-        tags: [],
-    },
-];
+// Get education from content collection
+const educationRaw = await getCollection("education");
+const educationExperiences = educationRaw.sort((a, b) => a.data.order - b.data.order);
 ---
 
 <section
@@ -134,13 +33,13 @@ const educationExperiences = [
                 {
                     workExperiences.map((experience) => (
                         <ExperienceCard
-                            title={experience.company}
-                            subtitle={experience.position}
-                            duration={experience.duration}
-                            location={experience.location}
-                            description={experience.description}
-                            tags={experience.tags}
-                            skills={experience.technologies}
+                            title={experience.data.company}
+                            subtitle={experience.data.position}
+                            duration={experience.data.duration}
+                            location={experience.data.location}
+                            description={experience.data.description}
+                            tags={experience.data.tags}
+                            skills={experience.data.technologies}
                             client:idle
                         />
                     ))
@@ -158,13 +57,13 @@ const educationExperiences = [
                 {
                     educationExperiences.map((education) => (
                         <ExperienceCard
-                            title={education.institution}
-                            subtitle={education.degree}
-                            duration={education.duration}
-                            location={education.location}
-                            description={education.description}
-                            tags={education.tags}
-                            skills={education.achievements}
+                            title={education.data.institution}
+                            subtitle={education.data.degree}
+                            duration={education.data.duration}
+                            location={education.data.location}
+                            description={education.data.description}
+                            tags={education.data.tags}
+                            skills={education.data.achievements}
                             client:idle
                         />
                     ))

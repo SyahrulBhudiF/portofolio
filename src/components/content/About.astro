@@ -1,40 +1,12 @@
 ---
+import { getCollection } from "astro:content";
 import AboutMotion from "../AboutMotion";
 import StarBackground from "../StarBackground";
 import TechStackCategory from "../TechStackCategory";
-import TechStackItem from "../TechStackItem";
 
-const techStackCategories = {
-    languages: {
-        title: "Languages",
-        items: ["Javascript", "Typescript", "PHP", "Python", "Rust", "Golang"],
-    },
-    frameworks: {
-        title: "Frameworks & Libraries",
-        items: [
-            "Tanstack",
-            "Laravel",
-            "NextJS",
-            "SvelteKit",
-            "Astro",
-            "NestJS",
-            "React",
-            "InertiaJS",
-            "Hono",
-            "BiomeJS",
-            "TailwindCSS",
-            "Bootstrap",
-        ],
-    },
-    databases: {
-        title: "Databases",
-        items: ["MySQL", "PostgreSQL", "Redis", "Prisma", "Drizzle"],
-    },
-    devops: {
-        title: "DevOps & Tools",
-        items: ["Docker", "Bun"],
-    },
-};
+// Get tech stack from content collection
+const techstackRaw = await getCollection("techstack");
+const techStackCategories = techstackRaw.sort((a, b) => a.data.order - b.data.order);
 ---
 
 <section
@@ -44,12 +16,13 @@ const techStackCategories = {
     <StarBackground client:visible />
     <AboutMotion client:idle>
         {
-            Object.entries(techStackCategories).map(([key, category]) => (
-                <TechStackCategory title={category.title} client:idle>
-                    {category.items.map((tech: string) => (
-                        <TechStackItem tech={tech} size="medium" />
-                    ))}
-                </TechStackCategory>
+            techStackCategories.map((category) => (
+                <TechStackCategory
+                    title={category.data.title}
+                    items={category.data.items}
+                    size="medium"
+                    client:idle
+                />
             ))
         }
     </AboutMotion>

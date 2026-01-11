@@ -1,10 +1,4 @@
-import {
-  FileUser,
-  Github,
-  Linkedin,
-  type LucideIcon,
-  Mail,
-} from "lucide-react";
+import { FileUser, Github, Linkedin, type LucideIcon, Mail } from "lucide-react";
 import type React from "react";
 
 interface SocialLink {
@@ -72,10 +66,7 @@ const Contact: React.FC = () => {
                 aria-label={item.ariaLabel}
                 className="flex items-center justify-center w-8 h-8 border-2 border-white opacity-50 rounded text-white transition-transform duration-300 ease-in-out hover:-translate-y-1"
               >
-                <item.icon
-                  size={24}
-                  className="group-hover:border-purple-700"
-                />
+                <item.icon size={24} className="group-hover:border-purple-700" />
               </a>
             ),
         )}
