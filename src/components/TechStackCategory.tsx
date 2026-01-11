@@ -66,7 +66,6 @@ const TechStackCategory: React.FC<Props> = ({
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="overflow-hidden"
               >
                 <div className="flex gap-2 flex-wrap justify-start pb-4">
                   {items.map((tech) => (
