@@ -28,40 +28,50 @@ const ExperienceCard: FC<Props> = ({
     <Collapsible
       open={isOpen}
       onOpenChange={setIsOpen}
-      className="flex flex-col items-start w-full gap-1 p-4 rounded-lg shadow-lg transition-all duration-300 hover:bg-gray-700/40 bg-gray-800/30"
+      className="flex h-full w-full flex-col items-start p-4 rounded-lg shadow-lg transition-all duration-300 hover:bg-gray-700/40 bg-gray-800/30"
     >
-      <div className="flex gap-2 justify-between w-full max-lg:flex-col max-lg:items-start">
-        <p className="font-medium text-xl">{title}</p>
-        <div className="flex gap-2">
-          {tags.map((tag) => (
-            <div
-              key={tag}
-              className="px-3 py-1 h-fit rounded-lg border bg-white text-black text-sm opacity-80"
-            >
-              {tag}
-            </div>
-          ))}
+      <div className="flex w-full gap-3 justify-between max-sm:flex-col">
+        <div className="min-w-0 flex-1">
+          <p className="font-medium text-xl leading-tight text-white">{title}</p>
+          <p className="mt-2 font-bold text-lg text-white/70 leading-snug">{subtitle}</p>
         </div>
+
+        {tags.length > 0 && (
+          <div className="flex shrink-0 gap-2 flex-wrap justify-end self-start max-sm:justify-start">
+            {tags.map((tag) => (
+              <div
+                key={tag}
+                className="px-3 py-1 h-fit rounded-lg border bg-white text-black text-sm opacity-80"
+              >
+                {tag}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      <p className="font-bold text-lg text-white/70 mb-3">{subtitle}</p>
-      <p className="font-medium text-sm text-white/50 flex gap-1 items-center">
-        <LucideCalendar1 className="w-4 h-4" />
-        {duration}
-      </p>
-      <p className="font-medium text-sm text-white/50 flex gap-1 items-center">
-        <LucideMapPinned className="w-4 h-4" />
-        {location}
-      </p>
+      <div className="w-full pt-5 space-y-1 self-start">
+        <p className="font-medium text-sm text-white/50 flex gap-1 items-center">
+          <LucideCalendar1 className="w-4 h-4" />
+          {duration}
+        </p>
+        <p className="font-medium text-sm text-white/50 flex gap-1 items-center">
+          <LucideMapPinned className="w-4 h-4" />
+          {location}
+        </p>
+      </div>
 
-      <div className="w-full flex justify-between items-center mt-2">
+      <div className="w-full flex justify-between items-center mt-auto pt-3">
         <CollapsibleTrigger asChild>
-          <div className="flex items-center gap-2 text-purple-200 hover:text-purple-300 hover:bg-transparent transition-colors duration-200 cursor-pointer text-xs">
+          <button
+            type="button"
+            className="flex items-center gap-2 text-purple-200 hover:text-purple-300 hover:bg-transparent transition-colors duration-200 cursor-pointer text-xs"
+          >
             <span>{isOpen ? "See Less" : "See More"}</span>
             <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
               <ChevronsUpDown className="h-4 w-4" />
             </motion.div>
-          </div>
+          </button>
         </CollapsibleTrigger>
       </div>
 
