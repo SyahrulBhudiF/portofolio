@@ -1,5 +1,5 @@
-import type React from "react";
 import { cn } from "@/lib/utils";
+import type React from "react";
 
 type TechStackSize = "small" | "medium" | "large";
 
@@ -30,7 +30,7 @@ const TechStackItem: React.FC<TechStackItemProps> = ({
     <div
       className={cn(
         "retro-tech-block relative m-2 flex justify-center items-center gap-1 text-white border-2 border-purple-700/30 rounded-lg cursor-pointer overflow-hidden bg-purple-900/20 group",
-        sizeClasses[size]
+        sizeClasses[size],
       )}
     >
       <div className="retro-block-inner flex items-center justify-center gap-2">
@@ -41,7 +41,7 @@ const TechStackItem: React.FC<TechStackItemProps> = ({
             loading="lazy"
             className={cn(
               iconSizeClasses[size],
-              "brightness-150 transition-transform duration-200 ease-out group-hover:scale-110"
+              "brightness-150 transition-transform duration-200 ease-out group-hover:scale-110",
             )}
           />
         </div>

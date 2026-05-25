@@ -1,15 +1,15 @@
+import { cn } from "@/lib/utils";
 import {
   AnimatePresence,
   type AnimationControls,
-  motion,
   type Target,
   type TargetAndTransition,
   type Transition,
   type VariantLabels,
+  motion,
 } from "framer-motion";
 import type React from "react";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
-import { cn } from "@/lib/utils";
 
 export interface RotatingTextRef {
   next: () => void;

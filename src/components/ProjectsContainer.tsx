@@ -22,9 +22,9 @@ const ProjectsContainer = ({ initialProjects, remainingProjects }: ProjectsConta
     >
       {initialProjects.map((project) => (
         <ProjectCard
-          key={project.slug}
+          key={project.id}
           project={project.data}
-          href={`assets/projects/${project.slug}/cover.webp`}
+          href={`assets/projects/${project.id}/cover.webp`}
           isReverse={false}
         />
       ))}
@@ -85,7 +85,7 @@ const ProjectsContainer = ({ initialProjects, remainingProjects }: ProjectsConta
                 <div className="pt-8 grid grid-cols-1 gap-10">
                   {remainingProjects.map((project, index) => (
                     <motion.div
-                      key={project.slug}
+                      key={project.id}
                       initial={{ opacity: 0, y: -20 }}
                       animate={{
                         opacity: 1,
@@ -98,7 +98,7 @@ const ProjectsContainer = ({ initialProjects, remainingProjects }: ProjectsConta
                     >
                       <ProjectCard
                         project={project.data}
-                        href={`assets/projects/${project.slug}/cover.webp`}
+                        href={`assets/projects/${project.id}/cover.webp`}
                         isReverse={false}
                       />
                     </motion.div>

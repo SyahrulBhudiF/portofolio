@@ -1,9 +1,9 @@
+import TechStackItem from "@/components/ui/TechStackItem";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import TechStackItem from "@/components/ui/TechStackItem";
-import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface Props {
   title: string;
@@ -11,11 +11,7 @@ interface Props {
   size?: "small" | "medium" | "large";
 }
 
-const TechStackCategory: React.FC<Props> = ({
-  title,
-  items,
-  size = "medium",
-}) => {
+const TechStackCategory: React.FC<Props> = ({ title, items, size = "medium" }) => {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(true);
 
@@ -44,14 +40,9 @@ const TechStackCategory: React.FC<Props> = ({
         aria-expanded={isOpen}
         aria-controls={categoryId}
       >
-        <h3 className="text-2xl font-semibold text-purple-300 max-sm:text-xl">
-          {title}
-        </h3>
+        <h3 className="text-2xl font-semibold text-purple-300 max-sm:text-xl">{title}</h3>
         {isMobile && (
-          <motion.div
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.3 }}
-          >
+          <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
             <ChevronDown className="w-5 h-5 text-purple-300" />
           </motion.div>
         )}

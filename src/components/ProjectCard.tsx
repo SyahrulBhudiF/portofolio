@@ -1,9 +1,9 @@
-import { motion, useInView } from "framer-motion";
-import type React from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { createCardVariants } from "@/lib/animations";
 import type { ProjectMeta } from "@/model/projects";
+import { motion, useInView } from "framer-motion";
+import type React from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import LinkedInIcon from "./icons/LinkedInIcon";
 import TechStackItem from "./ui/TechStackItem";
 
@@ -61,11 +61,7 @@ interface ProjectCardProps {
   isReverse?: boolean;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({
-  project,
-  href,
-  isReverse,
-}) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, isReverse }) => {
   const ref = useRef(null);
   const isMobile = useIsMobile();
   const [imageExists, setImageExists] = useState<boolean | null>(null);
@@ -100,15 +96,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
   const renderGithubLinks = () => (
     <div className="grid grid-cols-2 gap-4 w-fit mt-4 max-sm:grid-cols-1">
-      {project.sourceClient && (
-        <GithubLink url={project.sourceClient} text="Client Source" />
-      )}
-      {project.sourceServer && (
-        <GithubLink url={project.sourceServer} text="Server Source" />
-      )}
-      {project.sourceModel && (
-        <GithubLink url={project.sourceModel} text="Model Source" />
-      )}
+      {project.sourceClient && <GithubLink url={project.sourceClient} text="Client Source" />}
+      {project.sourceServer && <GithubLink url={project.sourceServer} text="Server Source" />}
+      {project.sourceModel && <GithubLink url={project.sourceModel} text="Model Source" />}
     </div>
   );
 
@@ -117,9 +107,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
     return (
       <div className="mt-6 w-full">
-        <p className="font-semibold text-xl text-purple-300 mb-3">
-          Contributors
-        </p>
+        <p className="font-semibold text-xl text-purple-300 mb-3">Contributors</p>
         <div className="flex flex-wrap flex-col space-y-2">
           {project.contributors.map((contributor) => (
             <ContributorLink
@@ -160,16 +148,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           )}
 
           <div className="w-full text-white flex flex-col gap-2">
-            <p className="font-semibold text-3xl text-gray-100">
-              {project.title}
-            </p>
+            <p className="font-semibold text-3xl text-gray-100">{project.title}</p>
             <p className="text-xl text-purple-300">{project.type}</p>
-            <p className="text-md text-gray-400 font-semibold">
-              {project.role}
-            </p>
-            <p className="text-base text-gray-300 mt-4 leading-relaxed">
-              {project.description}
-            </p>
+            <p className="text-md text-gray-400 font-semibold">{project.role}</p>
+            <p className="text-base text-gray-300 mt-4 leading-relaxed">{project.description}</p>
 
             {renderGithubLinks()}
             {renderContributors()}

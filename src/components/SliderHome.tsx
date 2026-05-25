@@ -1,9 +1,5 @@
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel.tsx";
 import Autoplay from "embla-carousel-autoplay";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel.tsx";
 
 const ROLES = [
   "Web Developer",
@@ -13,8 +9,7 @@ const ROLES = [
   "Bug Maker :v",
 ] as const;
 
-const CAROUSEL_ITEM_CLASS =
-  "text-white font-bold text-3xl max-sm:text-xl w-fit text-carousel";
+const CAROUSEL_ITEM_CLASS = "text-white font-bold text-3xl max-sm:text-xl w-fit text-carousel";
 
 const SliderHome = () => {
   return (

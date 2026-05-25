@@ -1,7 +1,7 @@
+import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible.tsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronsUpDown, LucideCalendar1, LucideMapPinned } from "lucide-react";
 import { type FC, useState } from "react";
-import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible.tsx";
 
 interface Props {
   title: string;
