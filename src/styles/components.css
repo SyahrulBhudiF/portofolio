@@ -6,6 +6,22 @@
  */
 
 /* ==========================================================================
+   Pixel Parallax Scene - fixed fullscreen WebGL background
+   ========================================================================== */
+
+.pixel-parallax-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ==========================================================================
    Typography - Retro/VT323 Font Styles
    ========================================================================== */
 
