@@ -1,6 +1,6 @@
 import { createCanvas2DBackend } from "./canvas2d";
 import type { PixelSceneOptions, PixelSceneRenderer, SceneViewport } from "./types";
-import { createWebGLBackend, type SceneBackend } from "./webgl";
+import { type SceneBackend, createWebGLBackend } from "./webgl";
 
 const MOBILE_MAX_WIDTH = 768;
 const DESKTOP_BUFFER_W = 480;
@@ -104,8 +104,8 @@ export function createPixelSceneRenderer(
 
   function onContextRestored() {
     buildBackend();
-    if (!reducedMotion) start();
-    else drawOnce(0);
+    if (reducedMotion) drawOnce(0);
+    else start();
   }
 
   function start() {

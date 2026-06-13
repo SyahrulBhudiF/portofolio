@@ -1,6 +1,6 @@
 import { pixelScenePalette as P } from "./palette";
-import type { SceneBackend } from "./webgl";
 import type { SceneFrame, SceneViewport } from "./types";
+import type { SceneBackend } from "./webgl";
 
 // Deterministic hash so the fallback scene is stable across redraws.
 function hash(x: number, y: number): number {
@@ -18,9 +18,6 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
   if (!ctx) return null;
   ctx.imageSmoothingEnabled = false;
   let vp: SceneViewport | null = null;
-
-  const px = (c: [number, number, number]) =>
-    `rgb(${Math.round(c[0] * 255)},${Math.round(c[1] * 255)},${Math.round(c[2] * 255)})`;
 
   return {
     resize(viewport) {

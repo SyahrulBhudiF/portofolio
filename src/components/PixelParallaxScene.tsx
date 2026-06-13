@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
 import { createPixelSceneRenderer } from "@/lib/pixelScene/renderer";
+import { useEffect, useRef } from "react";
 
 /**
  * Single fixed fullscreen WebGL pixel-art parallax background.
@@ -23,5 +23,5 @@ export default function PixelParallaxScene() {
     return () => renderer.destroy();
   }, []);
 
-  return <canvas ref={canvasRef} className="pixel-parallax-scene" aria-hidden="true" />;
+  return <canvas ref={canvasRef} className="pixel-parallax-scene" />;
 }

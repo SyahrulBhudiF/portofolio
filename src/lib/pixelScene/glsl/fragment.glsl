@@ -1,25 +1,11 @@
-// WebGL1 (GLSL ES 1.00) procedural pixel-art parallax scene.
-// One fullscreen fragment shader composes sky -> stars -> moon -> clouds -> mountains,
-// plus a soft mid-screen scrim so foreground text stays readable.
-// Banding is removed with static per-pixel dithering, which also gives the
-// low-res buffer its retro pixel grain.
-
-export const vertexShaderSource = /* glsl */ `
-attribute vec2 a_position;
-void main() {
-  gl_Position = vec4(a_position, 0.0, 1.0);
-}
-`;
-
-export const fragmentShaderSource = /* glsl */ `
 precision mediump float;
 
 uniform vec2 u_resolution;
 uniform float u_time;
-uniform float u_scroll;   // 0..1 full-page scroll progress
-uniform float u_pixelGrid; // base pixel quantization
-uniform float u_motion;   // 1.0 animate, 0.0 reduced-motion (static)
-uniform float u_quality;  // 1.0 desktop, 0.0 mobile (fewer octaves)
+uniform float u_scroll;
+uniform float u_pixelGrid;
+uniform float u_motion;
+uniform float u_quality;
 
 const vec3 SKY_TOP   = vec3(0.012, 0.016, 0.051);
 const vec3 SKY_MID   = vec3(0.035, 0.078, 0.169);
@@ -58,7 +44,7 @@ float fbm(vec2 p) {
   float amp = 0.5;
   v += amp * noise(p); p = p * 2.02 + 11.0; amp *= 0.5;
   v += amp * noise(p); p = p * 2.03 + 7.0;  amp *= 0.5;
-  v += amp * noise(p) * u_quality; // third octave only on desktop
+  v += amp * noise(p) * u_quality;
   return v;
 }
 
@@ -66,17 +52,14 @@ vec2 pixelate(vec2 uv, float grid) {
   return floor(uv * grid) / grid;
 }
 
-// --- Sky: smooth vertical gradient (dithered later, so no hard bands) ---
 vec3 drawSky(vec2 uv) {
   float t = clamp(uv.y + u_scroll * 0.12, 0.0, 1.0);
   vec3 col = mix(SKY_LOW, SKY_MID, smoothstep(0.0, 0.6, t));
   col = mix(col, SKY_TOP, smoothstep(0.45, 1.0, t));
-  // faint purple wash near the horizon
   col += PURPLE * 0.045 * smoothstep(0.4, 0.0, uv.y);
   return col;
 }
 
-// --- Stars: grid-cell square pixels with slow twinkle ---
 vec3 drawStars(vec3 col, vec2 uv, float aspect) {
   vec2 suv = uv;
   suv.x *= aspect;
@@ -94,7 +77,6 @@ vec3 drawStars(vec3 col, vec2 uv, float aspect) {
   return mix(col, starCol, clamp(s, 0.0, 1.0));
 }
 
-// --- Moon: blocky disc + craters, visible Home->About then drifts up & fades ---
 vec3 drawMoon(vec3 col, vec2 uv, float aspect) {
   float fade = 1.0 - smoothstep(0.14, 0.34, u_scroll);
   if (fade <= 0.001) return col;
@@ -113,27 +95,24 @@ vec3 drawMoon(vec3 col, vec2 uv, float aspect) {
   return mix(col, moonCol, disc * fade);
 }
 
-// --- Clouds: aspect-correct, domain-warped fbm, 3-tone blocky puffs ---
 vec3 drawClouds(
   vec3 col, vec2 uv, float aspect, float bandY, float depth, float grid,
   vec3 lit, vec3 mid, vec3 dark, float maxAlpha
 ) {
   float drift = u_time * 0.012 * depth * u_motion;
   float y = uv.y + u_scroll * (0.35 * depth) - bandY;
-  float cx = uv.x * aspect * 1.5; // aspect-correct so mobile clouds don't squash
+  float cx = uv.x * aspect * 1.5;
 
   vec2 cuv = pixelate(vec2(cx + drift + u_scroll * depth, y * 3.0), grid);
   float n = fbm(cuv * 4.0);
 
   float band = smoothstep(0.16, 0.0, abs(y));
   float mask = step(0.52, n) * band;
-  // two/three soft tone bands, hard pixel edges
   vec3 c = mix(dark, mid, step(0.52, n));
   c = mix(c, lit, step(0.64, n));
   return mix(col, c, clamp(mask, 0.0, 1.0) * maxAlpha);
 }
 
-// --- Natural mountain silhouette: multi-octave ridge, coarse pixels ---
 float mountainHeight(float x, float scale) {
   float h = noise(vec2(x * scale, 0.0)) * 0.5;
   h += noise(vec2(x * scale * 2.1, 5.0)) * 0.28;
@@ -142,7 +121,7 @@ float mountainHeight(float x, float scale) {
 }
 
 vec3 drawMountains(vec3 col, vec2 uv, float baseY, float scale, float par, vec3 mtnCol) {
-  float x = pixelate(vec2(uv.x, 0.0), 150.0).x; // coarse, chunky ridge pixels
+  float x = pixelate(vec2(uv.x, 0.0), 150.0).x;
   float h = baseY + mountainHeight(x + 3.1, scale) * 0.22 + u_scroll * par;
   float py = floor(uv.y * 90.0) / 90.0;
   float m = step(py, h);
@@ -162,14 +141,11 @@ void main() {
   col = drawMountains(col, uv, 0.13, 6.0, 0.14, MTN_MID);
   col = drawMountains(col, uv, 0.06, 9.0, 0.18, MTN_NEAR);
 
-  // mid-screen readability scrim
   float scrim = smoothstep(0.5, 0.18, abs(uv.y - 0.5)) * 0.28;
   col = mix(col, col * 0.45, scrim);
 
-  // Subtle dithering only to break 8-bit gradient banding (not visible grain).
   float dth = (hash(floor(gl_FragCoord.xy)) - 0.5) * (1.5 / 255.0);
   col += dth;
 
   gl_FragColor = vec4(col, 1.0);
 }
-`;

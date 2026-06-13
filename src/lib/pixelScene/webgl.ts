@@ -1,4 +1,5 @@
-import { fragmentShaderSource, vertexShaderSource } from "./shaders";
+import fragmentShaderSource from "./glsl/fragment.glsl?raw";
+import vertexShaderSource from "./glsl/vertex.glsl?raw";
 import type { SceneFrame, SceneViewport } from "./types";
 
 export type SceneBackend = {
@@ -52,6 +53,7 @@ export function createWebGLBackend(
     console.error("[pixelScene] program link error:", gl.getProgramInfoLog(program));
     return null;
   }
+  // biome-ignore lint/correctness/useHookAtTopLevel: WebGL useProgram is not a React hook.
   gl.useProgram(program);
 
   // Fullscreen quad (two triangles) created once.
