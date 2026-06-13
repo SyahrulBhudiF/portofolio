@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import CloudParallax from "@/components/CloudParallax";
 import ProjectsContainer from "@/components/ProjectsContainer";
 import type { Project } from "@/model/projects";
 
@@ -13,9 +12,8 @@ const initialProjects = sortedPersonalProjects.slice(0, 3);
 const remainingProjects = sortedPersonalProjects.slice(3);
 ---
 <section
-        class="text-white bg-linear-to-b from-gray-900 via-gray-800 to-gray-700 w-full h-fit flex justify-center relative px-16 max-md:px-4 pb-26"
+        class="text-white w-full h-fit flex justify-center relative z-10 px-16 max-md:px-4 pb-26"
         id="projects">
-    <CloudParallax client:visible/>
     <div class="flex flex-col gap-10 max-md:gap-14 z-10 items-center w-full max-w-6xl">
         <p class="text-retro text-6xl max-sm:text-5xl">Projects</p>
         <ProjectsContainer

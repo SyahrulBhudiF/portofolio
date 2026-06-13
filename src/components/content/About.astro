@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import AboutMotion from "../AboutMotion";
-import StarBackground from "../StarBackground";
 import TechStackCategory from "../TechStackCategory";
 
 // Get tech stack from content collection
@@ -10,10 +9,9 @@ const techStackCategories = techstackRaw.sort((a, b) => a.data.order - b.data.or
 ---
 
 <section
-    class="w-full min-h-screen max-xl:h-fit pb-20 max-md:px-4 bg-linear-to-b from-black via-gray-950 to-gray-900 px-16 flex justify-center items-center relative z-10"
+    class="w-full min-h-screen max-xl:h-fit pb-20 max-md:px-4 px-16 flex justify-center items-center relative z-10"
     id="about"
 >
-    <StarBackground client:visible />
     <AboutMotion client:idle>
         {
             techStackCategories.map((category) => (

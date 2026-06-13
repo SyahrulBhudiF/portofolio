@@ -2,7 +2,6 @@
 import { getCollection } from "astro:content";
 import Contact from "../Contact";
 import ExperienceCard from "../ExperienceCard";
-import MountainSVG from "../MountainSVG";
 
 // Get work experiences from content collection
 const workExperiencesRaw = await getCollection("experiences");
@@ -14,7 +13,7 @@ const educationExperiences = educationRaw.sort((a, b) => a.data.order - b.data.o
 ---
 
 <section
-    class="text-white bg-linear-to-b from-gray-700 to-gray-600 w-full h-full max-xl:h-fit max-lg:pb-24 flex flex-col items-center justify-between relative pb-20 px-16 max-md:px-4"
+    class="text-white w-full h-full max-xl:h-fit max-lg:pb-24 flex flex-col items-center justify-between relative z-10 pb-20 px-16 max-md:px-4"
     id="experience"
 >
     <h2 class="text-retro text-6xl text-center max-sm:text-5xl mb-8">
@@ -91,5 +90,4 @@ const educationExperiences = educationRaw.sort((a, b) => a.data.order - b.data.o
     <div class="w-full max-w-lg mt-4 z-20">
         <Contact />
     </div>
-    <MountainSVG client:visible />
 </section>
