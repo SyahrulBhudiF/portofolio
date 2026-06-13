@@ -5,16 +5,19 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "bun run build && wrangler dev",
     "astro": "astro",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
     "check": "biome check .",
     "check:fix": "biome check --write .",
-    "doctor": "react-doctor"
+    "doctor": "react-doctor",
+    "generate-types": "wrangler types",
+    "deploy": "bun run build && wrangler deploy"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.7.0",
     "@astrojs/mdx": "6.0.3",
     "@astrojs/react": "5.0.7",
     "@radix-ui/react-collapsible": "^1.1.12",
@@ -44,6 +47,10 @@
     "@biomejs/biome": "^1.9.4",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
-    "react-doctor": "^0.2.6"
+    "react-doctor": "^0.2.6",
+    "wrangler": "^4.100.0"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }
