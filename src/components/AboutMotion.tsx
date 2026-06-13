@@ -15,9 +15,9 @@ const AboutMotion = ({ children }: Props) => {
   const fadeUpVariants = useMemo(() => createFadeUpVariants(isMobile), [isMobile]);
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-16 text-white z-10">
+    <div className="w-full max-w-6xl h-full flex flex-col items-center justify-center gap-16 text-white z-10">
       <motion.div
-        className="flex flex-col w-full h-fit 2xl:w-3/4 items-center gap-4"
+        className="flex flex-col w-full h-fit items-center gap-4"
         variants={fadeUpVariants}
         initial="hidden"
         whileInView="visible"
@@ -39,7 +39,7 @@ const AboutMotion = ({ children }: Props) => {
       </motion.div>
 
       <motion.div
-        className="flex flex-col w-full 2xl:w-3/4 items-center gap-8"
+        className="flex flex-col w-full items-center gap-8"
         variants={fadeUpVariants}
         initial="hidden"
         whileInView="visible"

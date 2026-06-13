@@ -121,13 +121,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, isReverse }) =
   };
 
   return (
-    <div className="w-full flex justify-center overflow-hidden max-md:p-4">
+    <div className="w-full flex justify-center overflow-hidden">
       <motion.div
         ref={ref}
         variants={cardVariants}
         initial="hidden"
         animate={inView ? "visible" : "hidden"}
-        className="flex items-center justify-center w-3/4 max-xl:w-full mt-10 max-md:mt-0"
+        className="flex items-center justify-center w-full mt-10 max-md:mt-0"
         style={{ willChange: "transform, opacity" }}
       >
         <div
