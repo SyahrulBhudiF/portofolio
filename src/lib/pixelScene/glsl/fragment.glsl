@@ -52,94 +52,9 @@ vec2 pixelate(vec2 uv, float grid) {
   return floor(uv * grid) / grid;
 }
 
-vec3 drawSky(vec2 uv) {
-  float t = clamp(uv.y + u_scroll * 0.12, 0.0, 1.0);
-  vec3 col = mix(SKY_LOW, SKY_MID, smoothstep(0.0, 0.6, t));
-  col = mix(col, SKY_TOP, smoothstep(0.45, 1.0, t));
-  col += PURPLE * 0.045 * smoothstep(0.4, 0.0, uv.y);
-  return col;
-}
-
-vec3 drawStars(vec3 col, vec2 uv, float aspect) {
-  vec2 suv = uv;
-  suv.x *= aspect;
-  suv.y += u_scroll * 0.06;
-  float density = smoothstep(0.12, 0.7, uv.y);
-  vec2 grid = vec2(120.0, 80.0);
-  vec2 cell = floor(suv * grid);
-  float rnd = hash(cell);
-  float exists = step(0.978, rnd);
-  vec2 local = fract(suv * grid);
-  float shape = step(abs(local.x - 0.5), 0.12) * step(abs(local.y - 0.5), 0.12);
-  float twinkle = 0.6 + 0.4 * sin(u_time * 1.5 + rnd * 30.0) * u_motion;
-  float s = exists * shape * twinkle * density;
-  vec3 starCol = mix(STAR_DIM, STAR, rnd);
-  return mix(col, starCol, clamp(s, 0.0, 1.0));
-}
-
-vec3 drawMoon(vec3 col, vec2 uv, float aspect) {
-  float fade = 1.0 - smoothstep(0.14, 0.34, u_scroll);
-  if (fade <= 0.001) return col;
-  vec2 p = pixelate(uv, u_pixelGrid * 1.2);
-  vec2 c = vec2(0.78, 0.74 + u_scroll * 0.18);
-  vec2 d = vec2((p.x - c.x) * aspect, p.y - c.y);
-  float r = length(d);
-  float disc = 1.0 - step(0.085, r);
-  float cr = 0.0;
-  cr += 1.0 - step(0.016, length(d - vec2(-0.02, 0.015)));
-  cr += 1.0 - step(0.012, length(d - vec2(0.022, -0.01)));
-  cr += 1.0 - step(0.010, length(d - vec2(0.005, 0.030)));
-  vec3 moonCol = mix(MOON_LIGHT, MOON_SHADOW, clamp(cr, 0.0, 1.0) * 0.7);
-  float halo = (1.0 - smoothstep(0.085, 0.17, r)) * 0.22;
-  col = mix(col, MOON_LIGHT, halo * fade);
-  return mix(col, moonCol, disc * fade);
-}
-
-// Stylized pixel-art cloud: domain-warped fbm blobs, banded shading,
-// vertical window with a flatter bottom and softer puffy top.
-vec3 drawClouds(
-  vec3 col, vec2 uv, float aspect, float bandY, float depth, float grid,
-  vec3 lit, vec3 mid, vec3 dark, float maxAlpha,
-  float seed, float noiseScale, float stretch, float thresh, float bandW
-) {
-  float drift = u_time * 0.012 * depth * u_motion;
-  float y = uv.y + u_scroll * (0.35 * depth) - bandY;
-  float cx = uv.x * aspect * 1.5;
-
-  vec2 cuv = pixelate(vec2(cx + drift + u_scroll * depth + seed, y * stretch), grid);
-
-  // Domain warp -> organic, non-grainy blob edges.
-  vec2 warp = vec2(
-    fbm(cuv * (noiseScale * 0.5) + seed),
-    fbm(cuv * (noiseScale * 0.5) + seed + 3.3)
-  );
-  float n = fbm(cuv * noiseScale + warp * 0.9 + seed);
-
-  // Asymmetric window: gentle flat-ish bottom, taller puffy top.
-  float up = max(y, 0.0);
-  float dn = max(-y, 0.0);
-  float window = smoothstep(bandW, 0.0, up) * smoothstep(bandW * 0.55, 0.0, dn);
-
-  float mask = step(thresh, n) * window;
-  vec3 c = mix(dark, mid, step(thresh, n));
-  c = mix(c, lit, step(thresh + 0.10, n));
-  return mix(col, c, clamp(mask, 0.0, 1.0) * maxAlpha);
-}
-
-float mountainHeight(float x, float scale) {
-  float h = noise(vec2(x * scale, 0.0)) * 0.5;
-  h += noise(vec2(x * scale * 2.1, 5.0)) * 0.28;
-  h += noise(vec2(x * scale * 4.3, 9.0)) * 0.14;
-  return h;
-}
-
-vec3 drawMountains(vec3 col, vec2 uv, float baseY, float scale, float par, vec3 mtnCol) {
-  float x = pixelate(vec2(uv.x, 0.0), 150.0).x;
-  float h = baseY + mountainHeight(x + 3.1, scale) * 0.22 + u_scroll * par;
-  float py = floor(uv.y * 90.0) / 90.0;
-  float m = step(py, h);
-  return mix(col, mtnCol, m);
-}
+/*__SKY__*/
+/*__MOON__*/
+/*__MOUNTAIN__*/
 
 void main() {
   vec2 uv = gl_FragCoord.xy / u_resolution;
@@ -149,13 +64,13 @@ void main() {
   col = drawStars(col, uv, aspect);
   col = drawMoon(col, uv, aspect);
   float upperCloudFade = smoothstep(0.18, 0.42, u_scroll);
-  // top wisps near sky crown: thin/sparse; mid/near: fuller puffs, distinct seeds
-  col = drawClouds(col, uv, aspect, 0.82, 0.28, 54.0, CLOUD_MID,   CLOUD_DARK, CLOUD_DARK, 0.55 * (0.6 + 0.4 * upperCloudFade), 19.7, 3.0, 2.6, 0.56, 0.10);
-  col = drawClouds(col, uv, aspect, 0.60, 0.5,  60.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.78, 47.3, 3.6, 3.0, 0.52, 0.15);
-  col = drawClouds(col, uv, aspect, 0.47, 1.0,  84.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.86, 88.1, 4.2, 2.8, 0.50, 0.19);
-  col = drawMountains(col, uv, 0.20, 4.0, 0.10, MTN_FAR);
-  col = drawMountains(col, uv, 0.13, 6.0, 0.14, MTN_MID);
-  col = drawMountains(col, uv, 0.06, 9.0, 0.18, MTN_NEAR);
+  // top wisps sparse; mid/near puffs reduced and rounder.
+  col = drawClouds(col, uv, aspect, 0.82, 0.28, 54.0, CLOUD_MID,   CLOUD_DARK, CLOUD_DARK, 0.52 * (0.6 + 0.4 * upperCloudFade), 19.7, 2.9, 2.0, 0.57, 0.115);
+  col = drawClouds(col, uv, aspect, 0.60, 0.5,  60.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.68, 47.3, 3.3, 2.2, 0.55, 0.16);
+  col = drawClouds(col, uv, aspect, 0.47, 1.0,  84.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.76, 88.1, 3.9, 2.05, 0.53, 0.20);
+  col = drawMountains(col, uv, 0.16, 4.0, 0.10, MTN_FAR);
+  col = drawMountains(col, uv, 0.09, 6.0, 0.14, MTN_MID);
+  col = drawMountains(col, uv, 0.02, 9.0, 0.18, MTN_NEAR);
 
   float scrim = smoothstep(0.5, 0.18, abs(uv.y - 0.5)) * 0.28;
   col = mix(col, col * 0.45, scrim);

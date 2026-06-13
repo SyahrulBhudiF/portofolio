@@ -1,5 +1,13 @@
-import fragmentShaderSource from "./glsl/fragment.glsl?raw";
+import fragmentShaderMain from "./glsl/fragment.glsl?raw";
+import moonShaderSource from "./glsl/moon.glsl?raw";
+import mountainShaderSource from "./glsl/mountain.glsl?raw";
+import skyShaderSource from "./glsl/sky.glsl?raw";
 import vertexShaderSource from "./glsl/vertex.glsl?raw";
+
+const fragmentShaderSource = fragmentShaderMain
+  .replace("/*__SKY__*/", skyShaderSource)
+  .replace("/*__MOON__*/", moonShaderSource)
+  .replace("/*__MOUNTAIN__*/", mountainShaderSource);
 import type { SceneFrame, SceneViewport } from "./types";
 
 export type SceneBackend = {
