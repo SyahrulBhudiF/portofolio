@@ -95,21 +95,34 @@ vec3 drawMoon(vec3 col, vec2 uv, float aspect) {
   return mix(col, moonCol, disc * fade);
 }
 
+// Stylized pixel-art cloud: domain-warped fbm blobs, banded shading,
+// vertical window with a flatter bottom and softer puffy top.
 vec3 drawClouds(
   vec3 col, vec2 uv, float aspect, float bandY, float depth, float grid,
-  vec3 lit, vec3 mid, vec3 dark, float maxAlpha
+  vec3 lit, vec3 mid, vec3 dark, float maxAlpha,
+  float seed, float noiseScale, float stretch, float thresh, float bandW
 ) {
   float drift = u_time * 0.012 * depth * u_motion;
   float y = uv.y + u_scroll * (0.35 * depth) - bandY;
   float cx = uv.x * aspect * 1.5;
 
-  vec2 cuv = pixelate(vec2(cx + drift + u_scroll * depth, y * 3.0), grid);
-  float n = fbm(cuv * 4.0);
+  vec2 cuv = pixelate(vec2(cx + drift + u_scroll * depth + seed, y * stretch), grid);
 
-  float band = smoothstep(0.16, 0.0, abs(y));
-  float mask = step(0.52, n) * band;
-  vec3 c = mix(dark, mid, step(0.52, n));
-  c = mix(c, lit, step(0.64, n));
+  // Domain warp -> organic, non-grainy blob edges.
+  vec2 warp = vec2(
+    fbm(cuv * (noiseScale * 0.5) + seed),
+    fbm(cuv * (noiseScale * 0.5) + seed + 3.3)
+  );
+  float n = fbm(cuv * noiseScale + warp * 0.9 + seed);
+
+  // Asymmetric window: gentle flat-ish bottom, taller puffy top.
+  float up = max(y, 0.0);
+  float dn = max(-y, 0.0);
+  float window = smoothstep(bandW, 0.0, up) * smoothstep(bandW * 0.55, 0.0, dn);
+
+  float mask = step(thresh, n) * window;
+  vec3 c = mix(dark, mid, step(thresh, n));
+  c = mix(c, lit, step(thresh + 0.10, n));
   return mix(col, c, clamp(mask, 0.0, 1.0) * maxAlpha);
 }
 
@@ -135,8 +148,11 @@ void main() {
   vec3 col = drawSky(uv);
   col = drawStars(col, uv, aspect);
   col = drawMoon(col, uv, aspect);
-  col = drawClouds(col, uv, aspect, 0.62, 0.5, 60.0, CLOUD_MID, CLOUD_DARK, CLOUD_DARK, 0.5);
-  col = drawClouds(col, uv, aspect, 0.50, 1.0, 84.0, CLOUD_LIGHT, CLOUD_MID, CLOUD_DARK, 0.82);
+  float upperCloudFade = smoothstep(0.18, 0.42, u_scroll);
+  // top wisps near sky crown: thin/sparse; mid/near: fuller puffs, distinct seeds
+  col = drawClouds(col, uv, aspect, 0.82, 0.28, 54.0, CLOUD_MID,   CLOUD_DARK, CLOUD_DARK, 0.55 * (0.6 + 0.4 * upperCloudFade), 19.7, 3.0, 2.6, 0.56, 0.10);
+  col = drawClouds(col, uv, aspect, 0.60, 0.5,  60.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.78, 47.3, 3.6, 3.0, 0.52, 0.15);
+  col = drawClouds(col, uv, aspect, 0.47, 1.0,  84.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.86, 88.1, 4.2, 2.8, 0.50, 0.19);
   col = drawMountains(col, uv, 0.20, 4.0, 0.10, MTN_FAR);
   col = drawMountains(col, uv, 0.13, 6.0, 0.14, MTN_MID);
   col = drawMountains(col, uv, 0.06, 9.0, 0.18, MTN_NEAR);

@@ -10,6 +10,14 @@ const workExperiences = workExperiencesRaw.sort((a, b) => a.data.order - b.data.
 // Get education from content collection
 const educationRaw = await getCollection("education");
 const educationExperiences = educationRaw.sort((a, b) => a.data.order - b.data.order);
+
+const splitIntoColumns = <T,>(items: T[]) => [
+    items.filter((_, index) => index % 2 === 0),
+    items.filter((_, index) => index % 2 === 1),
+];
+
+const workExperienceColumns = splitIntoColumns(workExperiences);
+const educationExperienceColumns = splitIntoColumns(educationExperiences);
 ---
 
 <section
@@ -26,20 +34,22 @@ const educationExperiences = educationRaw.sort((a, b) => a.data.order - b.data.o
             >
                 Work
             </h3>
-            <div class="columns-2 max-lg:columns-1 gap-4">
+            <div class="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
                 {
-                    workExperiences.map((experience) => (
-                        <div class="break-inside-avoid mb-4">
-                            <ExperienceCard
-                                title={experience.data.company}
-                                subtitle={experience.data.position}
-                                duration={experience.data.duration}
-                                location={experience.data.location}
-                                description={experience.data.description}
-                                tags={experience.data.tags}
-                                skills={experience.data.technologies}
-                                client:idle
-                            />
+                    workExperienceColumns.map((column) => (
+                        <div class="flex flex-col gap-4">
+                            {column.map((experience) => (
+                                <ExperienceCard
+                                    title={experience.data.company}
+                                    subtitle={experience.data.position}
+                                    duration={experience.data.duration}
+                                    location={experience.data.location}
+                                    description={experience.data.description}
+                                    tags={experience.data.tags}
+                                    skills={experience.data.technologies}
+                                    client:idle
+                                />
+                            ))}
                         </div>
                     ))
                 }
@@ -52,20 +62,22 @@ const educationExperiences = educationRaw.sort((a, b) => a.data.order - b.data.o
             >
                 Education
             </h3>
-            <div class="columns-2 max-lg:columns-1 gap-4">
+            <div class="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
                 {
-                    educationExperiences.map((education) => (
-                        <div class="break-inside-avoid mb-4">
-                            <ExperienceCard
-                                title={education.data.institution}
-                                subtitle={education.data.degree}
-                                duration={education.data.duration}
-                                location={education.data.location}
-                                description={education.data.description}
-                                tags={education.data.tags}
-                                skills={education.data.achievements}
-                                client:idle
-                            />
+                    educationExperienceColumns.map((column) => (
+                        <div class="flex flex-col gap-4">
+                            {column.map((education) => (
+                                <ExperienceCard
+                                    title={education.data.institution}
+                                    subtitle={education.data.degree}
+                                    duration={education.data.duration}
+                                    location={education.data.location}
+                                    description={education.data.description}
+                                    tags={education.data.tags}
+                                    skills={education.data.achievements}
+                                    client:idle
+                                />
+                            ))}
                         </div>
                     ))
                 }
