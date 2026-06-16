@@ -16,7 +16,6 @@ const splitIntoColumns = <T,>(items: T[]) => [
     items.filter((_, index) => index % 2 === 1),
 ];
 
-const workExperienceColumns = splitIntoColumns(workExperiences);
 const educationExperienceColumns = splitIntoColumns(educationExperiences);
 ---
 
@@ -36,21 +35,17 @@ const educationExperienceColumns = splitIntoColumns(educationExperiences);
             </h3>
             <div class="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
                 {
-                    workExperienceColumns.map((column) => (
-                        <div class="flex flex-col gap-4">
-                            {column.map((experience) => (
-                                <ExperienceCard
-                                    title={experience.data.company}
-                                    subtitle={experience.data.position}
-                                    duration={experience.data.duration}
-                                    location={experience.data.location}
-                                    description={experience.data.description}
-                                    tags={experience.data.tags}
-                                    skills={experience.data.technologies}
-                                    client:idle
-                                />
-                            ))}
-                        </div>
+                    workExperiences.map((experience) => (
+                        <ExperienceCard
+                            title={experience.data.company}
+                            subtitle={experience.data.position}
+                            duration={experience.data.duration}
+                            location={experience.data.location}
+                            description={experience.data.description}
+                            tags={experience.data.tags}
+                            skills={experience.data.technologies}
+                            client:idle
+                        />
                     ))
                 }
             </div>
