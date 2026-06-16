@@ -63,7 +63,7 @@ const SliderHome = () => {
   }, []);
 
   return (
-    <span className="text-white font-bold text-[inherit] text-carousel inline-flex items-center w-[14em] max-sm:w-[12.5em] whitespace-nowrap font-mono tracking-tight">
+    <span className="text-white font-bold text-[inherit] text-carousel inline-flex items-center w-[14em] max-sm:w-[9.8em] whitespace-nowrap overflow-hidden font-mono tracking-tight">
       {display}
     </span>
   );
