@@ -138,14 +138,15 @@ vec3 drawMoon(vec3 col, vec2 uv, float aspect) {
 vec3 drawClouds(vec3 col, vec2 uv, float aspect, float bandY, float depth, float grid, vec3 lit, vec3 mid, vec3 dark, float maxAlpha, float seed, float noiseScale, float stretch, float thresh, float bandW) {
   float drift = u_time * 0.012 * depth * u_motion;
   float y = uv.y + u_scroll * (0.35 * depth) - bandY;
-  float cx = uv.x * aspect * 1.35;
+  float portrait = smoothstep(1.05, 0.65, aspect);
+  float cloudAspect = max(aspect, 1.0);
+  float cx = uv.x * cloudAspect * 1.35;
   vec2 cuv = pixelate(vec2(cx + drift + u_scroll * depth + seed, y * stretch), grid);
   vec2 warp = vec2(fbm(cuv * (noiseScale * 0.42) + seed), fbm(cuv * (noiseScale * 0.42) + seed + 3.3));
   float n = fbm(cuv * noiseScale + warp * 0.62 + seed);
   float up = max(y, 0.0);
   float dn = max(-y, 0.0);
   float window = smoothstep(bandW, 0.0, up) * smoothstep(bandW * 0.72, 0.0, dn);
-  float portrait = smoothstep(1.05, 0.65, aspect);
   float cloudThresh = thresh - portrait * 0.045;
   float body = smoothstep(cloudThresh, cloudThresh + 0.065, n);
   float mask = body * window;
@@ -161,9 +162,9 @@ void main() {
   col = drawStars(col, uv, aspect);
   col = drawMoon(col, uv, aspect);
   float upperCloudFade = smoothstep(0.18, 0.42, u_scroll);
-  col = drawClouds(col, uv, aspect, 0.82, 0.28, 54.0, CLOUD_MID,   CLOUD_DARK, CLOUD_DARK, 0.52 * (0.6 + 0.4 * upperCloudFade), 19.7, 2.9, 2.0, 0.57, 0.115);
-  col = drawClouds(col, uv, aspect, 0.60, 0.5,  60.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.68, 47.3, 3.3, 2.2, 0.55, 0.16);
-  col = drawClouds(col, uv, aspect, 0.47, 1.0,  84.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.76, 88.1, 3.9, 2.05, 0.53, 0.20);
+  col = drawClouds(col, uv, aspect, 0.82, 0.28, 54.0, CLOUD_MID,   CLOUD_DARK, CLOUD_DARK, 0.52 * (0.6 + 0.4 * upperCloudFade), 19.7, 2.9, 2.15, 0.57, 0.105);
+  col = drawClouds(col, uv, aspect, 0.60, 0.5,  60.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.68, 47.3, 3.3, 2.35, 0.55, 0.145);
+  col = drawClouds(col, uv, aspect, 0.47, 1.0,  84.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.76, 88.1, 3.9, 2.2, 0.53, 0.18);
   float scrim = smoothstep(0.5, 0.18, abs(uv.y - 0.5)) * 0.18;
   col = mix(col, col * 0.55, scrim);
   float dth = (hash(floor(gl_FragCoord.xy)) - 0.5) * (1.5 / 255.0);
