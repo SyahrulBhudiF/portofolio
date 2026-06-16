@@ -26,7 +26,7 @@ import SliderHome from "../SliderHome";
             </h1>
             <p class="real-name text-white">Bhudi Ferdiansyah</p>
             <div class="role-line text-white flex gap-3 items-center max-lg:justify-center">
-                <p class="whitespace-nowrap">I'm a</p>
+                <p class="role-prefix whitespace-nowrap">I'm a</p>
                 <SliderHome client:idle/>
             </div>
             <div class="hero-socials" aria-label="Social links">
@@ -59,6 +59,7 @@ import SliderHome from "../SliderHome";
     .pixel-portrait-wrap {
         --portrait-size: min(38vw, 500px);
         position: relative;
+        isolation: isolate;
         width: var(--portrait-size);
         flex: 0 0 auto;
         filter: drop-shadow(0 14px 18px rgb(0 0 0 / 0.2));
@@ -90,30 +91,30 @@ import SliderHome from "../SliderHome";
 
     .pixel-portrait {
         position: relative;
+        z-index: 1;
         width: 100%;
         aspect-ratio: 1.42;
         overflow: hidden;
-        background: #cda6ed;
+        background: transparent;
         filter: none;
     }
 
     .pixel-portrait::after {
         content: "";
         position: absolute;
-        inset: 2px;
+        inset: 0;
         background-image: var(--rin-image);
         background-size: var(--portrait-size) calc(var(--portrait-size) / 1.42);
         background-repeat: no-repeat;
-        background-position: -2px -2px;
+        background-position: 0 0;
         filter: saturate(0.82) contrast(0.92) brightness(0.78);
     }
 
     .pixel-bit {
         position: absolute;
+        z-index: 2;
         width: clamp(14px, 1.7vw, 24px);
         aspect-ratio: 1;
-        border: 2px solid #cda6ed;
-        box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16);
         opacity: 0.95;
     }
 
@@ -131,15 +132,15 @@ import SliderHome from "../SliderHome";
     .pixel-name {
         margin: 0;
         font-family: "Silkscreen", "VT323", monospace;
-        font-size: clamp(3.6rem, 7.5vw, 6.2rem);
+        font-size: clamp(3rem, 6vw, 5rem);
         font-weight: 400;
         line-height: 0.72;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.055em;
         text-transform: uppercase;
         color: #cda6ed;
         text-shadow: 7px 7px 0 rgb(45 53 83 / 0.55);
         white-space: nowrap;
-        transform: translateX(-0.16em);
+        transform: none;
     }
 
     .pixel-bracket {
@@ -166,6 +167,10 @@ import SliderHome from "../SliderHome";
         font-size: clamp(1.5rem, 2.1vw, 2.2rem);
         line-height: 1;
         text-shadow: 4px 4px 0 #6c548f;
+    }
+
+    .role-prefix {
+        flex: 0 0 auto;
     }
 
     .hero-socials {
@@ -202,7 +207,12 @@ import SliderHome from "../SliderHome";
     @media (max-width: 640px) {
         .home-hero {
             min-height: 100svh;
-            height: auto;
+            height: 100svh;
+        }
+
+        .hero-shell {
+            justify-content: center;
+            transform: translateY(8svh);
         }
 
         .pixel-portrait-wrap {
@@ -211,10 +221,10 @@ import SliderHome from "../SliderHome";
         }
 
         .pixel-name {
-            font-size: clamp(2.6rem, 13vw, 3.6rem);
-            letter-spacing: 0.02em;
+            font-size: clamp(1.75rem, 9.2vw, 2.55rem);
+            letter-spacing: 0;
             text-shadow: 4px 4px 0 rgb(45 53 83 / 0.62);
-            transform: translateX(-0.1em);
+            transform: none;
         }
 
         .pixel-bracket {
@@ -222,13 +232,17 @@ import SliderHome from "../SliderHome";
         }
 
         .real-name {
-            font-size: clamp(1.35rem, 6.2vw, 1.9rem);
-            letter-spacing: 0.12em;
+            font-size: clamp(1.15rem, 5.6vw, 1.55rem);
+            letter-spacing: 0.1em;
             white-space: normal;
         }
 
         .role-line {
-            font-size: clamp(1.2rem, 5.8vw, 1.55rem);
+            font-size: clamp(1rem, 4.8vw, 1.25rem);
+            width: 100%;
+            justify-content: center;
+            text-align: center;
+            gap: 0.6rem;
         }
 
         .hero-socials {
