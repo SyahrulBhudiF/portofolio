@@ -86,7 +86,7 @@ export function createWebGLBackend(
   };
 
   gl.uniform1f(u.pixelGrid, opts.isMobile ? 90.0 : 130.0);
-  gl.uniform1f(u.quality, opts.isMobile ? 0.0 : 1.0);
+  gl.uniform1f(u.quality, opts.isMobile ? 0.85 : 1.0);
   gl.uniform1f(u.motion, opts.reducedMotion ? 0.0 : 1.0);
 
   return {

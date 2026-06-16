@@ -14,9 +14,11 @@ vec3 drawStars(vec3 col, vec2 uv, float aspect) {
   vec2 grid = vec2(120.0, 80.0);
   vec2 cell = floor(suv * grid);
   float rnd = hash(cell);
-  float exists = step(0.978, rnd);
+  float portrait = smoothstep(1.05, 0.65, aspect);
+  float exists = step(mix(0.978, 0.970, portrait), rnd);
   vec2 local = fract(suv * grid);
-  float shape = step(abs(local.x - 0.5), 0.12) * step(abs(local.y - 0.5), 0.12);
+  float starSize = mix(0.12, 0.16, portrait);
+  float shape = step(abs(local.x - 0.5), starSize) * step(abs(local.y - 0.5), starSize);
   float twinkle = 0.6 + 0.4 * sin(u_time * 1.5 + rnd * 30.0) * u_motion;
   float s = exists * shape * twinkle * density;
   vec3 starCol = mix(STAR_DIM, STAR, rnd);
@@ -48,9 +50,11 @@ vec3 drawClouds(
   float dn = max(-y, 0.0);
   float window = smoothstep(bandW, 0.0, up) * smoothstep(bandW * 0.72, 0.0, dn);
 
-  float body = smoothstep(thresh, thresh + 0.065, n);
+  float portrait = smoothstep(1.05, 0.65, aspect);
+  float cloudThresh = thresh - portrait * 0.045;
+  float body = smoothstep(cloudThresh, cloudThresh + 0.065, n);
   float mask = body * window;
-  vec3 c = mix(dark, mid, step(thresh + 0.025, n));
-  c = mix(c, lit, step(thresh + 0.13, n));
-  return mix(col, c, clamp(mask, 0.0, 1.0) * maxAlpha);
+  vec3 c = mix(dark, mid, step(cloudThresh + 0.025, n));
+  c = mix(c, lit, step(cloudThresh + 0.13, n));
+  return mix(col, c, clamp(mask, 0.0, 1.0) * (maxAlpha + portrait * 0.08));
 }

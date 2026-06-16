@@ -1,35 +1,244 @@
 ---
-import { Image } from "astro:assets";
 import rinGif from "@/assets/rin.gif";
-import { FileUser } from "lucide-react";
+import { FileUser, Github, Linkedin, Mail } from "lucide-react";
 import SliderHome from "../SliderHome";
 ---
 
-<section class="w-full h-screen overflow-hidden relative flex justify-center px-16 max-md:px-4" id="home">
-    <div class="flex justify-center lg:justify-between h-full items-center w-full max-w-6xl py-16 z-10 lg:gap-10 max-lg:flex-col-reverse max-md:gap-4 max-lg:gap-10 max-lg:py-8">
-        <div class="flex flex-col gap-6 lg:w-1/2 xl:w-[55%] max-lg:w-full max-lg:px-10 max-md:px-0">
-            <h1 class="text-6xl font-bold text-white max-md:text-4xl max-sm:text-3xl text-wrap leading-tight">Hello, I'm <span
-                    class="text-[#CDA6ED]">
-                <span class="text-retro"><</span>Syahrul<span
-                    class="text-retro">/></span>
-                <br class="max-lg:hidden"> Bhudi Ferdiansyah</span>
+<section class="home-hero w-full h-screen overflow-hidden relative flex justify-center px-16 max-md:px-4" id="home">
+    <div class="hero-shell flex justify-center lg:justify-between h-full items-center w-full max-w-7xl py-16 z-10 lg:gap-12 max-lg:flex-col max-md:gap-4 max-lg:gap-10 max-lg:py-8">
+        <div class="pixel-portrait-wrap max-lg:w-[78%] max-md:w-full" aria-hidden="true" style={`--rin-image: url(${rinGif.src})`}>
+            <div class="pixel-window pixel-portrait"></div>
+            <span class="pixel-window pixel-bit bit-1"></span>
+            <span class="pixel-window pixel-bit bit-2"></span>
+            <span class="pixel-window pixel-bit bit-3"></span>
+            <span class="pixel-window pixel-bit bit-4"></span>
+            <span class="pixel-window pixel-bit bit-5"></span>
+            <span class="pixel-window pixel-bit bit-6"></span>
+            <span class="pixel-window pixel-bit bit-7"></span>
+            <span class="pixel-window pixel-bit bit-8"></span>
+            <span class="pixel-window pixel-bit bit-9"></span>
+            <span class="pixel-window pixel-bit bit-10"></span>
+        </div>
+
+        <div class="hero-copy flex flex-col lg:w-[58%] max-lg:w-full max-lg:items-center max-lg:text-center">
+            <h1 class="pixel-name text-[#CDA6ED]" aria-label="Syahrul">
+                <span class="pixel-bracket" aria-hidden="true">&lt;</span>SYAHRUL<span class="pixel-bracket" aria-hidden="true">/&gt;</span>
             </h1>
-            <div class="text-3xl text-white flex gap-3 items-center max-sm:text-lg">
+            <p class="real-name text-white">Bhudi Ferdiansyah</p>
+            <div class="role-line text-white flex gap-3 items-center max-lg:justify-center">
                 <p class="whitespace-nowrap">I'm a</p>
                 <SliderHome client:idle/>
             </div>
-            <a
-                    href="assets/cv_syahrul.pdf"
-                    download="Syahrul_CV.pdf"
-                    class="px-6 py-2 w-fit mt-8 font-bold max-sm:p-3 max-sm:text-sm bg-purple-800 shadow-box text-white rounded-md flex gap-2 items-center transition-transform duration-300 ease-in-out hover:-translate-y-1"
-            >
-                Download My CV
-                <FileUser size={20}/>
-            </a>
+            <div class="hero-socials" aria-label="Social links">
+                <a href="assets/cv_syahrul.pdf" download="Syahrul_CV.pdf" aria-label="Download CV">
+                    <FileUser size={24}/>
+                </a>
+                <a href="https://github.com/SyahrulBhudiF" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <Github size={24}/>
+                </a>
+                <a href="mailto:syahrulbhudif@ryuko.my.id" aria-label="Email">
+                    <Mail size={24}/>
+                </a>
+                <a href="https://www.linkedin.com/in/syahrulbhudif/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <Linkedin size={24}/>
+                </a>
+            </div>
         </div>
-        <Image src={rinGif} alt="Animated illustration of Rin character waving"
-               class="rounded max-lg:w-[90%] max-md:w-full lg:w-[46%] xl:w-[42%] object-fill border-purple-800 border-2 p-2 shadow-lg shadow-purple-900"
-               loading="eager"
-               fetchpriority={"high"}/>
     </div>
 </section>
+
+<style>
+    .home-hero {
+        isolation: isolate;
+    }
+
+    .hero-shell {
+        position: relative;
+    }
+
+    .pixel-portrait-wrap {
+        --portrait-size: min(38vw, 500px);
+        position: relative;
+        width: var(--portrait-size);
+        flex: 0 0 auto;
+        filter: drop-shadow(0 14px 18px rgb(0 0 0 / 0.2));
+    }
+
+    .pixel-window {
+        background-image: var(--rin-image);
+        background-size: var(--portrait-size) calc(var(--portrait-size) / 1.42);
+        background-repeat: no-repeat;
+        background-position: calc(var(--x, 0px) * -1) calc(var(--y, 0px) * -1);
+        filter: saturate(0.82) contrast(0.92) brightness(0.78);
+    }
+
+    .pixel-portrait,
+    .pixel-portrait::after {
+        --portrait-cut: polygon(
+            13% 20%, 21% 20%, 21% 8%, 31% 8%, 31% 1%,
+            41% 1%, 41% 3%, 61% 3%, 61% 8%, 74% 8%,
+            74% 14%, 82% 14%, 82% 20%, 92% 20%, 92% 28%,
+            99% 28%, 99% 41%, 96% 41%, 96% 51%, 92% 51%,
+            92% 73%, 88% 73%, 88% 84%, 80% 84%, 80% 91%,
+            68% 91%, 68% 100%, 52% 100%, 52% 91%, 40% 91%,
+            40% 95%, 31% 95%, 31% 89%, 22% 89%, 22% 82%,
+            14% 82%, 14% 72%, 9% 72%, 9% 60%, 4% 60%,
+            4% 43%, 7% 43%, 7% 30%, 13% 30%
+        );
+        clip-path: var(--portrait-cut);
+    }
+
+    .pixel-portrait {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1.42;
+        overflow: hidden;
+        background: #cda6ed;
+        filter: none;
+    }
+
+    .pixel-portrait::after {
+        content: "";
+        position: absolute;
+        inset: 2px;
+        background-image: var(--rin-image);
+        background-size: var(--portrait-size) calc(var(--portrait-size) / 1.42);
+        background-repeat: no-repeat;
+        background-position: -2px -2px;
+        filter: saturate(0.82) contrast(0.92) brightness(0.78);
+    }
+
+    .pixel-bit {
+        position: absolute;
+        width: clamp(14px, 1.7vw, 24px);
+        aspect-ratio: 1;
+        border: 2px solid #cda6ed;
+        box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16);
+        opacity: 0.95;
+    }
+
+    .bit-1 { --x: calc(var(--portrait-size) * 0.06); --y: calc(var(--portrait-size) / 1.42 * 0.10); left: 6%; top: 10%; }
+    .bit-2 { --x: calc(var(--portrait-size) * 0.17); --y: calc(var(--portrait-size) / 1.42 * -0.01); left: 17%; top: -1%; width: clamp(22px, 2.45vw, 34px); }
+    .bit-3 { --x: calc(var(--portrait-size) * 0.72); --y: calc(var(--portrait-size) / 1.42 * 0.01); right: 26%; top: 1%; width: clamp(20px, 2.1vw, 30px); }
+    .bit-4 { --x: calc(var(--portrait-size) * 0.98); --y: calc(var(--portrait-size) / 1.42 * 0.23); right: 1%; top: 23%; width: clamp(12px, 1.25vw, 18px); }
+    .bit-5 { --x: calc(var(--portrait-size) * 0.00); --y: calc(var(--portrait-size) / 1.42 * 0.20); left: 0%; top: 20%; width: clamp(24px, 2.65vw, 36px); }
+    .bit-6 { --x: calc(var(--portrait-size) * 0.03); --y: calc(var(--portrait-size) / 1.42 * 0.54); left: 3%; top: 54%; width: clamp(12px, 1.25vw, 18px); }
+    .bit-7 { --x: calc(var(--portrait-size) * 0.10); --y: calc(var(--portrait-size) / 1.42 * 0.79); left: 10%; bottom: 14%; width: clamp(18px, 1.85vw, 26px); }
+    .bit-8 { --x: calc(var(--portrait-size) * 0.38); --y: calc(var(--portrait-size) / 1.42 * 0.93); left: 38%; bottom: 1%; width: clamp(24px, 2.75vw, 38px); }
+    .bit-9 { --x: calc(var(--portrait-size) * 0.83); --y: calc(var(--portrait-size) / 1.42 * 0.77); right: 9%; bottom: 15%; width: clamp(22px, 2.55vw, 34px); }
+    .bit-10 { --x: calc(var(--portrait-size) * 0.94); --y: calc(var(--portrait-size) / 1.42 * 0.56); right: 3%; top: 56%; width: clamp(22px, 2.45vw, 34px); }
+
+    .pixel-name {
+        margin: 0;
+        font-family: "Silkscreen", "VT323", monospace;
+        font-size: clamp(3.6rem, 7.5vw, 6.2rem);
+        font-weight: 400;
+        line-height: 0.72;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #cda6ed;
+        text-shadow: 7px 7px 0 rgb(45 53 83 / 0.55);
+        white-space: nowrap;
+        transform: translateX(-0.16em);
+    }
+
+    .pixel-bracket {
+        color: #fff;
+        letter-spacing: 0;
+        margin-inline: 0.02em;
+        text-shadow: 5px 5px 0 #cda6ed, 8px 8px 0 rgb(45 53 83 / 0.45);
+    }
+
+    .real-name {
+        margin-top: 1rem;
+        font-family: "SF Pro Display", sans-serif;
+        font-size: clamp(1.95rem, 3.4vw, 3.1rem);
+        font-weight: 300;
+        line-height: 0.92;
+        letter-spacing: 0.28em;
+        color: #fff;
+        white-space: nowrap;
+    }
+
+    .role-line {
+        margin-top: 1rem;
+        font-family: "SF Pro Display", sans-serif;
+        font-size: clamp(1.5rem, 2.1vw, 2.2rem);
+        line-height: 1;
+        text-shadow: 4px 4px 0 #6c548f;
+    }
+
+    .hero-socials {
+        display: flex;
+        gap: 0.9rem;
+        margin-top: 1.45rem;
+    }
+
+    .hero-socials a {
+        display: grid;
+        place-items: center;
+        width: 3rem;
+        height: 3rem;
+        color: #081226;
+        background: #fff;
+        border-radius: 0.42rem;
+        box-shadow: 0 5px 0 rgb(0 0 0 / 0.1);
+        transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
+    }
+
+    .hero-socials a:hover {
+        transform: translateY(-3px);
+        color: #fff;
+        background: #cda6ed;
+    }
+
+    @media (max-width: 1023px) {
+        .pixel-portrait-wrap {
+            --portrait-size: min(70vw, 460px);
+            width: var(--portrait-size);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .home-hero {
+            min-height: 100svh;
+            height: auto;
+        }
+
+        .pixel-portrait-wrap {
+            --portrait-size: min(84vw, 498px);
+            width: var(--portrait-size);
+        }
+
+        .pixel-name {
+            font-size: clamp(2.6rem, 13vw, 3.6rem);
+            letter-spacing: 0.02em;
+            text-shadow: 4px 4px 0 rgb(45 53 83 / 0.62);
+            transform: translateX(-0.1em);
+        }
+
+        .pixel-bracket {
+            text-shadow: 3px 3px 0 #cda6ed, 5px 5px 0 rgb(45 53 83 / 0.45);
+        }
+
+        .real-name {
+            font-size: clamp(1.35rem, 6.2vw, 1.9rem);
+            letter-spacing: 0.12em;
+            white-space: normal;
+        }
+
+        .role-line {
+            font-size: clamp(1.2rem, 5.8vw, 1.55rem);
+        }
+
+        .hero-socials {
+            gap: 0.65rem;
+            margin-top: 1.1rem;
+        }
+
+        .hero-socials a {
+            width: 2.65rem;
+            height: 2.65rem;
+        }
+    }
+</style>

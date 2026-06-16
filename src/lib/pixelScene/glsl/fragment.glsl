@@ -68,9 +68,10 @@ void main() {
   col = drawClouds(col, uv, aspect, 0.82, 0.28, 54.0, CLOUD_MID,   CLOUD_DARK, CLOUD_DARK, 0.52 * (0.6 + 0.4 * upperCloudFade), 19.7, 2.9, 2.0, 0.57, 0.115);
   col = drawClouds(col, uv, aspect, 0.60, 0.5,  60.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.68, 47.3, 3.3, 2.2, 0.55, 0.16);
   col = drawClouds(col, uv, aspect, 0.47, 1.0,  84.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.76, 88.1, 3.9, 2.05, 0.53, 0.20);
-  col = drawMountains(col, uv, 0.16, 4.0, 0.10, MTN_FAR);
-  col = drawMountains(col, uv, 0.09, 6.0, 0.14, MTN_MID);
-  col = drawMountains(col, uv, 0.02, 9.0, 0.18, MTN_NEAR);
+  float portraitLift = smoothstep(1.05, 0.65, aspect) * 0.055;
+  col = drawMountains(col, uv, 0.16 + portraitLift, 4.0, 0.10, MTN_FAR);
+  col = drawMountains(col, uv, 0.09 + portraitLift, 6.0, 0.14, MTN_MID);
+  col = drawMountains(col, uv, 0.02 + portraitLift, 9.0, 0.18, MTN_NEAR);
 
   float scrim = smoothstep(0.5, 0.18, abs(uv.y - 0.5)) * 0.28;
   col = mix(col, col * 0.45, scrim);
