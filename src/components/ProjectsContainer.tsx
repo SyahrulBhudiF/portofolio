@@ -8,9 +8,19 @@ import ProjectCard from "./ProjectCard";
 interface ProjectsContainerProps {
   initialProjects: Project[];
   remainingProjects: Project[];
+  stars: Record<string, number | null>;
 }
 
-const ProjectsContainer = ({ initialProjects, remainingProjects }: ProjectsContainerProps) => {
+const projectStars = (project: Project, stars: Record<string, number | null>) =>
+  [project.data.sourceClient, project.data.sourceServer, project.data.sourceModel]
+    .flatMap((url) => (url ? [url] : []))
+    .reduce((total, url) => total + (stars[url] ?? 0), 0);
+
+const ProjectsContainer = ({
+  initialProjects,
+  remainingProjects,
+  stars,
+}: ProjectsContainerProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -24,8 +34,8 @@ const ProjectsContainer = ({ initialProjects, remainingProjects }: ProjectsConta
         <ProjectCard
           key={project.id}
           project={project.data}
-          href={`assets/projects/${project.id}/cover.webp`}
-          isReverse={false}
+          href={`/assets/projects/${project.id}/cover.webp`}
+          stars={projectStars(project, stars)}
         />
       ))}
 
@@ -98,8 +108,8 @@ const ProjectsContainer = ({ initialProjects, remainingProjects }: ProjectsConta
                     >
                       <ProjectCard
                         project={project.data}
-                        href={`assets/projects/${project.id}/cover.webp`}
-                        isReverse={false}
+                        href={`/assets/projects/${project.id}/cover.webp`}
+                        stars={projectStars(project, stars)}
                       />
                     </motion.div>
                   ))}

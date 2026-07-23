@@ -1,23 +1,24 @@
 ---
-title: DualCam Studio
-type: Web Application
-description: DualCam Studio is a research-oriented web platform developed as a supporting system for undergraduate thesis data collection in micro-expression and anxiety studies, featuring dual-camera capture using Intel RealSense and a standard webcam.
-role: Fullstack Developer
+title: Anxiety Classification
+type: Research Web Application
+description: A facial micro-expression analysis system that classifies anxiety from video using POC-ABS features and TabR. It detects 68 facial landmarks, analyses eye-eyebrow and mouth regions, and highlights anxiety events on a synchronized video timeline.
+role: Fullstack Developer & Machine Learning Engineer
 date: 2025-12-01
 sourceClient: https://github.com/SyahrulBhudiF/DualCam-Studio
 stack:
-  [
-    "TanStack",
-    "React",
-    "TypeScript",
-    "Drizzle",
-    "Effect",
-    "Supabase",
-    "PostgreSQL",
-    "Python",
-    "Proto",
-    "WebSocket",
-    "TailwindCSS",
-    "BiomeJS",
-  ]
+  - { name: TanStack, url: https://tanstack.com/ }
+  - { name: React, url: https://react.dev/ }
+  - { name: TypeScript, url: https://www.typescriptlang.org/docs/ }
+  - { name: Drizzle, url: https://orm.drizzle.team/docs/overview }
+  - { name: Effect, url: https://effect.website/docs }
+  - { name: Supabase, url: https://supabase.com/docs }
+  - { name: PostgreSQL, url: https://www.postgresql.org/docs/ }
+  - { name: Python, url: https://docs.python.org/3/ }
+  - { name: Proto, url: https://protobuf.dev/ }
+  - { name: WebSocket, url: https://developer.mozilla.org/docs/Web/API/WebSockets_API }
+  - { name: TailwindCSS, url: https://tailwindcss.com/docs }
+  - { name: BiomeJS, url: https://biomejs.dev/ }
+  - { name: Moon, url: https://moonrepo.dev/ }
 ---
+
+The system extracts X, Y, theta, and magnitude micro-movement features from 7×7 POC-ABS blocks across the right eye-eyebrow, left eye-eyebrow, and mouth regions. A TabR classifier separates low and high anxiety levels, reaching 58% accuracy in evaluation. Results are validated against questionnaires and expert-defined anxiety groupings.

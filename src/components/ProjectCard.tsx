@@ -2,8 +2,10 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { createCardVariants } from "@/lib/animations";
 import type { ProjectMeta } from "@/model/projects";
 import { motion, useInView } from "framer-motion";
+import { ExternalLink } from "lucide-react";
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import GitHubStars from "./GitHubStars";
 import LinkedInIcon from "./icons/LinkedInIcon";
 import TechStackItem from "./ui/TechStackItem";
 
@@ -12,21 +14,20 @@ interface GithubLinkProps {
   text: string;
 }
 
+const linkClassName =
+  "flex w-fit items-center gap-2 rounded-lg border-2 border-purple-800 bg-transparent px-4 py-2 text-white transition-all duration-300 ease-out hover:scale-105";
+
 const GithubLink: React.FC<GithubLinkProps> = ({ url, text }) => (
-  <a
-    href={url}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex items-center w-fit gap-2 bg-transparent text-white px-4 py-2 rounded-lg border-2 border-purple-800 bg-opacity-60 transition-all duration-300 ease-out hover:scale-105 hover:border-2"
-  >
-    <img
-      src="/assets/icon/github.svg"
-      alt={`View ${text} on GitHub`}
-      width={24}
-      height={24}
-      loading="lazy"
-    />
+  <a href={url} target="_blank" rel="noopener noreferrer" className={linkClassName}>
+    <img src="/assets/icon/github.svg" alt="" width={24} height={24} loading="lazy" />
     <span>{text}</span>
+  </a>
+);
+
+const DemoLink: React.FC<{ url: string }> = ({ url }) => (
+  <a href={url} target="_blank" rel="noopener noreferrer" className={linkClassName}>
+    <ExternalLink size={20} aria-hidden />
+    <span>Live Demo</span>
   </a>
 );
 
@@ -58,10 +59,10 @@ const ContributorLink: React.FC<ContributorLinkProps> = ({ contributor }) => (
 interface ProjectCardProps {
   project: ProjectMeta;
   href?: string;
-  isReverse?: boolean;
+  stars: number;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, isReverse }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, stars }) => {
   const ref = useRef(null);
   const isMobile = useIsMobile();
   const [imageExists, setImageExists] = useState<boolean | null>(null);
@@ -89,13 +90,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, isReverse }) =
   const renderTechStack = () => (
     <div className="flex flex-wrap gap-2 -mx-2">
       {project.stack.map((stack) => (
-        <TechStackItem key={stack} tech={stack} size="medium" />
+        <TechStackItem key={stack.name} tech={stack.name} url={stack.url} size="medium" />
       ))}
     </div>
   );
 
-  const renderGithubLinks = () => (
-    <div className="grid grid-cols-2 gap-4 w-fit mt-4 max-sm:grid-cols-1">
+  const renderProjectLinks = () => (
+    <div className="mt-4 flex flex-wrap gap-4">
+      {project.demo && <DemoLink url={project.demo} />}
       {project.sourceClient && <GithubLink url={project.sourceClient} text="Client Source" />}
       {project.sourceServer && <GithubLink url={project.sourceServer} text="Server Source" />}
       {project.sourceModel && <GithubLink url={project.sourceModel} text="Model Source" />}
@@ -121,7 +123,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, isReverse }) =
   };
 
   return (
-    <div className="w-full flex justify-center overflow-hidden">
+    <div className="w-full flex justify-center">
       <motion.div
         ref={ref}
         variants={cardVariants}
@@ -130,11 +132,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, isReverse }) =
         className="flex items-center justify-center w-full mt-10 max-md:mt-0"
         style={{ willChange: "transform, opacity" }}
       >
-        <div
-          className={`flex self-center gap-4 max-lg:flex-col-reverse ${
-            isReverse ? "flex-row-reverse" : "flex-row"
-          }`}
-        >
+        <div className="flex flex-row self-center gap-4 max-lg:flex-col-reverse">
           {imageExists && (
             <div className="w-full flex flex-col gap-4">
               <img
@@ -148,12 +146,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, isReverse }) =
           )}
 
           <div className="w-full text-white flex flex-col gap-2">
-            <p className="font-semibold text-3xl text-gray-100">{project.title}</p>
+            <div className="flex items-center gap-3">
+              <p className="font-semibold text-3xl text-gray-100">{project.title}</p>
+              <GitHubStars stars={stars} className="text-purple-200" />
+            </div>
             <p className="text-xl text-purple-300">{project.type}</p>
             <p className="text-md text-gray-400 font-semibold">{project.role}</p>
             <p className="text-base text-gray-300 mt-4 leading-relaxed">{project.description}</p>
 
-            {renderGithubLinks()}
+            {renderProjectLinks()}
             {renderContributors()}
 
             {!imageExists && <div className="mt-4">{renderTechStack()}</div>}

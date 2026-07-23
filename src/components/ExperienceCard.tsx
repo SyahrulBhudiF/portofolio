@@ -28,7 +28,7 @@ const ExperienceCard: FC<Props> = ({
     <Collapsible
       open={isOpen}
       onOpenChange={setIsOpen}
-      className="flex w-full flex-col items-start p-4 rounded-lg border border-white/5 bg-gray-900/80 p-4 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-gray-800/85"
+      className="flex w-full flex-col items-start rounded-lg border border-white/5 bg-gray-900/80 p-4 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-gray-800/85"
     >
       <div className="flex w-full gap-3 justify-between max-sm:flex-col">
         <div className="min-w-0 flex-1">

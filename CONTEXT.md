@@ -18,15 +18,9 @@ Build new portfolio background theme:
 
 Style: pixel-art / retro game diorama.
 
-Chosen v1 direction: WebGL-first procedural pixel shader renderer. No hand-drawn sprites required now. Keep architecture sprite-ready so future sprite/texture assets can replace procedural objects without rewriting the scene system. Canvas 2D is fallback only, not primary path.
+Chosen v1 direction: WebGL-first procedural pixel shader renderer with a Canvas 2D fallback. The scene is deliberately procedural; add a sprite/texture layer only when actual assets require one.
 
-Current implementation is too manual:
-
-- `src/components/StarBackground.tsx` creates random DOM stars.
-- `src/components/CloudParallax.tsx` moves several PNG images with Framer Motion.
-- `src/components/MountainSVG.tsx` renders static SVG layers.
-
-Target implementation: one cohesive parallax scene rendered through WebGL on a single canvas. V1 uses procedural GLSL shaders for sky/stars/moon/clouds/mountains. Later versions can add sprite/texture atlas layers without changing the public component.
+The implementation is one cohesive parallax scene rendered through WebGL on a single canvas. V1 uses procedural GLSL shaders for sky, stars, moon, clouds, and mountains.
 
 ## Important Clarification
 
@@ -371,22 +365,14 @@ Pause conditions:
 
 Detailed implementation guide lives in [`docs/pixel-parallax-implementation.md`](docs/pixel-parallax-implementation.md).
 
-Replace these over time:
-
-- `StarBackground.tsx` -> remove after new scene covers About sky.
-- `CloudParallax.tsx` -> remove after cloud layer exists in scene.
-- `MountainSVG.tsx` -> remove after mountain layer exists in scene.
-
-New files for V1:
+Implemented files:
 
 ```txt
 src/components/PixelParallaxScene.tsx
 src/lib/pixelScene/palette.ts
 src/lib/pixelScene/types.ts
-src/lib/pixelScene/scene.ts
 src/lib/pixelScene/renderer.ts
 src/lib/pixelScene/webgl.ts
-src/lib/pixelScene/shaders.ts
 src/lib/pixelScene/canvas2d.ts
 ```
 
@@ -529,7 +515,7 @@ Constraints:
 - Fullscreen fragment shader can become GPU-heavy if noise is too complex or framebuffer too large.
 - Procedural clouds can look generic without tuning.
 - WebGL context loss/restoration must be handled.
-- Future sprites need atlas/loading pipeline, but architecture should already support object kind swapping.
+- Future sprites need an atlas/loading pipeline if real sprite assets are added.
 - Fixed canvas behind whole page needs careful z-index with sections.
 - Pixel aesthetic can conflict with existing polished/gradient sections unless background colors updated.
 
@@ -538,11 +524,9 @@ Constraints:
 1. Add `PixelParallaxScene` behind current content, no removals.
 2. Implement optimized WebGL procedural fragment shader renderer.
 3. Add Canvas 2D fallback only for WebGL unavailable/context lost.
-4. Keep scene object/layer config sprite-ready.
-5. Remove `StarBackground`, `CloudParallax`, `MountainSVG` usage after visual approval.
-6. Tune section backgrounds to let scene show through.
-7. Later optional: add sprite atlas for moon/cloud/mountain hero objects.
-8. Run `npm run build` and `npm run check`.
+4. Tune section backgrounds to let the scene show through.
+5. Later optional: add a sprite atlas for moon, cloud, or mountain hero objects.
+6. Run `bun run build` and `bun run check`.
 
 ## Decisions / Remaining Questions
 

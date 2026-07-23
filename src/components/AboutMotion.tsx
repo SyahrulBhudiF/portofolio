@@ -25,16 +25,15 @@ const AboutMotion = ({ children }: Props) => {
       >
         <h2 className="text-6xl font-bold text-retro self-start max-sm:text-5xl">About Me</h2>
         <p className="text-lg max-sm:text-base">
-          Informatics Engineering student at Politeknik Negeri Malang with{" "}
-          <strong className="font-bold text-purple-300">2 years of experience</strong> in software
-          development, focusing on Full-Stack Development with a stronger emphasis on backend.
-          Experienced in frontend development using Next.js and TanStack Start with TypeScript, and
-          backend development using TypeScript, Laravel, and Golang.
+          I’m a software developer focused on building reliable full-stack applications, with a
+          particular interest in backend systems. Over the past{" "}
+          <strong className="font-bold text-purple-300">two years</strong>, I’ve worked with
+          TypeScript, Laravel, and Go on the backend, and Next.js and TanStack Start on the
+          frontend.
           <br />
           <br />
-          Proficient in Linux environments, quick to learn new technologies, and adaptable to
-          complex projects. Motivated to contribute effectively in collaborative teams while
-          continuously improving technical expertise.
+          Comfortable in Linux environments, I learn quickly, adapt to complex projects, and enjoy
+          contributing to collaborative teams while continuing to sharpen my technical skills.
         </p>
       </motion.div>
 

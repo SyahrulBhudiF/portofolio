@@ -13,11 +13,10 @@ export default function PixelParallaxScene() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const renderer = createPixelSceneRenderer(canvas, {
-      mode: "webgl",
-      seed: 1337,
-      reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    });
+    const renderer = createPixelSceneRenderer(
+      canvas,
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
 
     renderer.start();
     return () => renderer.destroy();

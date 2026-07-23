@@ -249,7 +249,7 @@ Avoid:
 Use explicit precision in fragment shader:
 
 ```glsl
-precision mediump float;
+precision highp float;
 ```
 
 Use `highp` only where needed for coordinate/time accuracy. Mobile GPUs benefit from lower precision when acceptable.

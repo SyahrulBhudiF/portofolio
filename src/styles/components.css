@@ -41,12 +41,11 @@
    ========================================================================== */
 
 .retro-tech-block {
-  transition: all 0.3s ease;
-  box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.16), 8px 8px 0 rgba(255, 255, 255, 0.1), 12px 12px 0
-    rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.22);
-  background-color: rgba(88, 28, 135, 0.42);
-  perspective: 500px;
+  transition: box-shadow 220ms ease-out, background-color 220ms ease-out;
+  box-shadow: 5px 5px 0 rgb(151 109 194 / 38%), 10px 10px 0 rgb(116 84 151 / 24%), 15px 15px 0
+    rgb(149 118 184 / 18%);
+  border-color: rgba(218, 178, 255, 0.42);
+  background-color: rgba(88, 28, 135, 0.56);
 }
 
 .retro-tech-block::before {
@@ -65,10 +64,9 @@
 .retro-tech-block:hover {
   position: relative;
   z-index: 50;
-  transform: translateY(-15px) rotateX(5deg) scale(1.05);
-  box-shadow: 6px 6px 0 rgba(255, 255, 255, 0.2), 12px 12px 0 rgba(255, 255, 255, 0.14), 18px 18px 0
-    rgba(255, 255, 255, 0.08);
-  background-color: rgba(156, 81, 224, 0.5);
+  box-shadow: 6px 6px 0 rgb(213 168 255 / 52%), 14px 14px 0 rgb(167 119 211 / 34%), 22px 22px 0
+    rgb(143 105 182 / 24%);
+  background-color: rgba(142, 64, 205, 0.72);
 }
 
 .retro-tech-block:hover p {
@@ -88,14 +86,6 @@
   -webkit-box-shadow: 5px 6px 9px 0px rgba(89, 28, 135, 1);
   -moz-box-shadow: 5px 6px 9px 0px rgba(89, 28, 135, 1);
   box-shadow: 5px 6px 9px 0px rgba(89, 28, 135, 1);
-}
-
-/* ==========================================================================
-   Splash Screen
-   ========================================================================== */
-
-.splash-screen {
-  visibility: hidden;
 }
 
 /* ==========================================================================

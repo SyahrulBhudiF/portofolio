@@ -15,7 +15,12 @@ const projectCollection = defineCollection({
     sourceModel: z.string().url().nullable().default(null),
     sourceClient: z.string().url().nullable().default(null),
     sourceServer: z.string().url().nullable().default(null),
-    stack: z.array(z.string()),
+    stack: z.array(
+      z.object({
+        name: z.string(),
+        url: z.string().url(),
+      }),
+    ),
     contributors: z
       .array(
         z.object({
@@ -61,7 +66,12 @@ const techstackCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     order: z.number().default(0),
-    items: z.array(z.string()),
+    items: z.array(
+      z.object({
+        name: z.string(),
+        url: z.string().url(),
+      }),
+    ),
   }),
 });
 

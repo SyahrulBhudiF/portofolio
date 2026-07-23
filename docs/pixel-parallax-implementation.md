@@ -355,9 +355,8 @@ export const pixelScenePalette = {
 After `PixelParallaxScene` looks acceptable:
 
 - Add to `src/layouts/Layout.astro`.
-- Stop mounting `StarBackground` in `src/components/content/About.astro`, but do not delete the source file.
-- Stop mounting `CloudParallax` in `src/components/content/Project.astro`, but do not delete the source file.
-- Stop mounting `MountainSVG` in `src/components/content/Experience.astro`, but do not delete the source file.
+- Stop mounting the legacy DOM/SVG backgrounds in their sections.
+- Delete the legacy background components after visual approval.
 - Tune section backgrounds opacity.
 - Run `npm run build`.
 - Run `npm run check`.

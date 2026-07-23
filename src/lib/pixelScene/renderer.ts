@@ -1,6 +1,6 @@
 import { createCanvas2DBackend } from "./canvas2d";
-import type { PixelSceneOptions, PixelSceneRenderer, SceneViewport } from "./types";
-import { type SceneBackend, createWebGLBackend } from "./webgl";
+import type { PixelSceneRenderer, SceneBackend, SceneViewport } from "./types";
+import { createWebGLBackend } from "./webgl";
 
 const MOBILE_MAX_WIDTH = 768;
 const DESKTOP_BUFFER_W = 480;
@@ -31,9 +31,8 @@ function readScroll(): number {
 
 export function createPixelSceneRenderer(
   canvas: HTMLCanvasElement,
-  options: PixelSceneOptions,
+  reducedMotion: boolean,
 ): PixelSceneRenderer {
-  const { reducedMotion } = options;
   let backend: SceneBackend | null = null;
   let usingFallback = false;
   let viewport = computeViewport();
@@ -51,12 +50,10 @@ export function createPixelSceneRenderer(
 
   function buildBackend() {
     applyCanvasSize();
-    if (options.mode === "webgl") {
-      backend = createWebGLBackend(canvas, {
-        isMobile: viewport.isMobile,
-        reducedMotion,
-      });
-    }
+    backend = createWebGLBackend(canvas, {
+      isMobile: viewport.isMobile,
+      reducedMotion,
+    });
     if (!backend) {
       usingFallback = true;
       backend = createCanvas2DBackend(canvas);

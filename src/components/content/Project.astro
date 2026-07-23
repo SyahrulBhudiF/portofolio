@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content";
+import OpenSourceContributions from "@/components/OpenSourceContributions.astro";
 import ProjectsContainer from "@/components/ProjectsContainer";
+import { getGitHubStars } from "@/lib/github";
 import type { Project } from "@/model/projects";
 
 const personalProjects = await getCollection("projects");
@@ -10,6 +12,13 @@ const sortedPersonalProjects = personalProjects.sort((a: Project, b: Project) =>
 
 const initialProjects = sortedPersonalProjects.slice(0, 3);
 const remainingProjects = sortedPersonalProjects.slice(3);
+const projectStars = await getGitHubStars(
+  sortedPersonalProjects.flatMap(({ data }) => [
+    data.sourceClient,
+    data.sourceServer,
+    data.sourceModel,
+  ]),
+);
 ---
 <section
         class="text-white w-full h-fit flex justify-center relative z-10 px-16 max-md:px-4 pb-26"
@@ -19,7 +28,9 @@ const remainingProjects = sortedPersonalProjects.slice(3);
         <ProjectsContainer
                 initialProjects={initialProjects}
                 remainingProjects={remainingProjects}
+                stars={projectStars}
                 client:idle
         />
+        <OpenSourceContributions />
     </div>
 </section>

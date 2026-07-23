@@ -1,6 +1,5 @@
 import { pixelScenePalette as P } from "./palette";
-import type { SceneFrame, SceneViewport } from "./types";
-import type { SceneBackend } from "./webgl";
+import type { SceneBackend, SceneFrame, SceneViewport } from "./types";
 
 // Deterministic hash so the fallback scene is stable across redraws.
 function hash(x: number, y: number): number {

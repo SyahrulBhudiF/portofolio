@@ -7,7 +7,7 @@ import { useState } from "react";
 
 interface Props {
   title: string;
-  items: string[];
+  items: { name: string; url: string }[];
   size?: "small" | "medium" | "large";
 }
 
@@ -60,7 +60,7 @@ const TechStackCategory: React.FC<Props> = ({ title, items, size = "medium" }) =
               >
                 <div className="flex gap-2 flex-wrap justify-start pb-4">
                   {items.map((tech) => (
-                    <TechStackItem key={tech} tech={tech} size={size} />
+                    <TechStackItem key={tech.name} tech={tech.name} url={tech.url} size={size} />
                   ))}
                 </div>
               </motion.div>
@@ -69,7 +69,7 @@ const TechStackCategory: React.FC<Props> = ({ title, items, size = "medium" }) =
         ) : (
           <div className="flex gap-4 flex-wrap justify-start">
             {items.map((tech) => (
-              <TechStackItem key={tech} tech={tech} size={size} />
+              <TechStackItem key={tech.name} tech={tech.name} url={tech.url} size={size} />
             ))}
           </div>
         )}

@@ -1,10 +1,4 @@
-import type { SceneFrame, SceneViewport } from "./types";
-
-export type SceneBackend = {
-  resize(viewport: SceneViewport): void;
-  draw(frame: SceneFrame): void;
-  destroy(): void;
-};
+import type { SceneBackend, SceneFrame, SceneViewport } from "./types";
 
 type MountainLayer = {
   seed: number;
@@ -17,12 +11,60 @@ type MountainLayer = {
 };
 
 const MOUNTAIN_LAYERS: MountainLayer[] = [
-  { seed: 0.0, scaleX: 3.0, xOffset: 0.0, heightMul: 1.45, baseY: 0.19, color: [0.149, 0.192, 0.302], parallax: 0.08 },
-  { seed: 1.0, scaleX: 3.8, xOffset: 0.45, heightMul: 1.35, baseY: 0.15, color: [0.126, 0.158, 0.260], parallax: 0.13 },
-  { seed: 2.0, scaleX: 4.8, xOffset: 1.1, heightMul: 1.20, baseY: 0.11, color: [0.106, 0.133, 0.220], parallax: 0.20 },
-  { seed: 3.0, scaleX: 6.0, xOffset: 1.8, heightMul: 1.05, baseY: 0.08, color: [0.082, 0.101, 0.178], parallax: 0.32 },
-  { seed: 4.0, scaleX: 7.4, xOffset: 2.6, heightMul: 0.90, baseY: 0.055, color: [0.062, 0.075, 0.140], parallax: 0.48 },
-  { seed: 5.0, scaleX: 9.2, xOffset: 3.4, heightMul: 0.74, baseY: 0.03, color: [0.043, 0.051, 0.094], parallax: 0.72 },
+  {
+    seed: 0.0,
+    scaleX: 3.0,
+    xOffset: 0.0,
+    heightMul: 1.45,
+    baseY: 0.19,
+    color: [0.149, 0.192, 0.302],
+    parallax: 0.08,
+  },
+  {
+    seed: 1.0,
+    scaleX: 3.8,
+    xOffset: 0.45,
+    heightMul: 1.35,
+    baseY: 0.15,
+    color: [0.126, 0.158, 0.26],
+    parallax: 0.13,
+  },
+  {
+    seed: 2.0,
+    scaleX: 4.8,
+    xOffset: 1.1,
+    heightMul: 1.2,
+    baseY: 0.11,
+    color: [0.106, 0.133, 0.22],
+    parallax: 0.2,
+  },
+  {
+    seed: 3.0,
+    scaleX: 6.0,
+    xOffset: 1.8,
+    heightMul: 1.05,
+    baseY: 0.08,
+    color: [0.082, 0.101, 0.178],
+    parallax: 0.32,
+  },
+  {
+    seed: 4.0,
+    scaleX: 7.4,
+    xOffset: 2.6,
+    heightMul: 0.9,
+    baseY: 0.055,
+    color: [0.062, 0.075, 0.14],
+    parallax: 0.48,
+  },
+  {
+    seed: 5.0,
+    scaleX: 9.2,
+    xOffset: 3.4,
+    heightMul: 0.74,
+    baseY: 0.03,
+    color: [0.043, 0.051, 0.094],
+    parallax: 0.72,
+  },
 ];
 
 const quadVertex = `
@@ -63,7 +105,7 @@ float fbm(vec2 p) {
 `;
 
 const backgroundFragment = `
-precision mediump float;
+precision highp float;
 
 uniform vec2 u_resolution;
 uniform float u_time;
@@ -173,7 +215,7 @@ void main() {
 `;
 
 const mountainFragment = `
-precision mediump float;
+precision highp float;
 
 uniform vec2 u_resolution;
 uniform float u_seed;
@@ -207,7 +249,7 @@ void main() {
 `;
 
 const displayFragment = `
-precision mediump float;
+precision highp float;
 
 uniform sampler2D u_texture;
 uniform float u_yOffset;
@@ -234,7 +276,11 @@ function compile(gl: WebGLRenderingContext, type: number, src: string): WebGLSha
   return shader;
 }
 
-function createProgram(gl: WebGLRenderingContext, vertexSrc: string, fragmentSrc: string): WebGLProgram | null {
+function createProgram(
+  gl: WebGLRenderingContext,
+  vertexSrc: string,
+  fragmentSrc: string,
+): WebGLProgram | null {
   const vertex = compile(gl, gl.VERTEX_SHADER, vertexSrc);
   const fragment = compile(gl, gl.FRAGMENT_SHADER, fragmentSrc);
   if (!vertex || !fragment) return null;
@@ -253,7 +299,11 @@ function createProgram(gl: WebGLRenderingContext, vertexSrc: string, fragmentSrc
   return program;
 }
 
-function createTexture(gl: WebGLRenderingContext, width: number, height: number): WebGLTexture | null {
+function createTexture(
+  gl: WebGLRenderingContext,
+  width: number,
+  height: number,
+): WebGLTexture | null {
   const texture = gl.createTexture();
   if (!texture) return null;
   gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -265,7 +315,10 @@ function createTexture(gl: WebGLRenderingContext, width: number, height: number)
   return texture;
 }
 
-function createFramebuffer(gl: WebGLRenderingContext, texture: WebGLTexture): WebGLFramebuffer | null {
+function createFramebuffer(
+  gl: WebGLRenderingContext,
+  texture: WebGLTexture,
+): WebGLFramebuffer | null {
   const framebuffer = gl.createFramebuffer();
   if (!framebuffer) return null;
   gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
@@ -302,7 +355,11 @@ export function createWebGLBackend(
   const buffer = gl.createBuffer();
   if (!buffer) return null;
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+    gl.STATIC_DRAW,
+  );
 
   const attrib = {
     background: gl.getAttribLocation(backgroundProgram, "a_position"),
@@ -383,8 +440,13 @@ export function createWebGLBackend(
   }
 
   function renderMountainLayers(currentViewport: SceneViewport) {
+    // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
     gl.useProgram(mountainProgram);
-    gl.uniform2f(mountainUniform.resolution, currentViewport.bufferWidth, currentViewport.bufferHeight);
+    gl.uniform2f(
+      mountainUniform.resolution,
+      currentViewport.bufferWidth,
+      currentViewport.bufferHeight,
+    );
     for (let i = 0; i < MOUNTAIN_LAYERS.length; i += 1) {
       const layer = MOUNTAIN_LAYERS[i];
       gl.bindFramebuffer(gl.FRAMEBUFFER, mountainFramebuffers[i]);
@@ -407,6 +469,7 @@ export function createWebGLBackend(
     gl.bindFramebuffer(gl.FRAMEBUFFER, backgroundFramebuffer);
     gl.viewport(0, 0, viewport.bufferWidth, viewport.bufferHeight);
     gl.disable(gl.BLEND);
+    // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
     gl.useProgram(backgroundProgram);
     gl.uniform2f(backgroundUniform.resolution, viewport.bufferWidth, viewport.bufferHeight);
     gl.uniform1f(backgroundUniform.time, frame.time);
@@ -423,6 +486,7 @@ export function createWebGLBackend(
     gl.viewport(0, 0, viewport.bufferWidth, viewport.bufferHeight);
     gl.clearColor(0.012, 0.016, 0.051, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
+    // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
     gl.useProgram(displayProgram);
     gl.uniform2f(displayUniform.screenSize, viewport.bufferWidth, viewport.bufferHeight);
     gl.activeTexture(gl.TEXTURE0);
@@ -438,7 +502,10 @@ export function createWebGLBackend(
     for (let i = 0; i < MOUNTAIN_LAYERS.length; i += 1) {
       const layer = MOUNTAIN_LAYERS[i];
       gl.bindTexture(gl.TEXTURE_2D, mountainTextures[i]);
-      gl.uniform1f(displayUniform.yOffset, -frame.scroll * layer.parallax * viewport.bufferHeight * 0.36);
+      gl.uniform1f(
+        displayUniform.yOffset,
+        -frame.scroll * layer.parallax * viewport.bufferHeight * 0.36,
+      );
       drawQuad(attrib.display);
     }
     gl.disable(gl.BLEND);

@@ -1,0 +1,48 @@
+---
+import ExperienceCard from "../ExperienceCard";
+
+interface Props {
+  title: string;
+  items: {
+    title: string;
+    subtitle: string;
+    duration: string;
+    location: string;
+    description: string[];
+    tags: string[];
+    skills: string[];
+  }[];
+}
+
+const { title, items } = Astro.props;
+
+const columns = [items.filter((_, i) => i % 2 === 0), items.filter((_, i) => i % 2 === 1)];
+---
+
+<div>
+  <h3
+    class="text-3xl font-bold text-purple-300 max-sm:text-2xl mb-6 text-center"
+  >
+    {title}
+  </h3>
+  <div class="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
+    {
+      columns.map((column) => (
+        <div class="flex flex-col gap-4">
+          {column.map((item) => (
+            <ExperienceCard
+              title={item.title}
+              subtitle={item.subtitle}
+              duration={item.duration}
+              location={item.location}
+              description={item.description}
+              tags={item.tags}
+              skills={item.skills}
+              client:idle
+            />
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>

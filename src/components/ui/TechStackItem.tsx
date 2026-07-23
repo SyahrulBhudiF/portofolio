@@ -5,6 +5,7 @@ type TechStackSize = "small" | "medium" | "large";
 
 interface TechStackItemProps {
   tech: string;
+  url: string;
   size?: TechStackSize;
   showLabel?: boolean;
 }
@@ -23,13 +24,18 @@ const iconSizeClasses: Record<TechStackSize, string> = {
 
 const TechStackItem: React.FC<TechStackItemProps> = ({
   tech,
+  url,
   size = "medium",
   showLabel = true,
 }) => {
   return (
-    <div
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${tech} documentation`}
       className={cn(
-        "retro-tech-block relative m-2 flex justify-center items-center gap-1 text-white border-2 border-purple-700/30 rounded-lg cursor-pointer overflow-hidden bg-purple-900/20 group",
+        "retro-tech-block relative m-2 flex items-center justify-center gap-1 rounded-lg border-2 border-purple-700/30 bg-purple-900/20 text-white no-underline group",
         sizeClasses[size],
       )}
     >
@@ -37,7 +43,7 @@ const TechStackItem: React.FC<TechStackItemProps> = ({
         <div className="relative block mr-1">
           <img
             src={`/assets/icon/${tech.toLowerCase()}.svg`}
-            alt={tech}
+            alt=""
             loading="lazy"
             className={cn(
               iconSizeClasses[size],
@@ -51,7 +57,7 @@ const TechStackItem: React.FC<TechStackItemProps> = ({
           </p>
         )}
       </div>
-    </div>
+    </a>
   );
 };
 
