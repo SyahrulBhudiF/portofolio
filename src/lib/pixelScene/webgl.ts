@@ -1,3 +1,4 @@
+import moonImage from "@/assets/pixelScene/moon.png";
 import type { SceneBackend, SceneFrame, SceneViewport } from "./types";
 
 type MountainLayer = {
@@ -73,6 +74,28 @@ varying vec2 v_uv;
 void main() {
   gl_Position = vec4(a_position, 0.0, 1.0);
   v_uv = (a_position + 1.0) * 0.5;
+}
+`;
+
+const spriteVertex = `
+attribute vec2 a_position;
+uniform vec2 u_center;
+uniform vec2 u_size;
+varying vec2 v_uv;
+void main() {
+  gl_Position = vec4(u_center + a_position * u_size, 0.0, 1.0);
+  v_uv = vec2((a_position.x + 1.0) * 0.5, (1.0 - a_position.y) * 0.5);
+}
+`;
+
+const spriteFragment = `
+precision highp float;
+uniform sampler2D u_texture;
+uniform float u_opacity;
+varying vec2 v_uv;
+void main() {
+  vec4 color = texture2D(u_texture, v_uv);
+  gl_FragColor = vec4(color.rgb, color.a * u_opacity);
 }
 `;
 
@@ -161,20 +184,10 @@ vec3 drawStars(vec3 col, vec2 uv, float aspect) {
 
 vec3 drawMoon(vec3 col, vec2 uv, float aspect) {
   float fade = 1.0 - smoothstep(0.14, 0.34, u_scroll);
-  if (fade <= 0.001) return col;
-  vec2 p = pixelate(uv, u_pixelGrid * 1.2);
   vec2 c = vec2(0.78, 0.74 + u_scroll * 0.18);
-  vec2 d = vec2((p.x - c.x) * aspect, p.y - c.y);
-  float r = length(d);
-  float disc = 1.0 - step(0.085, r);
-  float cr = 0.0;
-  cr += 1.0 - step(0.016, length(d - vec2(-0.02, 0.015)));
-  cr += 1.0 - step(0.012, length(d - vec2(0.022, -0.01)));
-  cr += 1.0 - step(0.010, length(d - vec2(0.005, 0.030)));
-  vec3 moonCol = mix(MOON_LIGHT, MOON_SHADOW, clamp(cr, 0.0, 1.0) * 0.7);
-  float halo = (1.0 - smoothstep(0.085, 0.17, r)) * 0.22;
-  col = mix(col, MOON_LIGHT, halo * fade);
-  return mix(col, moonCol, disc * fade);
+  vec2 d = vec2((uv.x - c.x) * aspect, uv.y - c.y);
+  float halo = (1.0 - smoothstep(0.095, 0.18, length(d))) * 0.18;
+  return mix(col, MOON_LIGHT, halo * fade);
 }
 
 vec3 drawClouds(vec3 col, vec2 uv, float aspect, float bandY, float depth, float grid, vec3 lit, vec3 mid, vec3 dark, float maxAlpha, float seed, float noiseScale, float stretch, float thresh, float bandW) {
@@ -350,7 +363,8 @@ export function createWebGLBackend(
   const backgroundProgram = createProgram(gl, quadVertex, backgroundFragment);
   const mountainProgram = createProgram(gl, quadVertex, mountainFragment);
   const displayProgram = createProgram(gl, quadVertex, displayFragment);
-  if (!backgroundProgram || !mountainProgram || !displayProgram) return null;
+  const spriteProgram = createProgram(gl, spriteVertex, spriteFragment);
+  if (!backgroundProgram || !mountainProgram || !displayProgram || !spriteProgram) return null;
 
   const buffer = gl.createBuffer();
   if (!buffer) return null;
@@ -365,6 +379,7 @@ export function createWebGLBackend(
     background: gl.getAttribLocation(backgroundProgram, "a_position"),
     mountain: gl.getAttribLocation(mountainProgram, "a_position"),
     display: gl.getAttribLocation(displayProgram, "a_position"),
+    sprite: gl.getAttribLocation(spriteProgram, "a_position"),
   };
 
   const backgroundUniform = {
@@ -391,11 +406,21 @@ export function createWebGLBackend(
     screenSize: gl.getUniformLocation(displayProgram, "u_screenSize"),
   };
 
+  const spriteUniform = {
+    texture: gl.getUniformLocation(spriteProgram, "u_texture"),
+    center: gl.getUniformLocation(spriteProgram, "u_center"),
+    size: gl.getUniformLocation(spriteProgram, "u_size"),
+    opacity: gl.getUniformLocation(spriteProgram, "u_opacity"),
+  };
+
   let viewport: SceneViewport | null = null;
+  let lastFrame: SceneFrame | null = null;
   let backgroundTexture: WebGLTexture | null = null;
   let backgroundFramebuffer: WebGLFramebuffer | null = null;
   let mountainTextures: WebGLTexture[] = [];
   let mountainFramebuffers: WebGLFramebuffer[] = [];
+  const moonTexture = createTexture(gl, 1, 1);
+  let moonReady = false;
 
   function bindQuad(attribLocation: number) {
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -480,6 +505,22 @@ export function createWebGLBackend(
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   }
 
+  function drawMoon(frame: SceneFrame) {
+    if (!viewport || !moonTexture || !moonReady) return;
+    const opacity = 1 - Math.min(1, Math.max(0, (frame.scroll - 0.14) / 0.2));
+    if (opacity <= 0) return;
+    const aspect = viewport.bufferWidth / viewport.bufferHeight;
+    // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
+    gl.useProgram(spriteProgram);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, moonTexture);
+    gl.uniform1i(spriteUniform.texture, 0);
+    gl.uniform2f(spriteUniform.center, 0.56, (0.74 + frame.scroll * 0.18) * 2 - 1);
+    gl.uniform2f(spriteUniform.size, 0.18 / aspect, 0.18);
+    gl.uniform1f(spriteUniform.opacity, opacity);
+    drawQuad(attrib.sprite);
+  }
+
   function composite(frame: SceneFrame) {
     if (!viewport || !backgroundTexture) return;
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -499,6 +540,12 @@ export function createWebGLBackend(
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    drawMoon(frame);
+
+    // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
+    gl.useProgram(displayProgram);
+    gl.uniform2f(displayUniform.screenSize, viewport.bufferWidth, viewport.bufferHeight);
+    gl.uniform1i(displayUniform.texture, 0);
     for (let i = 0; i < MOUNTAIN_LAYERS.length; i += 1) {
       const layer = MOUNTAIN_LAYERS[i];
       gl.bindTexture(gl.TEXTURE_2D, mountainTextures[i]);
@@ -511,6 +558,17 @@ export function createWebGLBackend(
     gl.disable(gl.BLEND);
   }
 
+  if (moonTexture) {
+    const image = new Image();
+    image.onload = () => {
+      gl.bindTexture(gl.TEXTURE_2D, moonTexture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      moonReady = true;
+      if (lastFrame) composite(lastFrame);
+    };
+    image.src = moonImage.src;
+  }
+
   return {
     resize(nextViewport) {
       viewport = nextViewport;
@@ -518,15 +576,19 @@ export function createWebGLBackend(
     },
     draw(frame) {
       if (!viewport) return;
+      lastFrame = frame;
       renderBackground(frame);
       composite(frame);
     },
     destroy() {
+      lastFrame = null;
       destroyTextures();
+      if (moonTexture) gl.deleteTexture(moonTexture);
       gl.deleteBuffer(buffer);
       gl.deleteProgram(backgroundProgram);
       gl.deleteProgram(mountainProgram);
       gl.deleteProgram(displayProgram);
+      gl.deleteProgram(spriteProgram);
       const lose = gl.getExtension("WEBGL_lose_context");
       if (lose) lose.loseContext();
     },

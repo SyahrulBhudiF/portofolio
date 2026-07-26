@@ -1,3 +1,4 @@
+import moonImage from "@/assets/pixelScene/moon.png";
 import { pixelScenePalette as P } from "./palette";
 import type { SceneBackend, SceneFrame, SceneViewport } from "./types";
 
@@ -16,13 +17,17 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
   ctx.imageSmoothingEnabled = false;
+  const moon = new Image();
+  moon.src = moonImage.src;
   let vp: SceneViewport | null = null;
+  let lastFrame: SceneFrame | null = null;
 
-  return {
+  const backend = {
     resize(viewport) {
       vp = viewport;
     },
     draw(frame: SceneFrame) {
+      lastFrame = frame;
       const v = vp ?? frame.viewport;
       const w = v.bufferWidth;
       const h = v.bufferHeight;
@@ -54,13 +59,17 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
       const fade = 1 - Math.min(1, Math.max(0, (scroll - 0.14) / 0.2));
       if (fade > 0.01) {
         ctx.globalAlpha = fade;
-        ctx.fillStyle = P.moonLight;
-        const mx = w * 0.78;
-        const my = h * (0.26 - scroll * 0.18);
-        const r = h * 0.085;
-        ctx.beginPath();
-        ctx.arc(mx, my, r, 0, Math.PI * 2);
-        ctx.fill();
+        const size = Math.round(h * 0.18);
+        const mx = Math.round(w * 0.78 - size * 0.5);
+        const my = Math.round(h * (0.26 - scroll * 0.18) - size * 0.5);
+        if (moon.complete && moon.naturalWidth > 0) {
+          ctx.drawImage(moon, mx, my, size, size);
+        } else {
+          ctx.fillStyle = P.moonLight;
+          ctx.beginPath();
+          ctx.arc(mx + size * 0.5, my + size * 0.5, size * 0.48, 0, Math.PI * 2);
+          ctx.fill();
+        }
         ctx.globalAlpha = 1;
       }
 
@@ -86,6 +95,14 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
     },
     destroy() {
       vp = null;
+      lastFrame = null;
+      moon.onload = null;
     },
   } satisfies SceneBackend;
+
+  moon.onload = () => {
+    if (lastFrame) backend.draw(lastFrame);
+  };
+
+  return backend;
 }
