@@ -68,34 +68,35 @@ const MOUNTAIN_LAYERS: MountainLayer[] = [
   },
 ];
 
-const quadVertex = `
-attribute vec2 a_position;
-varying vec2 v_uv;
+const quadVertex = `#version 300 es
+in vec2 a_position;
+out vec2 v_uv;
 void main() {
   gl_Position = vec4(a_position, 0.0, 1.0);
   v_uv = (a_position + 1.0) * 0.5;
 }
 `;
 
-const spriteVertex = `
-attribute vec2 a_position;
+const spriteVertex = `#version 300 es
+in vec2 a_position;
 uniform vec2 u_center;
 uniform vec2 u_size;
-varying vec2 v_uv;
+out vec2 v_uv;
 void main() {
   gl_Position = vec4(u_center + a_position * u_size, 0.0, 1.0);
   v_uv = vec2((a_position.x + 1.0) * 0.5, (1.0 - a_position.y) * 0.5);
 }
 `;
 
-const spriteFragment = `
+const spriteFragment = `#version 300 es
 precision highp float;
 uniform sampler2D u_texture;
 uniform float u_opacity;
-varying vec2 v_uv;
+in vec2 v_uv;
+out vec4 outColor;
 void main() {
-  vec4 color = texture2D(u_texture, v_uv);
-  gl_FragColor = vec4(color.rgb, color.a * u_opacity);
+  vec4 color = texture(u_texture, v_uv);
+  outColor = vec4(color.rgb, color.a * u_opacity);
 }
 `;
 
@@ -127,7 +128,7 @@ float fbm(vec2 p) {
 }
 `;
 
-const backgroundFragment = `
+const backgroundFragment = `#version 300 es
 precision highp float;
 
 uniform vec2 u_resolution;
@@ -135,7 +136,8 @@ uniform float u_time;
 uniform float u_scroll;
 uniform float u_pixelGrid;
 uniform float u_motion;
-varying vec2 v_uv;
+in vec2 v_uv;
+out vec4 outColor;
 
 const vec3 SKY_TOP   = vec3(0.012, 0.016, 0.051);
 const vec3 SKY_MID   = vec3(0.035, 0.078, 0.169);
@@ -223,11 +225,11 @@ void main() {
   float scrim = smoothstep(0.5, 0.18, abs(uv.y - 0.5)) * 0.18;
   col = mix(col, col * 0.55, scrim);
   float dth = (hash(floor(gl_FragCoord.xy)) - 0.5) * (1.5 / 255.0);
-  gl_FragColor = vec4(col + dth, 1.0);
+  outColor = vec4(col + dth, 1.0);
 }
 `;
 
-const mountainFragment = `
+const mountainFragment = `#version 300 es
 precision highp float;
 
 uniform vec2 u_resolution;
@@ -237,7 +239,8 @@ uniform float u_xOffset;
 uniform float u_heightMul;
 uniform float u_baseY;
 uniform vec3 u_color;
-varying vec2 v_uv;
+in vec2 v_uv;
+out vec4 outColor;
 
 ${noiseGlsl}
 
@@ -257,26 +260,27 @@ void main() {
   float portrait = smoothstep(1.05, 0.65, u_resolution.x / u_resolution.y);
   float h = u_baseY + portrait * 0.055 + ridge(px * u_scaleX + u_xOffset, u_seed) * u_heightMul * 0.24;
   float mtn = step(py, h);
-  gl_FragColor = vec4(u_color * mtn, mtn);
+  outColor = vec4(u_color * mtn, mtn);
 }
 `;
 
-const displayFragment = `
+const displayFragment = `#version 300 es
 precision highp float;
 
 uniform sampler2D u_texture;
 uniform float u_yOffset;
 uniform vec2 u_screenSize;
-varying vec2 v_uv;
+in vec2 v_uv;
+out vec4 outColor;
 
 void main() {
   vec2 uv = v_uv;
   uv.y += u_yOffset / u_screenSize.y;
-  gl_FragColor = texture2D(u_texture, uv);
+  outColor = texture(u_texture, uv);
 }
 `;
 
-function compile(gl: WebGLRenderingContext, type: number, src: string): WebGLShader | null {
+function compile(gl: WebGL2RenderingContext, type: number, src: string): WebGLShader | null {
   const shader = gl.createShader(type);
   if (!shader) return null;
   gl.shaderSource(shader, src);
@@ -290,7 +294,7 @@ function compile(gl: WebGLRenderingContext, type: number, src: string): WebGLSha
 }
 
 function createProgram(
-  gl: WebGLRenderingContext,
+  gl: WebGL2RenderingContext,
   vertexSrc: string,
   fragmentSrc: string,
 ): WebGLProgram | null {
@@ -313,7 +317,7 @@ function createProgram(
 }
 
 function createTexture(
-  gl: WebGLRenderingContext,
+  gl: WebGL2RenderingContext,
   width: number,
   height: number,
 ): WebGLTexture | null {
@@ -329,7 +333,7 @@ function createTexture(
 }
 
 function createFramebuffer(
-  gl: WebGLRenderingContext,
+  gl: WebGL2RenderingContext,
   texture: WebGLTexture,
 ): WebGLFramebuffer | null {
   const framebuffer = gl.createFramebuffer();
@@ -349,14 +353,14 @@ export function createWebGLBackend(
   canvas: HTMLCanvasElement,
   opts: { isMobile: boolean; reducedMotion: boolean },
 ): SceneBackend | null {
-  const gl = (canvas.getContext("webgl", {
+  const gl = canvas.getContext("webgl2", {
     antialias: false,
     depth: false,
     stencil: false,
     alpha: false,
     powerPreference: "low-power",
     preserveDrawingBuffer: false,
-  }) || canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
+  });
 
   if (!gl) return null;
 
