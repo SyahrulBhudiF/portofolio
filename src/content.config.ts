@@ -33,6 +33,20 @@ const projectCollection = defineCollection({
   }),
 });
 
+const contributionCollection = defineCollection({
+  loader: glob({ pattern: "**/*.mdx", base: "./src/content/contributions" }),
+  schema: z.object({
+    title: z.string(),
+    repository: z.string().url(),
+    date: z.coerce.date(),
+    description: z.string(),
+    highlights: z.array(z.string()).default([]),
+    pullRequest: z.string().url().nullable().optional(),
+    issue: z.string().url().nullable().optional(),
+    commit: z.string().url().nullable().optional(),
+  }),
+});
+
 const experienceCollection = defineCollection({
   loader: glob({ pattern: "**/*.mdx", base: "./src/content/experiences" }),
   schema: z.object({
@@ -77,6 +91,7 @@ const techstackCollection = defineCollection({
 
 export const collections = {
   projects: projectCollection,
+  contributions: contributionCollection,
   experiences: experienceCollection,
   education: educationCollection,
   techstack: techstackCollection,

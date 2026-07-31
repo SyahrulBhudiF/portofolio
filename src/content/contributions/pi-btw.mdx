@@ -1,0 +1,12 @@
+---
+title: pi-btw
+repository: https://github.com/dbachelder/pi-btw
+date: 2026-05-01
+description: Made the Pi BTW side-conversation transcript practical to navigate by adding mouse-wheel, touchpad, and fine-grained keyboard scrolling.
+highlights:
+  - Enabled SGR mouse reporting so terminal wheel and touchpad events reach the overlay input handler.
+  - Added shared transcript-scroll logic with one-line arrow-key movement and viewport-sized Page Up/Page Down movement.
+  - Disabled follow mode when scrolling upward, preserved bounded offsets, and requested an immediate redraw.
+  - Restored terminal mouse-reporting state when the overlay closes.
+commit: https://github.com/dbachelder/pi-btw/commit/88980a42076eb0f5e197345ad0e5d78697d00231
+---
