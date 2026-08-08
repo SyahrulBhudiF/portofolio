@@ -1,0 +1,13 @@
+---
+title: zuno
+repository: https://github.com/noFAYZ/zuno
+date: 2026-08-06
+description: Stopped forcing GTK window decorations on Linux so the app-drawn title bar is used, and added a Linux-only "Show in system media controls" toggle so the browser mediaSession bridge can never double up with SMTC or MPNowPlayingInfoCenter on Windows/macOS.
+highlights:
+  - Removed the Linux decorations override and defaulted native window controls off so the app's own title bar is used.
+  - Hid the app-drawn window buttons on tiling compositors (niri, sway, hyprland) where the WM owns window management, while GNOME/KDE keep close and minimize reachable.
+  - Added a Linux-only media-session toggle and gated the browser mediaSession bridge to Linux, since WebView2 and WKWebView already bridge it to SMTC and MPNowPlayingInfoCenter on their own.
+  - Cleared navigator.mediaSession metadata, playback state, and action handlers whenever the bridge is disabled so no duplicate now-playing entry survives.
+pullRequest: https://github.com/noFAYZ/zuno/pull/25
+issue: https://github.com/noFAYZ/zuno/issues/23
+---
