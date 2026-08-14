@@ -1,72 +1,18 @@
+import gunug1 from "@/assets/pixelScene/gunug1.png";
+import gunug2 from "@/assets/pixelScene/gunug2.png";
+import gunug3 from "@/assets/pixelScene/gunug3.png";
+import gunug4 from "@/assets/pixelScene/gunug4.png";
+import gunug5 from "@/assets/pixelScene/gunug5.png";
 import moonImage from "@/assets/pixelScene/moon.png";
 import type { SceneBackend, SceneFrame, SceneViewport } from "./types";
 
-type MountainLayer = {
-  seed: number;
-  scaleX: number;
-  xOffset: number;
-  heightMul: number;
-  baseY: number;
-  color: [number, number, number];
-  parallax: number;
-};
-
-const MOUNTAIN_LAYERS: MountainLayer[] = [
-  {
-    seed: 0.0,
-    scaleX: 3.0,
-    xOffset: 0.0,
-    heightMul: 1.45,
-    baseY: 0.19,
-    color: [0.149, 0.192, 0.302],
-    parallax: 0.08,
-  },
-  {
-    seed: 1.0,
-    scaleX: 3.8,
-    xOffset: 0.45,
-    heightMul: 1.35,
-    baseY: 0.15,
-    color: [0.126, 0.158, 0.26],
-    parallax: 0.13,
-  },
-  {
-    seed: 2.0,
-    scaleX: 4.8,
-    xOffset: 1.1,
-    heightMul: 1.2,
-    baseY: 0.11,
-    color: [0.106, 0.133, 0.22],
-    parallax: 0.2,
-  },
-  {
-    seed: 3.0,
-    scaleX: 6.0,
-    xOffset: 1.8,
-    heightMul: 1.05,
-    baseY: 0.08,
-    color: [0.082, 0.101, 0.178],
-    parallax: 0.32,
-  },
-  {
-    seed: 4.0,
-    scaleX: 7.4,
-    xOffset: 2.6,
-    heightMul: 0.9,
-    baseY: 0.055,
-    color: [0.062, 0.075, 0.14],
-    parallax: 0.48,
-  },
-  {
-    seed: 5.0,
-    scaleX: 9.2,
-    xOffset: 3.4,
-    heightMul: 0.74,
-    baseY: 0.03,
-    color: [0.043, 0.051, 0.094],
-    parallax: 0.72,
-  },
-];
+const MOUNTAIN_LAYERS = [
+  { image: gunug5, parallax: 0.08 },
+  { image: gunug4, parallax: 0.16 },
+  { image: gunug3, parallax: 0.28 },
+  { image: gunug2, parallax: 0.44 },
+  { image: gunug1, parallax: 0.64 },
+] as const;
 
 const quadVertex = `#version 300 es
 in vec2 a_position;
@@ -229,41 +175,6 @@ void main() {
 }
 `;
 
-const mountainFragment = `#version 300 es
-precision highp float;
-
-uniform vec2 u_resolution;
-uniform float u_seed;
-uniform float u_scaleX;
-uniform float u_xOffset;
-uniform float u_heightMul;
-uniform float u_baseY;
-uniform vec3 u_color;
-in vec2 v_uv;
-out vec4 outColor;
-
-${noiseGlsl}
-
-float ridge(float x, float seed) {
-  float h = 0.0;
-  h += max(0.0, 0.24 - abs(sin(x * 1.35 + seed * 2.7)) * 0.24);
-  h += max(0.0, 0.15 - abs(sin(x * 2.40 + seed * 1.9)) * 0.15) * 0.68;
-  h += max(0.0, 0.08 - abs(sin(x * 4.20 + seed * 5.1)) * 0.08) * 0.46;
-  h += noise(vec2(x * 0.85, seed * 3.0)) * 0.055;
-  return clamp(h, 0.0, 0.42);
-}
-
-void main() {
-  vec2 uv = v_uv;
-  float px = floor(uv.x * 150.0) / 150.0;
-  float py = floor(uv.y * 90.0) / 90.0;
-  float portrait = smoothstep(1.05, 0.65, u_resolution.x / u_resolution.y);
-  float h = u_baseY + portrait * 0.055 + ridge(px * u_scaleX + u_xOffset, u_seed) * u_heightMul * 0.24;
-  float mtn = step(py, h);
-  outColor = vec4(u_color * mtn, mtn);
-}
-`;
-
 const displayFragment = `#version 300 es
 precision highp float;
 
@@ -365,10 +276,9 @@ export function createWebGLBackend(
   if (!gl) return null;
 
   const backgroundProgram = createProgram(gl, quadVertex, backgroundFragment);
-  const mountainProgram = createProgram(gl, quadVertex, mountainFragment);
   const displayProgram = createProgram(gl, quadVertex, displayFragment);
   const spriteProgram = createProgram(gl, spriteVertex, spriteFragment);
-  if (!backgroundProgram || !mountainProgram || !displayProgram || !spriteProgram) return null;
+  if (!backgroundProgram || !displayProgram || !spriteProgram) return null;
 
   const buffer = gl.createBuffer();
   if (!buffer) return null;
@@ -381,7 +291,6 @@ export function createWebGLBackend(
 
   const attrib = {
     background: gl.getAttribLocation(backgroundProgram, "a_position"),
-    mountain: gl.getAttribLocation(mountainProgram, "a_position"),
     display: gl.getAttribLocation(displayProgram, "a_position"),
     sprite: gl.getAttribLocation(spriteProgram, "a_position"),
   };
@@ -392,16 +301,6 @@ export function createWebGLBackend(
     scroll: gl.getUniformLocation(backgroundProgram, "u_scroll"),
     pixelGrid: gl.getUniformLocation(backgroundProgram, "u_pixelGrid"),
     motion: gl.getUniformLocation(backgroundProgram, "u_motion"),
-  };
-
-  const mountainUniform = {
-    resolution: gl.getUniformLocation(mountainProgram, "u_resolution"),
-    seed: gl.getUniformLocation(mountainProgram, "u_seed"),
-    scaleX: gl.getUniformLocation(mountainProgram, "u_scaleX"),
-    xOffset: gl.getUniformLocation(mountainProgram, "u_xOffset"),
-    heightMul: gl.getUniformLocation(mountainProgram, "u_heightMul"),
-    baseY: gl.getUniformLocation(mountainProgram, "u_baseY"),
-    color: gl.getUniformLocation(mountainProgram, "u_color"),
   };
 
   const displayUniform = {
@@ -421,9 +320,11 @@ export function createWebGLBackend(
   let lastFrame: SceneFrame | null = null;
   let backgroundTexture: WebGLTexture | null = null;
   let backgroundFramebuffer: WebGLFramebuffer | null = null;
-  let mountainTextures: WebGLTexture[] = [];
-  let mountainFramebuffers: WebGLFramebuffer[] = [];
+  const mountainTextures = MOUNTAIN_LAYERS.map(() => createTexture(gl, 1, 1));
+  const mountainReady = MOUNTAIN_LAYERS.map(() => false);
   const moonTexture = createTexture(gl, 1, 1);
+  const images: HTMLImageElement[] = [];
+  let alive = true;
   let moonReady = false;
 
   function bindQuad(attribLocation: number) {
@@ -440,12 +341,8 @@ export function createWebGLBackend(
   function destroyTextures() {
     if (backgroundTexture) gl.deleteTexture(backgroundTexture);
     if (backgroundFramebuffer) gl.deleteFramebuffer(backgroundFramebuffer);
-    for (const texture of mountainTextures) gl.deleteTexture(texture);
-    for (const framebuffer of mountainFramebuffers) gl.deleteFramebuffer(framebuffer);
     backgroundTexture = null;
     backgroundFramebuffer = null;
-    mountainTextures = [];
-    mountainFramebuffers = [];
   }
 
   function rebuildTextures(nextViewport: SceneViewport) {
@@ -455,42 +352,7 @@ export function createWebGLBackend(
     backgroundFramebuffer = createFramebuffer(gl, backgroundTexture);
     if (!backgroundFramebuffer) return false;
 
-    for (let i = 0; i < MOUNTAIN_LAYERS.length; i += 1) {
-      const texture = createTexture(gl, nextViewport.bufferWidth, nextViewport.bufferHeight);
-      if (!texture) return false;
-      const framebuffer = createFramebuffer(gl, texture);
-      if (!framebuffer) return false;
-      mountainTextures.push(texture);
-      mountainFramebuffers.push(framebuffer);
-    }
-
-    renderMountainLayers(nextViewport);
     return true;
-  }
-
-  function renderMountainLayers(currentViewport: SceneViewport) {
-    // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
-    gl.useProgram(mountainProgram);
-    gl.uniform2f(
-      mountainUniform.resolution,
-      currentViewport.bufferWidth,
-      currentViewport.bufferHeight,
-    );
-    for (let i = 0; i < MOUNTAIN_LAYERS.length; i += 1) {
-      const layer = MOUNTAIN_LAYERS[i];
-      gl.bindFramebuffer(gl.FRAMEBUFFER, mountainFramebuffers[i]);
-      gl.viewport(0, 0, currentViewport.bufferWidth, currentViewport.bufferHeight);
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform1f(mountainUniform.seed, layer.seed);
-      gl.uniform1f(mountainUniform.scaleX, layer.scaleX);
-      gl.uniform1f(mountainUniform.xOffset, layer.xOffset);
-      gl.uniform1f(mountainUniform.heightMul, layer.heightMul);
-      gl.uniform1f(mountainUniform.baseY, layer.baseY);
-      gl.uniform3f(mountainUniform.color, layer.color[0], layer.color[1], layer.color[2]);
-      drawQuad(attrib.mountain);
-    }
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   }
 
   function renderBackground(frame: SceneFrame) {
@@ -503,7 +365,7 @@ export function createWebGLBackend(
     gl.uniform2f(backgroundUniform.resolution, viewport.bufferWidth, viewport.bufferHeight);
     gl.uniform1f(backgroundUniform.time, frame.time);
     gl.uniform1f(backgroundUniform.scroll, frame.scroll);
-    gl.uniform1f(backgroundUniform.pixelGrid, opts.isMobile ? 90.0 : 130.0);
+    gl.uniform1f(backgroundUniform.pixelGrid, viewport.isMobile ? 90.0 : 130.0);
     gl.uniform1f(backgroundUniform.motion, opts.reducedMotion ? 0.0 : 1.0);
     drawQuad(attrib.background);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -547,24 +409,43 @@ export function createWebGLBackend(
     drawMoon(frame);
 
     // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
-    gl.useProgram(displayProgram);
-    gl.uniform2f(displayUniform.screenSize, viewport.bufferWidth, viewport.bufferHeight);
-    gl.uniform1i(displayUniform.texture, 0);
+    gl.useProgram(spriteProgram);
+    gl.uniform1i(spriteUniform.texture, 0);
     for (let i = 0; i < MOUNTAIN_LAYERS.length; i += 1) {
+      if (!mountainReady[i] || !mountainTextures[i]) continue;
       const layer = MOUNTAIN_LAYERS[i];
+      const aspect = viewport.bufferWidth / viewport.bufferHeight;
+      const halfHeight = viewport.isMobile ? 0.36 : 0.6;
+      const halfWidth = (halfHeight * (1580 / 530)) / aspect;
       gl.bindTexture(gl.TEXTURE_2D, mountainTextures[i]);
-      gl.uniform1f(
-        displayUniform.yOffset,
-        -frame.scroll * layer.parallax * viewport.bufferHeight * 0.36,
-      );
-      drawQuad(attrib.display);
+      gl.uniform2f(spriteUniform.center, 0, -1 + halfHeight - frame.scroll * layer.parallax * 0.36);
+      gl.uniform2f(spriteUniform.size, halfWidth, halfHeight);
+      gl.uniform1f(spriteUniform.opacity, 1);
+      drawQuad(attrib.sprite);
     }
     gl.disable(gl.BLEND);
   }
 
+  for (let i = 0; i < MOUNTAIN_LAYERS.length; i += 1) {
+    const texture = mountainTextures[i];
+    if (!texture) continue;
+    const image = new Image();
+    images.push(image);
+    image.onload = () => {
+      if (!alive) return;
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      mountainReady[i] = true;
+      if (lastFrame) composite(lastFrame);
+    };
+    image.src = MOUNTAIN_LAYERS[i].image.src;
+  }
+
   if (moonTexture) {
     const image = new Image();
+    images.push(image);
     image.onload = () => {
+      if (!alive) return;
       gl.bindTexture(gl.TEXTURE_2D, moonTexture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
       moonReady = true;
@@ -585,12 +466,16 @@ export function createWebGLBackend(
       composite(frame);
     },
     destroy() {
+      alive = false;
+      for (const image of images) image.onload = null;
       lastFrame = null;
       destroyTextures();
+      for (const texture of mountainTextures) {
+        if (texture) gl.deleteTexture(texture);
+      }
       if (moonTexture) gl.deleteTexture(moonTexture);
       gl.deleteBuffer(buffer);
       gl.deleteProgram(backgroundProgram);
-      gl.deleteProgram(mountainProgram);
       gl.deleteProgram(displayProgram);
       gl.deleteProgram(spriteProgram);
       const lose = gl.getExtension("WEBGL_lose_context");

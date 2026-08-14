@@ -1,6 +1,19 @@
+import gunug1 from "@/assets/pixelScene/gunug1.png";
+import gunug2 from "@/assets/pixelScene/gunug2.png";
+import gunug3 from "@/assets/pixelScene/gunug3.png";
+import gunug4 from "@/assets/pixelScene/gunug4.png";
+import gunug5 from "@/assets/pixelScene/gunug5.png";
 import moonImage from "@/assets/pixelScene/moon.png";
 import { pixelScenePalette as P } from "./palette";
 import type { SceneBackend, SceneFrame, SceneViewport } from "./types";
+
+const MOUNTAIN_LAYERS = [
+  { image: gunug5, parallax: 0.08 },
+  { image: gunug4, parallax: 0.16 },
+  { image: gunug3, parallax: 0.28 },
+  { image: gunug2, parallax: 0.44 },
+  { image: gunug1, parallax: 0.64 },
+] as const;
 
 // Deterministic hash so the fallback scene is stable across redraws.
 function hash(x: number, y: number): number {
@@ -18,6 +31,11 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
   if (!ctx) return null;
   ctx.imageSmoothingEnabled = false;
   const moon = new Image();
+  const mountains = MOUNTAIN_LAYERS.map(({ image }) => {
+    const mountain = new Image();
+    mountain.src = image.src;
+    return mountain;
+  });
   moon.src = moonImage.src;
   let vp: SceneViewport | null = null;
   let lastFrame: SceneFrame | null = null;
@@ -73,36 +91,31 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
         ctx.globalAlpha = 1;
       }
 
-      // mountain bands (far -> near)
-      const bands: Array<[string, number, number]> = [
-        [P.mountainFar, 0.78, 4.0],
-        [P.mountainMid, 0.86, 6.0],
-        [P.mountainNear, 0.93, 9.0],
-      ];
-      for (const [color, baseY, scale] of bands) {
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.moveTo(0, h);
-        for (let x = 0; x <= w; x += 2) {
-          const n = hash(Math.floor((x / w) * scale * 8), 0) * 0.12;
-          const y = (baseY - n) * h;
-          ctx.lineTo(x, y);
-        }
-        ctx.lineTo(w, h);
-        ctx.closePath();
-        ctx.fill();
+      // Mountain sprites, far (gunug5) to near (gunug1).
+      for (let i = 0; i < mountains.length; i += 1) {
+        const mountain = mountains[i];
+        if (!mountain.complete || mountain.naturalWidth === 0) continue;
+        const layer = MOUNTAIN_LAYERS[i];
+        const height = Math.ceil(h * (v.isMobile ? 0.36 : 0.6));
+        const width = Math.ceil(height * (1580 / 530));
+        const x = Math.round((w - width) * 0.5);
+        const y = Math.round(h - height - scroll * layer.parallax * h * 0.18);
+        ctx.drawImage(mountain, x, y, width, height);
       }
     },
     destroy() {
       vp = null;
       lastFrame = null;
       moon.onload = null;
+      for (const mountain of mountains) mountain.onload = null;
     },
   } satisfies SceneBackend;
 
-  moon.onload = () => {
+  const redraw = () => {
     if (lastFrame) backend.draw(lastFrame);
   };
+  moon.onload = redraw;
+  for (const mountain of mountains) mountain.onload = redraw;
 
   return backend;
 }
