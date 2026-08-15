@@ -11,14 +11,14 @@ const projectCollection = defineCollection({
     hasImage: z.boolean().default(true),
     date: z.coerce.date(),
     description: z.string(),
-    demo: z.string().url().nullable().default(null),
-    sourceModel: z.string().url().nullable().default(null),
-    sourceClient: z.string().url().nullable().default(null),
-    sourceServer: z.string().url().nullable().default(null),
+    demo: z.url().nullable().default(null),
+    sourceModel: z.url().nullable().default(null),
+    sourceClient: z.url().nullable().default(null),
+    sourceServer: z.url().nullable().default(null),
     stack: z.array(
       z.object({
         name: z.string(),
-        url: z.string().url(),
+        url: z.url(),
       }),
     ),
     contributors: z
@@ -26,7 +26,7 @@ const projectCollection = defineCollection({
         z.object({
           role: z.string(),
           name: z.string(),
-          link: z.string().url().nullable().default(null),
+          link: z.url().nullable().default(null),
         }),
       )
       .optional(),
@@ -37,13 +37,13 @@ const contributionCollection = defineCollection({
   loader: glob({ pattern: "**/*.mdx", base: "./src/content/contributions" }),
   schema: z.object({
     title: z.string(),
-    repository: z.string().url(),
+    repository: z.url(),
     date: z.coerce.date(),
     description: z.string(),
     highlights: z.array(z.string()).default([]),
-    pullRequest: z.string().url().nullable().optional(),
-    issue: z.string().url().nullable().optional(),
-    commit: z.string().url().nullable().optional(),
+    pullRequest: z.url().nullable().optional(),
+    issue: z.url().nullable().optional(),
+    commit: z.url().nullable().optional(),
   }),
 });
 
@@ -83,7 +83,7 @@ const techstackCollection = defineCollection({
     items: z.array(
       z.object({
         name: z.string(),
-        url: z.string().url(),
+        url: z.url(),
       }),
     ),
   }),

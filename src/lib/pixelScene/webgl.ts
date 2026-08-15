@@ -1,17 +1,165 @@
-import gunug1 from "@/assets/pixelScene/gunug1.png";
-import gunug2 from "@/assets/pixelScene/gunug2.png";
-import gunug3 from "@/assets/pixelScene/gunug3.png";
-import gunug4 from "@/assets/pixelScene/gunug4.png";
-import gunug5 from "@/assets/pixelScene/gunug5.png";
+import awan1 from "@/assets/pixelScene/awan1.png";
+import awan2 from "@/assets/pixelScene/awan2.png";
+import awan3 from "@/assets/pixelScene/awan3.png";
+import awan4 from "@/assets/pixelScene/awan4.png";
+import awan5 from "@/assets/pixelScene/awan5.png";
+import awan6 from "@/assets/pixelScene/awan6.png";
+import awan7 from "@/assets/pixelScene/awan7.png";
+import awan8 from "@/assets/pixelScene/awan8.png";
+import awan9 from "@/assets/pixelScene/awan9.png";
+import awan10 from "@/assets/pixelScene/awan10.png";
+import awan11 from "@/assets/pixelScene/awan11.png";
+import awan12 from "@/assets/pixelScene/awan12.png";
 import moonImage from "@/assets/pixelScene/moon.png";
+import mount1 from "@/assets/pixelScene/mount1.png";
+import mount2 from "@/assets/pixelScene/mount2.png";
+import mount3 from "@/assets/pixelScene/mount3.png";
+import mount4 from "@/assets/pixelScene/mount4.png";
 import type { SceneBackend, SceneFrame, SceneViewport } from "./types";
 
+const CLOUD_LAYERS = [
+  // Far: dark, high, and almost still.
+  {
+    image: awan3,
+    x: -0.9,
+    y: 0.77,
+    scale: 0.58,
+    parallax: 0.05,
+    speed: -0.005,
+    bob: 0.006,
+    phase: 0.2,
+    opacity: 0.56,
+  },
+  {
+    image: awan5,
+    x: 0.2,
+    y: 0.63,
+    scale: 0.68,
+    parallax: 0.06,
+    speed: -0.006,
+    bob: 0.005,
+    phase: 2.1,
+    opacity: 0.56,
+  },
+  {
+    image: awan7,
+    x: 1.05,
+    y: 0.8,
+    scale: 0.52,
+    parallax: 0.05,
+    speed: -0.005,
+    bob: 0.004,
+    phase: 4.4,
+    opacity: 0.52,
+  },
+  {
+    image: awan8,
+    x: -0.15,
+    y: 0.49,
+    scale: 0.62,
+    parallax: 0.07,
+    speed: -0.007,
+    bob: 0.006,
+    phase: 5.3,
+    opacity: 0.58,
+  },
+  // Mid: muted cloud banks on the outer sides of the hero.
+  {
+    image: awan1,
+    x: -1.08,
+    y: 0.32,
+    scale: 0.82,
+    parallax: 0.12,
+    speed: -0.011,
+    bob: 0.008,
+    phase: 1.3,
+    opacity: 0.72,
+  },
+  {
+    image: awan2,
+    x: 1.12,
+    y: 0.4,
+    scale: 0.76,
+    parallax: 0.13,
+    speed: -0.012,
+    bob: 0.007,
+    phase: 3.6,
+    opacity: 0.7,
+  },
+  {
+    image: awan4,
+    x: -0.72,
+    y: 0.08,
+    scale: 0.7,
+    parallax: 0.14,
+    speed: -0.013,
+    bob: 0.008,
+    phase: 5.1,
+    opacity: 0.7,
+  },
+  {
+    image: awan6,
+    x: 0.82,
+    y: 0.04,
+    scale: 0.78,
+    parallax: 0.15,
+    speed: -0.014,
+    bob: 0.007,
+    phase: 0.7,
+    opacity: 0.72,
+  },
+  // Near: pale low mist, intentionally hidden in part by mountains.
+  {
+    image: awan9,
+    x: -1.15,
+    y: -0.48,
+    scale: 1.1,
+    parallax: 0.24,
+    speed: -0.021,
+    bob: 0.009,
+    phase: 2.7,
+    opacity: 0.68,
+  },
+  {
+    image: awan10,
+    x: -0.02,
+    y: -0.62,
+    scale: 1.18,
+    parallax: 0.26,
+    speed: -0.023,
+    bob: 0.009,
+    phase: 4.1,
+    opacity: 0.66,
+  },
+  {
+    image: awan11,
+    x: 0.98,
+    y: -0.42,
+    scale: 1.04,
+    parallax: 0.25,
+    speed: -0.022,
+    bob: 0.008,
+    phase: 5.8,
+    opacity: 0.66,
+  },
+  {
+    image: awan12,
+    x: 0.45,
+    y: -0.78,
+    scale: 1.2,
+    parallax: 0.28,
+    speed: -0.024,
+    bob: 0.009,
+    phase: 1.6,
+    opacity: 0.62,
+  },
+] as const;
+
 const MOUNTAIN_LAYERS = [
-  { image: gunug5, parallax: 0.08 },
-  { image: gunug4, parallax: 0.16 },
-  { image: gunug3, parallax: 0.28 },
-  { image: gunug2, parallax: 0.44 },
-  { image: gunug1, parallax: 0.64 },
+  { image: mount4, parallax: 0.08 },
+  { image: mount3, parallax: 0.2 },
+  { image: mount2, parallax: 0.38 },
+  { image: mount1, parallax: 0.6 },
 ] as const;
 
 const quadVertex = `#version 300 es
@@ -46,36 +194,14 @@ void main() {
 }
 `;
 
-const noiseGlsl = `
+const backgroundFragment = `#version 300 es
+precision highp float;
+
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
   p += dot(p, p + 45.32);
   return fract(p.x * p.y);
 }
-
-float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  float a = hash(i);
-  float b = hash(i + vec2(1.0, 0.0));
-  float c = hash(i + vec2(0.0, 1.0));
-  float d = hash(i + vec2(1.0, 1.0));
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-}
-
-float fbm(vec2 p) {
-  float v = 0.0;
-  float amp = 0.5;
-  v += amp * noise(p); p = p * 2.02 + 11.0; amp *= 0.5;
-  v += amp * noise(p); p = p * 2.03 + 7.0;  amp *= 0.5;
-  v += amp * noise(p);
-  return v;
-}
-`;
-
-const backgroundFragment = `#version 300 es
-precision highp float;
 
 uniform vec2 u_resolution;
 uniform float u_time;
@@ -92,16 +218,7 @@ const vec3 STAR      = vec3(0.937, 0.910, 1.000);
 const vec3 STAR_DIM  = vec3(0.561, 0.612, 0.800);
 const vec3 MOON_LIGHT  = vec3(0.953, 0.875, 0.667);
 const vec3 MOON_SHADOW = vec3(0.616, 0.533, 0.380);
-const vec3 CLOUD_LIGHT = vec3(0.784, 0.827, 0.949);
-const vec3 CLOUD_MID   = vec3(0.498, 0.553, 0.741);
-const vec3 CLOUD_DARK  = vec3(0.224, 0.267, 0.408);
 const vec3 PURPLE      = vec3(0.486, 0.361, 1.000);
-
-${noiseGlsl}
-
-vec2 pixelate(vec2 uv, float grid) {
-  return floor(uv * grid) / grid;
-}
 
 vec3 drawSky(vec2 uv) {
   float t = clamp(uv.y + u_scroll * 0.12, 0.0, 1.0);
@@ -138,36 +255,12 @@ vec3 drawMoon(vec3 col, vec2 uv, float aspect) {
   return mix(col, MOON_LIGHT, halo * fade);
 }
 
-vec3 drawClouds(vec3 col, vec2 uv, float aspect, float bandY, float depth, float grid, vec3 lit, vec3 mid, vec3 dark, float maxAlpha, float seed, float noiseScale, float stretch, float thresh, float bandW) {
-  float drift = u_time * 0.012 * depth * u_motion;
-  float y = uv.y + u_scroll * (0.35 * depth) - bandY;
-  float portrait = smoothstep(1.05, 0.65, aspect);
-  float cloudAspect = max(aspect, 1.0);
-  float cx = uv.x * cloudAspect * 1.35;
-  vec2 cuv = pixelate(vec2(cx + drift + u_scroll * depth + seed, y * stretch), grid);
-  vec2 warp = vec2(fbm(cuv * (noiseScale * 0.42) + seed), fbm(cuv * (noiseScale * 0.42) + seed + 3.3));
-  float n = fbm(cuv * noiseScale + warp * 0.62 + seed);
-  float up = max(y, 0.0);
-  float dn = max(-y, 0.0);
-  float window = smoothstep(bandW, 0.0, up) * smoothstep(bandW * 0.72, 0.0, dn);
-  float cloudThresh = thresh - portrait * 0.045;
-  float body = smoothstep(cloudThresh, cloudThresh + 0.065, n);
-  float mask = body * window;
-  vec3 c = mix(dark, mid, step(cloudThresh + 0.025, n));
-  c = mix(c, lit, step(cloudThresh + 0.13, n));
-  return mix(col, c, clamp(mask, 0.0, 1.0) * (maxAlpha + portrait * 0.08));
-}
-
 void main() {
   vec2 uv = v_uv;
   float aspect = u_resolution.x / u_resolution.y;
   vec3 col = drawSky(uv);
   col = drawStars(col, uv, aspect);
-  col = drawMoon(col, uv, aspect);
-  float upperCloudFade = smoothstep(0.18, 0.42, u_scroll);
-  col = drawClouds(col, uv, aspect, 0.82, 0.28, 54.0, CLOUD_MID,   CLOUD_DARK, CLOUD_DARK, 0.52 * (0.6 + 0.4 * upperCloudFade), 19.7, 2.9, 2.15, 0.57, 0.105);
-  col = drawClouds(col, uv, aspect, 0.60, 0.5,  60.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.68, 47.3, 3.3, 2.35, 0.55, 0.145);
-  col = drawClouds(col, uv, aspect, 0.47, 1.0,  84.0, CLOUD_LIGHT, CLOUD_MID,  CLOUD_DARK, 0.76, 88.1, 3.9, 2.2, 0.53, 0.18);
+
   float scrim = smoothstep(0.5, 0.18, abs(uv.y - 0.5)) * 0.18;
   col = mix(col, col * 0.55, scrim);
   float dth = (hash(floor(gl_FragCoord.xy)) - 0.5) * (1.5 / 255.0);
@@ -320,6 +413,8 @@ export function createWebGLBackend(
   let lastFrame: SceneFrame | null = null;
   let backgroundTexture: WebGLTexture | null = null;
   let backgroundFramebuffer: WebGLFramebuffer | null = null;
+  const cloudTextures = CLOUD_LAYERS.map(() => createTexture(gl, 1, 1));
+  const cloudReady = CLOUD_LAYERS.map(() => false);
   const mountainTextures = MOUNTAIN_LAYERS.map(() => createTexture(gl, 1, 1));
   const mountainReady = MOUNTAIN_LAYERS.map(() => false);
   const moonTexture = createTexture(gl, 1, 1);
@@ -381,8 +476,10 @@ export function createWebGLBackend(
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, moonTexture);
     gl.uniform1i(spriteUniform.texture, 0);
-    gl.uniform2f(spriteUniform.center, 0.56, (0.74 + frame.scroll * 0.18) * 2 - 1);
-    gl.uniform2f(spriteUniform.size, 0.18 / aspect, 0.18);
+    const size = viewport.isMobile ? 0.14 : 0.18;
+    const y = viewport.isMobile ? 0.64 : 0.74;
+    gl.uniform2f(spriteUniform.center, 0.56, (y + frame.scroll * 0.18) * 2 - 1);
+    gl.uniform2f(spriteUniform.size, size / aspect, size);
     gl.uniform1f(spriteUniform.opacity, opacity);
     drawQuad(attrib.sprite);
   }
@@ -406,24 +503,77 @@ export function createWebGLBackend(
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    drawMoon(frame);
+    const drawCloudRange = (start: number, end: number) => {
+      // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
+      gl.useProgram(spriteProgram);
+      gl.uniform1i(spriteUniform.texture, 0);
+      for (let i = start; i < end; i += 1) {
+        if (!cloudReady[i] || !cloudTextures[i]) continue;
+        const layer = CLOUD_LAYERS[i];
+        const aspect = viewport.bufferWidth / viewport.bufferHeight;
+        const cloudBaseSize = viewport.isMobile
+          ? 0.06
+          : Math.min(0.13, Math.max(0.09, aspect * 0.065));
+        const halfHeight = cloudBaseSize * layer.scale;
+        const halfWidth = (halfHeight * 2) / aspect;
+        const x = ((((layer.x + frame.time * layer.speed + 1.4) % 2.8) + 2.8) % 2.8) - 1.4;
+        const y =
+          layer.y +
+          (i >= 8 && !viewport.isMobile ? 0.18 : 0) +
+          Math.sin(frame.time * 0.16 + layer.phase) * layer.bob -
+          frame.scroll * layer.parallax * 0.36;
+        gl.bindTexture(gl.TEXTURE_2D, cloudTextures[i]);
+        gl.uniform2f(spriteUniform.center, x, y);
+        gl.uniform2f(spriteUniform.size, halfWidth, halfHeight);
+        gl.uniform1f(spriteUniform.opacity, layer.opacity);
+        drawQuad(attrib.sprite);
+      }
+    };
+    const drawMountainRange = (start: number, end: number) => {
+      // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
+      gl.useProgram(spriteProgram);
+      gl.uniform1i(spriteUniform.texture, 0);
+      for (let i = start; i < end; i += 1) {
+        if (!mountainReady[i] || !mountainTextures[i]) continue;
+        const layer = MOUNTAIN_LAYERS[i];
+        const aspect = viewport.bufferWidth / viewport.bufferHeight;
+        const assetAspect = 1600 / 640;
+        const minimumHeight = viewport.isMobile ? 0.43 : 0.6;
+        const halfWidth = Math.max(1.04, (minimumHeight * assetAspect) / aspect);
+        const halfHeight = (halfWidth * aspect) / assetAspect;
+        gl.bindTexture(gl.TEXTURE_2D, mountainTextures[i]);
+        gl.uniform2f(
+          spriteUniform.center,
+          0,
+          -1 + halfHeight - frame.scroll * layer.parallax * 0.36,
+        );
+        gl.uniform2f(spriteUniform.size, halfWidth, halfHeight);
+        gl.uniform1f(spriteUniform.opacity, 1);
+        drawQuad(attrib.sprite);
+      }
+    };
 
-    // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
-    gl.useProgram(spriteProgram);
-    gl.uniform1i(spriteUniform.texture, 0);
-    for (let i = 0; i < MOUNTAIN_LAYERS.length; i += 1) {
-      if (!mountainReady[i] || !mountainTextures[i]) continue;
-      const layer = MOUNTAIN_LAYERS[i];
-      const aspect = viewport.bufferWidth / viewport.bufferHeight;
-      const halfHeight = viewport.isMobile ? 0.36 : 0.6;
-      const halfWidth = (halfHeight * (1580 / 530)) / aspect;
-      gl.bindTexture(gl.TEXTURE_2D, mountainTextures[i]);
-      gl.uniform2f(spriteUniform.center, 0, -1 + halfHeight - frame.scroll * layer.parallax * 0.36);
-      gl.uniform2f(spriteUniform.size, halfWidth, halfHeight);
-      gl.uniform1f(spriteUniform.opacity, 1);
-      drawQuad(attrib.sprite);
-    }
+    drawCloudRange(0, 8);
+    drawMoon(frame);
+    drawMountainRange(0, 2);
+    drawCloudRange(8, CLOUD_LAYERS.length);
+    drawMountainRange(2, MOUNTAIN_LAYERS.length);
     gl.disable(gl.BLEND);
+  }
+
+  for (let i = 0; i < CLOUD_LAYERS.length; i += 1) {
+    const texture = cloudTextures[i];
+    if (!texture) continue;
+    const image = new Image();
+    images.push(image);
+    image.onload = () => {
+      if (!alive) return;
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      cloudReady[i] = true;
+      if (lastFrame) composite(lastFrame);
+    };
+    image.src = CLOUD_LAYERS[i].image.src;
   }
 
   for (let i = 0; i < MOUNTAIN_LAYERS.length; i += 1) {
@@ -470,7 +620,7 @@ export function createWebGLBackend(
       for (const image of images) image.onload = null;
       lastFrame = null;
       destroyTextures();
-      for (const texture of mountainTextures) {
+      for (const texture of [...cloudTextures, ...mountainTextures]) {
         if (texture) gl.deleteTexture(texture);
       }
       if (moonTexture) gl.deleteTexture(moonTexture);

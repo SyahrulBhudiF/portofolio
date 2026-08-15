@@ -1,18 +1,166 @@
-import gunug1 from "@/assets/pixelScene/gunug1.png";
-import gunug2 from "@/assets/pixelScene/gunug2.png";
-import gunug3 from "@/assets/pixelScene/gunug3.png";
-import gunug4 from "@/assets/pixelScene/gunug4.png";
-import gunug5 from "@/assets/pixelScene/gunug5.png";
+import awan1 from "@/assets/pixelScene/awan1.png";
+import awan2 from "@/assets/pixelScene/awan2.png";
+import awan3 from "@/assets/pixelScene/awan3.png";
+import awan4 from "@/assets/pixelScene/awan4.png";
+import awan5 from "@/assets/pixelScene/awan5.png";
+import awan6 from "@/assets/pixelScene/awan6.png";
+import awan7 from "@/assets/pixelScene/awan7.png";
+import awan8 from "@/assets/pixelScene/awan8.png";
+import awan9 from "@/assets/pixelScene/awan9.png";
+import awan10 from "@/assets/pixelScene/awan10.png";
+import awan11 from "@/assets/pixelScene/awan11.png";
+import awan12 from "@/assets/pixelScene/awan12.png";
 import moonImage from "@/assets/pixelScene/moon.png";
+import mount1 from "@/assets/pixelScene/mount1.png";
+import mount2 from "@/assets/pixelScene/mount2.png";
+import mount3 from "@/assets/pixelScene/mount3.png";
+import mount4 from "@/assets/pixelScene/mount4.png";
 import { pixelScenePalette as P } from "./palette";
 import type { SceneBackend, SceneFrame, SceneViewport } from "./types";
 
+const CLOUD_LAYERS = [
+  // Far: dark, high, and almost still.
+  {
+    image: awan3,
+    x: -0.9,
+    y: 0.77,
+    scale: 0.58,
+    parallax: 0.05,
+    speed: -0.005,
+    bob: 0.006,
+    phase: 0.2,
+    opacity: 0.56,
+  },
+  {
+    image: awan5,
+    x: 0.2,
+    y: 0.63,
+    scale: 0.68,
+    parallax: 0.06,
+    speed: -0.006,
+    bob: 0.005,
+    phase: 2.1,
+    opacity: 0.56,
+  },
+  {
+    image: awan7,
+    x: 1.05,
+    y: 0.8,
+    scale: 0.52,
+    parallax: 0.05,
+    speed: -0.005,
+    bob: 0.004,
+    phase: 4.4,
+    opacity: 0.52,
+  },
+  {
+    image: awan8,
+    x: -0.15,
+    y: 0.49,
+    scale: 0.62,
+    parallax: 0.07,
+    speed: -0.007,
+    bob: 0.006,
+    phase: 5.3,
+    opacity: 0.58,
+  },
+  // Mid: muted cloud banks on the outer sides of the hero.
+  {
+    image: awan1,
+    x: -1.08,
+    y: 0.32,
+    scale: 0.82,
+    parallax: 0.12,
+    speed: -0.011,
+    bob: 0.008,
+    phase: 1.3,
+    opacity: 0.72,
+  },
+  {
+    image: awan2,
+    x: 1.12,
+    y: 0.4,
+    scale: 0.76,
+    parallax: 0.13,
+    speed: -0.012,
+    bob: 0.007,
+    phase: 3.6,
+    opacity: 0.7,
+  },
+  {
+    image: awan4,
+    x: -0.72,
+    y: 0.08,
+    scale: 0.7,
+    parallax: 0.14,
+    speed: -0.013,
+    bob: 0.008,
+    phase: 5.1,
+    opacity: 0.7,
+  },
+  {
+    image: awan6,
+    x: 0.82,
+    y: 0.04,
+    scale: 0.78,
+    parallax: 0.15,
+    speed: -0.014,
+    bob: 0.007,
+    phase: 0.7,
+    opacity: 0.72,
+  },
+  // Near: pale low mist, intentionally hidden in part by mountains.
+  {
+    image: awan9,
+    x: -1.15,
+    y: -0.48,
+    scale: 1.1,
+    parallax: 0.24,
+    speed: -0.021,
+    bob: 0.009,
+    phase: 2.7,
+    opacity: 0.68,
+  },
+  {
+    image: awan10,
+    x: -0.02,
+    y: -0.62,
+    scale: 1.18,
+    parallax: 0.26,
+    speed: -0.023,
+    bob: 0.009,
+    phase: 4.1,
+    opacity: 0.66,
+  },
+  {
+    image: awan11,
+    x: 0.98,
+    y: -0.42,
+    scale: 1.04,
+    parallax: 0.25,
+    speed: -0.022,
+    bob: 0.008,
+    phase: 5.8,
+    opacity: 0.66,
+  },
+  {
+    image: awan12,
+    x: 0.45,
+    y: -0.78,
+    scale: 1.2,
+    parallax: 0.28,
+    speed: -0.024,
+    bob: 0.009,
+    phase: 1.6,
+    opacity: 0.62,
+  },
+] as const;
+
 const MOUNTAIN_LAYERS = [
-  { image: gunug5, parallax: 0.08 },
-  { image: gunug4, parallax: 0.16 },
-  { image: gunug3, parallax: 0.28 },
-  { image: gunug2, parallax: 0.44 },
-  { image: gunug1, parallax: 0.64 },
+  { image: mount4, parallax: 0.08 },
+  { image: mount3, parallax: 0.2 },
+  { image: mount2, parallax: 0.38 },
+  { image: mount1, parallax: 0.6 },
 ] as const;
 
 // Deterministic hash so the fallback scene is stable across redraws.
@@ -31,6 +179,11 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
   if (!ctx) return null;
   ctx.imageSmoothingEnabled = false;
   const moon = new Image();
+  const clouds = CLOUD_LAYERS.map(({ image }) => {
+    const cloud = new Image();
+    cloud.src = image.src;
+    return cloud;
+  });
   const mountains = MOUNTAIN_LAYERS.map(({ image }) => {
     const mountain = new Image();
     mountain.src = image.src;
@@ -73,13 +226,39 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
         }
       }
 
+      const drawCloudRange = (start: number, end: number) => {
+        for (let i = start; i < end; i += 1) {
+          const cloud = clouds[i];
+          if (!cloud.complete || cloud.naturalWidth === 0) continue;
+          const layer = CLOUD_LAYERS[i];
+          const cloudBaseSize = v.isMobile
+            ? h * 0.06
+            : Math.min(h * 0.13, Math.max(h * 0.09, w * 0.065));
+          const height = Math.ceil(cloudBaseSize * layer.scale);
+          const width = height * 2;
+          const centerX = ((((layer.x + frame.time * layer.speed + 1.4) % 2.8) + 2.8) % 2.8) - 1.4;
+          const x = Math.round(((centerX + 1) * w - width) * 0.5);
+          const centerY =
+            layer.y +
+            (i >= 8 && !v.isMobile ? 0.18 : 0) +
+            Math.sin(frame.time * 0.16 + layer.phase) * layer.bob -
+            scroll * layer.parallax * 0.36;
+          const y = Math.round((1 - centerY) * h * 0.5 - height * 0.5);
+          ctx.globalAlpha = layer.opacity;
+          ctx.drawImage(cloud, x, y, width, height);
+          ctx.globalAlpha = 1;
+        }
+      };
+
+      drawCloudRange(0, 8);
+
       // moon (fades out by ~34% scroll)
       const fade = 1 - Math.min(1, Math.max(0, (scroll - 0.14) / 0.2));
       if (fade > 0.01) {
         ctx.globalAlpha = fade;
-        const size = Math.round(h * 0.18);
+        const size = Math.round(h * (v.isMobile ? 0.14 : 0.18));
         const mx = Math.round(w * 0.78 - size * 0.5);
-        const my = Math.round(h * (0.26 - scroll * 0.18) - size * 0.5);
+        const my = Math.round(h * ((v.isMobile ? 0.36 : 0.26) - scroll * 0.18) - size * 0.5);
         if (moon.complete && moon.naturalWidth > 0) {
           ctx.drawImage(moon, mx, my, size, size);
         } else {
@@ -91,22 +270,30 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
         ctx.globalAlpha = 1;
       }
 
-      // Mountain sprites, far (gunug5) to near (gunug1).
-      for (let i = 0; i < mountains.length; i += 1) {
-        const mountain = mountains[i];
-        if (!mountain.complete || mountain.naturalWidth === 0) continue;
-        const layer = MOUNTAIN_LAYERS[i];
-        const height = Math.ceil(h * (v.isMobile ? 0.36 : 0.6));
-        const width = Math.ceil(height * (1580 / 530));
-        const x = Math.round((w - width) * 0.5);
-        const y = Math.round(h - height - scroll * layer.parallax * h * 0.18);
-        ctx.drawImage(mountain, x, y, width, height);
-      }
+      const drawMountainRange = (start: number, end: number) => {
+        for (let i = start; i < end; i += 1) {
+          const mountain = mountains[i];
+          if (!mountain.complete || mountain.naturalWidth === 0) continue;
+          const layer = MOUNTAIN_LAYERS[i];
+          const assetAspect = 1600 / 640;
+          const minimumHeight = Math.ceil(h * (v.isMobile ? 0.43 : 0.6));
+          const width = Math.max(Math.ceil(w * 1.04), Math.ceil(minimumHeight * assetAspect));
+          const height = Math.ceil(width / assetAspect);
+          const x = Math.round((w - width) * 0.5);
+          const y = Math.round(h - height - scroll * layer.parallax * h * 0.18);
+          ctx.drawImage(mountain, x, y, width, height);
+        }
+      };
+
+      drawMountainRange(0, 2);
+      drawCloudRange(8, CLOUD_LAYERS.length);
+      drawMountainRange(2, MOUNTAIN_LAYERS.length);
     },
     destroy() {
       vp = null;
       lastFrame = null;
       moon.onload = null;
+      for (const cloud of clouds) cloud.onload = null;
       for (const mountain of mountains) mountain.onload = null;
     },
   } satisfies SceneBackend;
@@ -115,6 +302,7 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
     if (lastFrame) backend.draw(lastFrame);
   };
   moon.onload = redraw;
+  for (const cloud of clouds) cloud.onload = redraw;
   for (const mountain of mountains) mountain.onload = redraw;
 
   return backend;
