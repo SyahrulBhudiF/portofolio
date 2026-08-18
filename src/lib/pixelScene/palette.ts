@@ -13,6 +13,7 @@ export const pixelScenePalette = {
   mountainFar: "#26314d",
   mountainMid: "#1b2238",
   mountainNear: "#0b0d18",
+  mountainFill: "#241735",
 } as const;
 
 export type PixelScenePalette = typeof pixelScenePalette;

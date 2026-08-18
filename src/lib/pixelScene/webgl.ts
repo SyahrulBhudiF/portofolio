@@ -156,10 +156,10 @@ const CLOUD_LAYERS = [
 ] as const;
 
 const MOUNTAIN_LAYERS = [
-  { image: mount4, parallax: 0.08, zoom: 0.05, travel: -0.02 },
-  { image: mount3, parallax: 0.2, zoom: 0.12, travel: -0.03 },
-  { image: mount2, parallax: 0.38, zoom: 0.32, travel: -0.05 },
-  { image: mount1, parallax: 0.6, zoom: 0.72, travel: 0 },
+  { image: mount4, parallax: 0.7, scale: 0.3 },
+  { image: mount3, parallax: 0.8, scale: 0.2 },
+  { image: mount2, parallax: 0.9, scale: 0.1 },
+  { image: mount1, parallax: 1, scale: 0 },
 ] as const;
 
 const quadVertex = `#version 300 es
@@ -190,6 +190,7 @@ in vec2 v_uv;
 out vec4 outColor;
 void main() {
   vec4 color = texture(u_texture, v_uv);
+  if (color.a < 0.01 || dot(color.rgb, color.rgb) < 0.0005) discard;
   outColor = vec4(color.rgb, color.a * u_opacity);
 }
 `;
@@ -265,6 +266,17 @@ void main() {
   col = mix(col, col * 0.55, scrim);
   float dth = (hash(floor(gl_FragCoord.xy)) - 0.5) * (1.5 / 255.0);
   outColor = vec4(col + dth, 1.0);
+}
+`;
+
+const fillFragment = `#version 300 es
+precision highp float;
+uniform float u_fillTop;
+in vec2 v_uv;
+out vec4 outColor;
+void main() {
+  if (v_uv.y > u_fillTop) discard;
+  outColor = vec4(0.141, 0.090, 0.208, 1.0);
 }
 `;
 
@@ -369,9 +381,10 @@ export function createWebGLBackend(
   if (!gl) return null;
 
   const backgroundProgram = createProgram(gl, quadVertex, backgroundFragment);
+  const fillProgram = createProgram(gl, quadVertex, fillFragment);
   const displayProgram = createProgram(gl, quadVertex, displayFragment);
   const spriteProgram = createProgram(gl, spriteVertex, spriteFragment);
-  if (!backgroundProgram || !displayProgram || !spriteProgram) return null;
+  if (!backgroundProgram || !fillProgram || !displayProgram || !spriteProgram) return null;
 
   const buffer = gl.createBuffer();
   if (!buffer) return null;
@@ -384,6 +397,7 @@ export function createWebGLBackend(
 
   const attrib = {
     background: gl.getAttribLocation(backgroundProgram, "a_position"),
+    fill: gl.getAttribLocation(fillProgram, "a_position"),
     display: gl.getAttribLocation(displayProgram, "a_position"),
     sprite: gl.getAttribLocation(spriteProgram, "a_position"),
   };
@@ -394,6 +408,10 @@ export function createWebGLBackend(
     scroll: gl.getUniformLocation(backgroundProgram, "u_scroll"),
     pixelGrid: gl.getUniformLocation(backgroundProgram, "u_pixelGrid"),
     motion: gl.getUniformLocation(backgroundProgram, "u_motion"),
+  };
+
+  const fillUniform = {
+    fillTop: gl.getUniformLocation(fillProgram, "u_fillTop"),
   };
 
   const displayUniform = {
@@ -539,21 +557,11 @@ export function createWebGLBackend(
         const aspect = viewport.bufferWidth / viewport.bufferHeight;
         const assetAspect = 1600 / 640;
         const minimumHeight = viewport.isMobile ? 0.43 : 0.6;
-        const zoomT = Math.min(1, frame.scroll / 0.45);
-        const zoomProgress = zoomT * zoomT * (3 - 2 * zoomT);
-        const positionScroll = Math.min(frame.scroll, 0.45);
-        const travelT = Math.min(1, Math.max(0, (frame.scroll - 0.4) / 0.6));
-        const travelProgress = travelT * travelT * (3 - 2 * travelT);
-        const zoom = 1 + zoomProgress * layer.zoom;
-        const travel = travelProgress * layer.travel;
-        const halfWidth = Math.max(1.04, (minimumHeight * assetAspect) / aspect) * zoom;
+        const halfWidth = Math.max(1.04, (minimumHeight * assetAspect) / aspect);
         const halfHeight = (halfWidth * aspect) / assetAspect;
+        const yOffset = frame.scroll * layer.parallax * 2;
         gl.bindTexture(gl.TEXTURE_2D, mountainTextures[i]);
-        gl.uniform2f(
-          spriteUniform.center,
-          0,
-          -1 + halfHeight + positionScroll * layer.parallax * 0.36 + travel,
-        );
+        gl.uniform2f(spriteUniform.center, 0, -1 + halfHeight + yOffset);
         gl.uniform2f(spriteUniform.size, halfWidth, halfHeight);
         gl.uniform1f(spriteUniform.opacity, 1);
         drawQuad(attrib.sprite);
@@ -565,7 +573,15 @@ export function createWebGLBackend(
     drawMountainRange(0, 2);
     drawCloudRange(8, CLOUD_LAYERS.length);
     drawMountainRange(2, MOUNTAIN_LAYERS.length);
+
+    // Mountain 1's bottom edge rises from the viewport bottom by `scroll`.
+    // Keep the fill empty at the hero start; it only appears in the exposed gap.
+    const fillTop = frame.scroll;
     gl.disable(gl.BLEND);
+    // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
+    gl.useProgram(fillProgram);
+    gl.uniform1f(fillUniform.fillTop, fillTop);
+    drawQuad(attrib.fill);
   }
 
   for (let i = 0; i < CLOUD_LAYERS.length; i += 1) {

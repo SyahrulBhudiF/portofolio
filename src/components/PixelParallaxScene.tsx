@@ -22,5 +22,9 @@ export default function PixelParallaxScene() {
     return () => renderer.destroy();
   }, []);
 
-  return <canvas ref={canvasRef} className="pixel-parallax-scene" />;
+  return (
+    <div className="pixel-parallax-wrapper" aria-hidden="true">
+      <canvas ref={canvasRef} className="pixel-parallax-scene" />
+    </div>
+  );
 }

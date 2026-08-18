@@ -25,8 +25,7 @@ function computeViewport(): SceneViewport {
 }
 
 function readScroll(): number {
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  return max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+  return Math.min(1, Math.max(0, window.scrollY / Math.max(1, window.innerHeight)));
 }
 
 export function createPixelSceneRenderer(
