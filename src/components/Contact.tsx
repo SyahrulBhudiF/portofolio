@@ -1,9 +1,10 @@
-import { FileUser, Github, Linkedin, type LucideIcon, Mail } from "lucide-react";
+import { FileUser, Mail } from "lucide-react";
+import { type BrandIcon, GithubIcon, LinkedinIcon } from "./BrandIcons";
 
-const socialLinks: { href: string; label: string; icon: LucideIcon }[] = [
+const socialLinks: { href: string; label: string; icon: BrandIcon }[] = [
   { href: "mailto:syahrulbhudif@ryuko.my.id", label: "Email", icon: Mail },
-  { href: "https://www.linkedin.com/in/syahrulbhudif/", label: "LinkedIn", icon: Linkedin },
-  { href: "https://github.com/SyahrulBhudiF", label: "GitHub", icon: Github },
+  { href: "https://www.linkedin.com/in/syahrulbhudif/", label: "LinkedIn", icon: LinkedinIcon },
+  { href: "https://github.com/SyahrulBhudiF", label: "GitHub", icon: GithubIcon },
 ];
 
 export default function Contact() {
