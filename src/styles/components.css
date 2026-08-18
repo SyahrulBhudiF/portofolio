@@ -149,6 +149,7 @@
 .retro-block-inner {
   position: relative;
   z-index: 3;
+  transform: translateX(0.35rem);
 }
 
 /* ==========================================================================
