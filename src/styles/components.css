@@ -17,6 +17,7 @@
   height: 100vh;
   pointer-events: none;
   display: block;
+  background: linear-gradient(180deg, #0a060f 0%, #201529 55%, #361d41 100%);
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
