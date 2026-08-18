@@ -1,7 +1,7 @@
 export const pixelScenePalette = {
-  skyTop: "#03040d",
-  skyMid: "#09142b",
-  skyLow: "#171933",
+  skyTop: "#0a060f",
+  skyMid: "#201529",
+  skyLow: "#361d41",
   star: "#efe8ff",
   starDim: "#8f9ccc",
   moonLight: "#f3dfaa",

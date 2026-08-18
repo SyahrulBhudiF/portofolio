@@ -211,9 +211,9 @@ uniform float u_motion;
 in vec2 v_uv;
 out vec4 outColor;
 
-const vec3 SKY_TOP   = vec3(0.012, 0.016, 0.051);
-const vec3 SKY_MID   = vec3(0.035, 0.078, 0.169);
-const vec3 SKY_LOW   = vec3(0.090, 0.098, 0.200);
+const vec3 SKY_TOP   = vec3(0.039, 0.024, 0.059);
+const vec3 SKY_MID   = vec3(0.125, 0.082, 0.161);
+const vec3 SKY_LOW   = vec3(0.212, 0.114, 0.255);
 const vec3 STAR      = vec3(0.937, 0.910, 1.000);
 const vec3 STAR_DIM  = vec3(0.561, 0.612, 0.800);
 const vec3 MOON_LIGHT  = vec3(0.953, 0.875, 0.667);
