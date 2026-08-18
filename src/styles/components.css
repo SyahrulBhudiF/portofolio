@@ -41,32 +41,105 @@
    ========================================================================== */
 
 .retro-tech-block {
-  transition: box-shadow 220ms ease-out, background-color 220ms ease-out;
-  box-shadow: 5px 5px 0 rgb(151 109 194 / 38%), 10px 10px 0 rgb(116 84 151 / 24%), 15px 15px 0
-    rgb(149 118 184 / 18%);
-  border-color: rgba(218, 178, 255, 0.42);
-  background-color: rgba(88, 28, 135, 0.56);
+  --pixel-shape: polygon(
+    6% 0,
+    94% 0,
+    94% 12%,
+    100% 12%,
+    100% 80%,
+    94% 80%,
+    94% 100%,
+    6% 100%,
+    6% 80%,
+    0 80%,
+    0 12%,
+    6% 12%
+  );
+  --pixel-face: rgba(88, 28, 135, 0.56);
+  --pixel-shadow-near: rgb(151 109 194 / 38%);
+  --pixel-shadow-middle: rgb(116 84 151 / 24%);
+  --pixel-shadow-far: rgb(149 118 184 / 18%);
+  isolation: isolate;
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.retro-tech-layer,
+.retro-tech-border,
+.retro-tech-block::before,
+.retro-tech-block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: var(--pixel-shape);
+  pointer-events: none;
+}
+
+.retro-tech-layer {
+  transition: transform 220ms ease-out, background-color 220ms ease-out;
+}
+
+.retro-tech-layer-far {
+  z-index: -3;
+  background-color: var(--pixel-shadow-far);
+  transform: translate(15px, 15px);
+}
+
+.retro-tech-layer-middle {
+  z-index: -2;
+  background-color: var(--pixel-shadow-middle);
+  transform: translate(10px, 10px);
+}
+
+.retro-tech-layer-near {
+  z-index: -1;
+  background-color: var(--pixel-shadow-near);
+  transform: translate(5px, 5px);
+}
+
+.retro-tech-border {
+  z-index: 0;
+  background-color: rgba(218, 178, 255, 0.42);
 }
 
 .retro-tech-block::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 2px;
+  z-index: 1;
+  background-color: var(--pixel-face);
+}
+
+.retro-tech-block::after {
+  inset: 2px;
+  z-index: 2;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
   mix-blend-mode: overlay;
-  z-index: 1;
-  pointer-events: none;
 }
 
 .retro-tech-block:hover {
   position: relative;
   z-index: 50;
-  box-shadow: 6px 6px 0 rgb(213 168 255 / 52%), 14px 14px 0 rgb(167 119 211 / 34%), 22px 22px 0
-    rgb(143 105 182 / 24%);
-  background-color: rgba(142, 64, 205, 0.72);
+  --pixel-face: rgba(142, 64, 205, 0.72);
+  --pixel-shadow-near: rgb(213 168 255 / 52%);
+  --pixel-shadow-middle: rgb(167 119 211 / 34%);
+  --pixel-shadow-far: rgb(143 105 182 / 24%);
+}
+
+.retro-tech-layer-far,
+.retro-tech-layer-middle,
+.retro-tech-layer-near {
+  transition: transform 220ms ease-out, background-color 220ms ease-out;
+}
+
+.retro-tech-block:hover .retro-tech-layer-far {
+  transform: translate(22px, 22px);
+}
+
+.retro-tech-block:hover .retro-tech-layer-middle {
+  transform: translate(14px, 14px);
+}
+
+.retro-tech-block:hover .retro-tech-layer-near {
+  transform: translate(6px, 6px);
 }
 
 .retro-tech-block:hover p {
@@ -75,7 +148,7 @@
 
 .retro-block-inner {
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 
 /* ==========================================================================

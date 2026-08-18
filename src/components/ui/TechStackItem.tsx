@@ -39,6 +39,10 @@ const TechStackItem: React.FC<TechStackItemProps> = ({
         sizeClasses[size],
       )}
     >
+      <span className="retro-tech-layer retro-tech-layer-far" aria-hidden="true" />
+      <span className="retro-tech-layer retro-tech-layer-middle" aria-hidden="true" />
+      <span className="retro-tech-layer retro-tech-layer-near" aria-hidden="true" />
+      <span className="retro-tech-border" aria-hidden="true" />
       <div className="retro-block-inner flex items-center justify-center gap-2">
         <div className="relative block mr-1">
           <img
