@@ -156,10 +156,10 @@ const CLOUD_LAYERS = [
 ] as const;
 
 const MOUNTAIN_LAYERS = [
-  { image: mount4, parallax: 0.08 },
-  { image: mount3, parallax: 0.2 },
-  { image: mount2, parallax: 0.38 },
-  { image: mount1, parallax: 0.6 },
+  { image: mount4, parallax: 0.08, zoom: 0.05, travel: -0.02 },
+  { image: mount3, parallax: 0.2, zoom: 0.12, travel: -0.03 },
+  { image: mount2, parallax: 0.38, zoom: 0.32, travel: -0.05 },
+  { image: mount1, parallax: 0.6, zoom: 0.72, travel: 0 },
 ] as const;
 
 const quadVertex = `#version 300 es
@@ -539,13 +539,20 @@ export function createWebGLBackend(
         const aspect = viewport.bufferWidth / viewport.bufferHeight;
         const assetAspect = 1600 / 640;
         const minimumHeight = viewport.isMobile ? 0.43 : 0.6;
-        const halfWidth = Math.max(1.04, (minimumHeight * assetAspect) / aspect);
+        const zoomT = Math.min(1, frame.scroll / 0.45);
+        const zoomProgress = zoomT * zoomT * (3 - 2 * zoomT);
+        const positionScroll = Math.min(frame.scroll, 0.45);
+        const travelT = Math.min(1, Math.max(0, (frame.scroll - 0.4) / 0.6));
+        const travelProgress = travelT * travelT * (3 - 2 * travelT);
+        const zoom = 1 + zoomProgress * layer.zoom;
+        const travel = travelProgress * layer.travel;
+        const halfWidth = Math.max(1.04, (minimumHeight * assetAspect) / aspect) * zoom;
         const halfHeight = (halfWidth * aspect) / assetAspect;
         gl.bindTexture(gl.TEXTURE_2D, mountainTextures[i]);
         gl.uniform2f(
           spriteUniform.center,
           0,
-          -1 + halfHeight - frame.scroll * layer.parallax * 0.36,
+          -1 + halfHeight + positionScroll * layer.parallax * 0.36 + travel,
         );
         gl.uniform2f(spriteUniform.size, halfWidth, halfHeight);
         gl.uniform1f(spriteUniform.opacity, 1);

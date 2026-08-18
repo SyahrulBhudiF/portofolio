@@ -157,10 +157,10 @@ const CLOUD_LAYERS = [
 ] as const;
 
 const MOUNTAIN_LAYERS = [
-  { image: mount4, parallax: 0.08 },
-  { image: mount3, parallax: 0.2 },
-  { image: mount2, parallax: 0.38 },
-  { image: mount1, parallax: 0.6 },
+  { image: mount4, parallax: 0.08, zoom: 0.05, travel: -0.02 },
+  { image: mount3, parallax: 0.2, zoom: 0.12, travel: -0.03 },
+  { image: mount2, parallax: 0.38, zoom: 0.32, travel: -0.05 },
+  { image: mount1, parallax: 0.6, zoom: 0.72, travel: 0 },
 ] as const;
 
 // Deterministic hash so the fallback scene is stable across redraws.
@@ -277,11 +277,21 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
           const layer = MOUNTAIN_LAYERS[i];
           const assetAspect = 1600 / 640;
           const minimumHeight = Math.ceil(h * (v.isMobile ? 0.43 : 0.6));
-          const width = Math.max(Math.ceil(w * 1.04), Math.ceil(minimumHeight * assetAspect));
+          const zoomT = Math.min(1, scroll / 0.45);
+          const zoomProgress = zoomT * zoomT * (3 - 2 * zoomT);
+          const positionScroll = Math.min(scroll, 0.45);
+          const travelT = Math.min(1, Math.max(0, (scroll - 0.4) / 0.6));
+          const travelProgress = travelT * travelT * (3 - 2 * travelT);
+          const zoom = 1 + zoomProgress * layer.zoom;
+          const travel = travelProgress * layer.travel;
+          const width = Math.ceil(Math.max(w * 1.04, minimumHeight * assetAspect) * zoom);
           const height = Math.ceil(width / assetAspect);
           const x = Math.round((w - width) * 0.5);
-          const y = Math.round(h - height - scroll * layer.parallax * h * 0.18);
+          const y = Math.round(
+            h - height - positionScroll * layer.parallax * h * 0.18 - travel * h,
+          );
           ctx.drawImage(mountain, x, y, width, height);
+          ctx.globalAlpha = 1;
         }
       };
 
