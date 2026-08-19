@@ -42,7 +42,7 @@ const mountains = [
 ---
 
 <div class="absolute left-0 top-0 z-0 h-screen w-full overflow-hidden pointer-events-none bg-[#0b070f]" aria-hidden="true" data-pixel-scene>
-  <div class="absolute inset-0 bg-[linear-gradient(180deg,#0b070f_0%,#1b1024_62%,#000_100%)]"></div>
+  <div class="absolute inset-0 bg-[linear-gradient(180deg,#0b070f_0%,#1b1024_62%,#0b070f_100%)]"></div>
   <div class="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-90" style={`background-image:url(${stars.src})`}></div>
   <div class="stars-secondary absolute inset-0" style={`background-image:url(${stars2.src})`}></div>
 
@@ -53,8 +53,8 @@ const mountains = [
   {clouds.map((cloud, index) => (
     <div
       class={`absolute inset-0 overflow-visible will-change-transform ${index >= 8 ? "cloud-near" : ""}`}
-      style={`z-index:${index < 8 ? 1 : 7};--x:${cloud.x};--y:${cloud.y};--cloud-scale:${cloud.scale};--cloud-size:${index >= 8 ? 0.72 : 1};--parallax:${cloud.parallax};--cloud-opacity:${cloud.opacity};--cloud-duration:${Math.max(24, cloud.duration * 0.2)}s`}
-      data-speed={cloud.parallax} data-layer={index >= 8 ? "near" : "cloud"}
+      style={`z-index:${index < 8 ? 1 : 7};--x:${cloud.x};--y:${cloud.y};--cloud-scale:${cloud.scale};--cloud-size:${index >= 8 ? 0.72 : 1};--cloud-opacity:${cloud.opacity};--cloud-duration:${30 + (index % 4) * 2}s;--cloud-delay:${index * -1.5}s`}
+      data-layer="cloud"
     >
       <img class="cloud-image absolute left-[calc(50%+var(--x)*50%)] top-[calc(50%-var(--y)*50%)] w-[calc(4*var(--cloud-scale)*var(--cloud-base)*var(--cloud-size)*100vh)] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={cloud.image.src} width={cloud.image.width} height={cloud.image.height} alt="" />
       <img class="cloud-image cloud-copy absolute left-[calc(50%+var(--x)*50%)] top-[calc(50%-var(--y)*50%)] w-[calc(4*var(--cloud-scale)*var(--cloud-base)*var(--cloud-size)*100vh)] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={cloud.image.src} width={cloud.image.width} height={cloud.image.height} alt="" />
@@ -79,11 +79,9 @@ const mountains = [
       const speed = Number(layer.dataset.speed);
       const distance = layer.dataset.layer === "mountain"
         ? -(window.scrollY * speed)
-        : layer.dataset.layer === "near"
-          ? window.scrollY * 0.3
-          : layer.dataset.layer === "moon"
-            ? progress * speed * window.innerHeight
-            : 0;
+        : layer.dataset.layer === "moon"
+          ? progress * speed * window.innerHeight
+          : 0;
       layer.style.transform = `translate3d(0, ${distance}px, 0)`;
     });
     ticking = false;
@@ -111,10 +109,10 @@ const mountains = [
     --cloud-base: 0.055;
     width: calc(4 * var(--cloud-scale) * var(--cloud-base) * var(--cloud-size) * 100vh) !important;
     opacity: var(--cloud-opacity);
-    --wind-start: 0;
     animation: cloud-drift var(--cloud-duration) linear infinite;
+    animation-delay: var(--cloud-delay);
   }
-  .cloud-copy { --wind-start: -100vw; }
+  .cloud-copy { animation-name: cloud-drift-copy; }
   .cloud-near .cloud-image {
     top: calc(50% - (var(--y) + 0.18) * 50%);
     opacity: calc(var(--cloud-opacity) * 0.9);
@@ -126,8 +124,12 @@ const mountains = [
     .cloud-near .cloud-image { top: calc(50% - var(--y) * 50%); }
   }
   @keyframes cloud-drift {
-    from { margin-left: var(--wind-start, 0); }
-    to { margin-left: calc(var(--wind-start, 0) + 100vw); }
+    from { margin-left: 0; }
+    to { margin-left: 100vw; }
+  }
+  @keyframes cloud-drift-copy {
+    from { margin-left: -100vw; }
+    to { margin-left: 0; }
   }
   @media (max-width: 768px) {
     .cloud-image {
