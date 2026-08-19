@@ -25,9 +25,9 @@ const AboutMotion = ({ children }: Props) => {
       >
         <h2 className="text-6xl font-bold text-retro self-start max-sm:text-5xl">About Me</h2>
         <p className="text-lg max-sm:text-base">
-          I’m a software developer focused on building reliable full-stack applications, with a
+          I'm a software developer focused on building reliable full-stack applications, with a
           particular interest in backend systems. Over the past{" "}
-          <strong className="font-bold text-purple-300">two years</strong>, I’ve worked with
+          <strong className="font-bold text-purple-300">two years</strong>, I've worked with
           TypeScript, Laravel, and Go on the backend, and Next.js and TanStack Start on the
           frontend.
           <br />
