@@ -559,12 +559,12 @@ export function createWebGLBackend(
         const minimumHeight = viewport.isMobile ? 0.43 : 0.6;
         const halfWidth = Math.max(1.04, (minimumHeight * assetAspect) / aspect);
         const halfHeight = (halfWidth * aspect) / assetAspect;
-        // Keep the mobile mountain horizon fixed. Vertical parallax pushes the
-        // layer behind the next opaque section and leaves a clipped strip.
-        const yOffset = viewport.isMobile
-          ? 0
-          : Math.round(frame.scroll * layer.parallax * 2 * viewport.bufferHeight) /
-            viewport.bufferHeight;
+        // Mobile keeps a smaller parallax range so the mountains stay visible
+        // while the transparent content sections scroll over the scene.
+        const parallaxDistance = viewport.isMobile ? 0.35 : 2;
+        const yOffset =
+          Math.round(frame.scroll * layer.parallax * parallaxDistance * viewport.bufferHeight) /
+          viewport.bufferHeight;
         gl.bindTexture(gl.TEXTURE_2D, mountainTextures[i]);
         gl.uniform2f(spriteUniform.center, 0, -1 + halfHeight + yOffset);
         gl.uniform2f(spriteUniform.size, halfWidth, halfHeight);
@@ -579,9 +579,9 @@ export function createWebGLBackend(
     drawCloudRange(8, CLOUD_LAYERS.length);
     drawMountainRange(2, MOUNTAIN_LAYERS.length);
 
-    // Mountain 1's bottom edge rises from the viewport bottom by `scroll`.
-    // Keep the fill empty at the hero start; it only appears in the exposed gap.
-    const fillTop = viewport.isMobile ? 0 : frame.scroll;
+    // Fill the gap exposed below the parallaxing mountain instead of letting
+    // the next section/background show through it.
+    const fillTop = viewport.isMobile ? frame.scroll * 0.175 : frame.scroll;
     gl.disable(gl.BLEND);
     // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
     gl.useProgram(fillProgram);
