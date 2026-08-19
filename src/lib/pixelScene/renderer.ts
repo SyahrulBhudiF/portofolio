@@ -24,8 +24,8 @@ function computeViewport(): SceneViewport {
   };
 }
 
-function readScroll(): number {
-  return Math.min(1, Math.max(0, window.scrollY / Math.max(1, window.innerHeight)));
+function readScroll(viewportHeight: number): number {
+  return Math.min(1, Math.max(0, window.scrollY / Math.max(1, viewportHeight)));
 }
 
 export function createPixelSceneRenderer(
@@ -38,13 +38,14 @@ export function createPixelSceneRenderer(
   let rafId: number | null = null;
   let running = false;
   let startTime = 0;
-  const scrollRef = { current: readScroll() };
+  let scrollViewportHeight = viewport.cssHeight;
+  const scrollRef = { current: readScroll(scrollViewportHeight) };
 
   function applyCanvasSize() {
     canvas.width = viewport.bufferWidth;
     canvas.height = viewport.bufferHeight;
-    canvas.style.width = `${viewport.cssWidth}px`;
-    canvas.style.height = `${viewport.cssHeight}px`;
+    // CSS (100dvh + object-fit: cover) owns the display size so the buffer is
+    // never stretched when mobile browser chrome changes innerHeight.
   }
 
   function buildBackend() {
@@ -74,21 +75,23 @@ export function createPixelSceneRenderer(
 
   // --- listeners ---
   function onScroll() {
-    scrollRef.current = readScroll();
+    scrollRef.current = readScroll(scrollViewportHeight);
     // In static modes a scroll still needs a redraw to reposition the scene.
     if (!running) drawOnce(0);
   }
 
   function onResize() {
     const nextViewport = computeViewport();
-    // Mobile browser chrome changes innerHeight while scrolling. Ignore that
-    // height-only resize: changing the render buffer changes mountain scale and
-    // aspect, which looks like mountain jitter even when scrollY is unchanged.
+    // Mobile browser chrome changes innerHeight while scrolling (url bar /
+    // bottom bar show·hide). Ignore height-only resizes entirely: the canvas
+    // tracks the viewport via CSS 100dvh + object-fit:cover, and re-buffering
+    // would change the scene aspect and jitter the mountains.
     if (viewport.isMobile && nextViewport.isMobile && nextViewport.cssWidth === viewport.cssWidth) {
-      canvas.style.height = `${nextViewport.cssHeight}px`;
       return;
     }
     viewport = nextViewport;
+    scrollViewportHeight = viewport.cssHeight;
+    scrollRef.current = readScroll(scrollViewportHeight);
     applyCanvasSize();
     backend?.resize(viewport);
     if (!running) drawOnce(0);

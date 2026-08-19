@@ -13,7 +13,8 @@
   position: fixed;
   inset: 0;
   z-index: 0;
-  height: 100vh;
+  height: 100vh; /* fallback */
+  height: 100dvh; /* tracks mobile browser chrome (url bar / bottom bar) */
   overflow: hidden;
   pointer-events: none;
 }
@@ -22,9 +23,12 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: block;
+  /* Uniformly scale the buffer to cover the box instead of stretching it,
+     so mobile chrome height changes crop rather than distort the scene. */
+  object-fit: cover;
   background: linear-gradient(180deg, #0a060f 0%, #201529 55%, #361d41 100%);
   image-rendering: pixelated;
   image-rendering: crisp-edges;
