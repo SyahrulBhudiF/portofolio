@@ -38,7 +38,7 @@ export function createPixelSceneRenderer(
   let rafId: number | null = null;
   let running = false;
   let startTime = 0;
-  const scrollRef = { current: readScroll() };
+  const scrollRef = { current: readScroll(), target: readScroll() };
 
   function applyCanvasSize() {
     canvas.width = viewport.bufferWidth;
@@ -68,15 +68,24 @@ export function createPixelSceneRenderer(
   function frame(now: number) {
     if (!running) return;
     if (startTime === 0) startTime = now;
+    // Low-pass the scroll signal so mountain parallax cannot vibrate on noisy
+    // mobile scroll updates while retaining the intended movement.
+    scrollRef.current += (scrollRef.target - scrollRef.current) * 0.16;
+    if (Math.abs(scrollRef.target - scrollRef.current) < 0.0001) {
+      scrollRef.current = scrollRef.target;
+    }
     drawOnce((now - startTime) * 0.001);
     rafId = requestAnimationFrame(frame);
   }
 
   // --- listeners ---
   function onScroll() {
-    scrollRef.current = readScroll();
+    scrollRef.target = readScroll();
     // In static modes a scroll still needs a redraw to reposition the scene.
-    if (!running) drawOnce(0);
+    if (!running) {
+      scrollRef.current = scrollRef.target;
+      drawOnce(0);
+    }
   }
 
   function onResize() {
