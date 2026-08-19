@@ -20,33 +20,33 @@ import stars from "@/assets/pixelScene/stars.svg";
 import stars2 from "@/assets/pixelScene/stars2.svg";
 
 const clouds = [
-  { image: awan3, x: -0.9, y: 0.77, scale: 0.58, parallax: 0.018, opacity: 0.56, duration: 150 },
-  { image: awan5, x: 0.2, y: 0.63, scale: 0.68, parallax: 0.022, opacity: 0.56, duration: 170 },
-  { image: awan7, x: 1.05, y: 0.8, scale: 0.52, parallax: 0.018, opacity: 0.52, duration: 160 },
-  { image: awan8, x: -0.15, y: 0.49, scale: 0.62, parallax: 0.025, opacity: 0.58, duration: 140 },
-  { image: awan1, x: -1.08, y: 0.32, scale: 0.82, parallax: 0.043, opacity: 0.72, duration: 120 },
-  { image: awan2, x: 1.12, y: 0.4, scale: 0.76, parallax: 0.047, opacity: 0.7, duration: 115 },
-  { image: awan4, x: -0.72, y: 0.08, scale: 0.7, parallax: 0.05, opacity: 0.7, duration: 110 },
-  { image: awan6, x: 0.82, y: 0.04, scale: 0.78, parallax: 0.054, opacity: 0.72, duration: 105 },
-  { image: awan9, x: -1.15, y: -0.48, scale: 1.1, parallax: 0.086, opacity: 0.68, duration: 95 },
-  { image: awan10, x: -0.02, y: -0.62, scale: 1.18, parallax: 0.094, opacity: 0.66, duration: 90 },
-  { image: awan11, x: 0.98, y: -0.42, scale: 1.04, parallax: 0.09, opacity: 0.66, duration: 92 },
-  { image: awan12, x: 0.45, y: -0.78, scale: 1.2, parallax: 0.101, opacity: 0.62, duration: 88 },
+  { image: awan3, x: -0.9, y: 0.77, scale: 0.58, parallax: 0.05, opacity: 0.56, duration: 150 },
+  { image: awan5, x: 0.2, y: 0.63, scale: 0.68, parallax: 0.06, opacity: 0.56, duration: 170 },
+  { image: awan7, x: 1.05, y: 0.8, scale: 0.52, parallax: 0.05, opacity: 0.52, duration: 160 },
+  { image: awan8, x: -0.15, y: 0.49, scale: 0.62, parallax: 0.07, opacity: 0.58, duration: 140 },
+  { image: awan1, x: -1.08, y: 0.32, scale: 0.82, parallax: 0.12, opacity: 0.72, duration: 120 },
+  { image: awan2, x: 1.12, y: 0.4, scale: 0.76, parallax: 0.13, opacity: 0.7, duration: 115 },
+  { image: awan4, x: -0.72, y: 0.08, scale: 0.7, parallax: 0.14, opacity: 0.7, duration: 110 },
+  { image: awan6, x: 0.82, y: 0.04, scale: 0.78, parallax: 0.15, opacity: 0.72, duration: 105 },
+  { image: awan9, x: -1.15, y: -0.48, scale: 1.1, parallax: 0.24, opacity: 0.68, duration: 95 },
+  { image: awan10, x: -0.02, y: -0.62, scale: 1.18, parallax: 0.26, opacity: 0.66, duration: 90 },
+  { image: awan11, x: 0.98, y: -0.42, scale: 1.04, parallax: 0.25, opacity: 0.66, duration: 92 },
+  { image: awan12, x: 0.45, y: -0.78, scale: 1.2, parallax: 0.28, opacity: 0.62, duration: 88 }
 ];
 const mountains = [
-  { image: mount4, speed: 0.7 },
-  { image: mount3, speed: 0.8 },
-  { image: mount2, speed: 0.9 },
-  { image: mount1, speed: 1 },
+  { image: mount4, speed: -0.3 },
+  { image: mount3, speed: -0.2 },
+  { image: mount2, speed: -0.1 },
+  { image: mount1, speed: 0 },
 ];
 ---
 
 <div class="absolute left-0 top-0 z-0 h-screen w-full overflow-hidden pointer-events-none bg-[#0b070f]" aria-hidden="true" data-pixel-scene>
-  <div class="absolute inset-0 bg-[linear-gradient(180deg,#0b070f_0%,#25162e_100%)]"></div>
+  <div class="absolute inset-0 bg-[linear-gradient(180deg,#0b070f_0%,#1b1024_62%,#000_100%)]"></div>
   <div class="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-90" style={`background-image:url(${stars.src})`}></div>
   <div class="stars-secondary absolute inset-0" style={`background-image:url(${stars2.src})`}></div>
 
-  <div class="absolute inset-0 z-[2] will-change-transform" data-speed="0.18">
+  <div class="absolute inset-0 z-[2] will-change-transform" data-speed="0.18" data-layer="moon">
     <img class="moon-image absolute left-[78%] top-[25%] w-[15vh] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={moon.src} width={moon.width} height={moon.height} alt="" />
   </div>
 
@@ -54,15 +54,16 @@ const mountains = [
     <div
       class={`absolute inset-0 overflow-visible will-change-transform ${index >= 8 ? "cloud-near" : ""}`}
       style={`z-index:${index < 8 ? 1 : 7};--x:${cloud.x};--y:${cloud.y};--cloud-scale:${cloud.scale};--cloud-size:${index >= 8 ? 0.72 : 1};--parallax:${cloud.parallax};--cloud-opacity:${cloud.opacity};--cloud-duration:${Math.max(24, cloud.duration * 0.2)}s`}
-      data-speed={cloud.parallax}
+      data-speed={cloud.parallax} data-layer={index >= 8 ? "near" : "cloud"}
     >
-      <img class="cloud-image absolute left-[calc(50%+var(--x)*50%)] top-[calc(50%-var(--y)*50%)] w-[calc(4*var(--cloud-scale)*var(--cloud-base)*100vh)] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={cloud.image.src} width={cloud.image.width} height={cloud.image.height} alt="" />
+      <img class="cloud-image absolute left-[calc(50%+var(--x)*50%)] top-[calc(50%-var(--y)*50%)] w-[calc(4*var(--cloud-scale)*var(--cloud-base)*var(--cloud-size)*100vh)] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={cloud.image.src} width={cloud.image.width} height={cloud.image.height} alt="" />
+      <img class="cloud-image cloud-copy absolute left-[calc(50%+var(--x)*50%)] top-[calc(50%-var(--y)*50%)] w-[calc(4*var(--cloud-scale)*var(--cloud-base)*var(--cloud-size)*100vh)] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={cloud.image.src} width={cloud.image.width} height={cloud.image.height} alt="" />
     </div>
   ))}
 
   {mountains.map((mountain, index) => (
-    <div class="absolute inset-0 overflow-visible will-change-transform" style={`z-index:${5 + index}`} data-speed={mountain.speed}>
-      <img class="mountain-image absolute bottom-0 left-1/2 w-[104vw] max-w-none -translate-x-1/2 image-rendering-crisp" src={mountain.image.src} width={mountain.image.width} height={mountain.image.height} alt="" />
+    <div class="mountain-layer absolute inset-0 h-screen w-full overflow-hidden will-change-transform" style={`z-index:${5 + index}`} data-speed={mountain.speed} data-layer="mountain">
+      <img class="mountain-image absolute bottom-0 left-1/2 max-w-none -translate-x-1/2 image-rendering-crisp" src={mountain.image.src} width={mountain.image.width} height={mountain.image.height} alt="" />
     </div>
   ))}
 </div>
@@ -73,9 +74,17 @@ const mountains = [
   let ticking = false;
 
   function updateParallax() {
-    const scrollY = window.scrollY;
+    const progress = Math.min(1, Math.max(0, window.scrollY / Math.max(1, window.innerHeight)));
     layers?.forEach((layer) => {
-      layer.style.transform = `translate3d(0, ${-(scrollY * Number(layer.dataset.speed))}px, 0)`;
+      const speed = Number(layer.dataset.speed);
+      const distance = layer.dataset.layer === "mountain"
+        ? -(window.scrollY * speed)
+        : layer.dataset.layer === "near"
+          ? window.scrollY * 0.3
+          : layer.dataset.layer === "moon"
+            ? progress * speed * window.innerHeight
+            : 0;
+      layer.style.transform = `translate3d(0, ${distance}px, 0)`;
     });
     ticking = false;
   }
@@ -102,28 +111,29 @@ const mountains = [
     --cloud-base: 0.055;
     width: calc(4 * var(--cloud-scale) * var(--cloud-base) * var(--cloud-size) * 100vh) !important;
     opacity: var(--cloud-opacity);
+    --wind-start: 0;
     animation: cloud-drift var(--cloud-duration) linear infinite;
   }
+  .cloud-copy { --wind-start: -100vw; }
   .cloud-near .cloud-image {
     top: calc(50% - (var(--y) + 0.18) * 50%);
     opacity: calc(var(--cloud-opacity) * 0.9);
   }
   .cloud-near { z-index: 7 !important; }
-  .mountain-image { height: auto; }
+  .mountain-image { width: 100vw; height: auto; }
   @media (max-width: 768px) {
     .moon-image { left: 50%; top: 26%; width: 7rem; }
     .cloud-near .cloud-image { top: calc(50% - var(--y) * 50%); }
   }
   @keyframes cloud-drift {
-    from { margin-left: -180px; }
-    to { margin-left: 180px; }
+    from { margin-left: var(--wind-start, 0); }
+    to { margin-left: calc(var(--wind-start, 0) + 100vw); }
   }
   @media (max-width: 768px) {
     .cloud-image {
       --cloud-base: 0.035;
       width: calc(4 * var(--cloud-scale) * var(--cloud-base) * var(--cloud-size) * 100vh) !important;
     }
-    .mountain-image { width: 104vw; }
     .cloud-near { z-index: 7 !important; }
   }
   @media (prefers-reduced-motion: reduce) {
