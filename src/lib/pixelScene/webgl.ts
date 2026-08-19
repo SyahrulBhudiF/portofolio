@@ -559,9 +559,12 @@ export function createWebGLBackend(
         const minimumHeight = viewport.isMobile ? 0.43 : 0.6;
         const halfWidth = Math.max(1.04, (minimumHeight * assetAspect) / aspect);
         const halfHeight = (halfWidth * aspect) / assetAspect;
-        const yOffset =
-          Math.round(frame.scroll * layer.parallax * 2 * viewport.bufferHeight) /
-          viewport.bufferHeight;
+        // Keep the mobile mountain horizon fixed. Vertical parallax pushes the
+        // layer behind the next opaque section and leaves a clipped strip.
+        const yOffset = viewport.isMobile
+          ? 0
+          : Math.round(frame.scroll * layer.parallax * 2 * viewport.bufferHeight) /
+            viewport.bufferHeight;
         gl.bindTexture(gl.TEXTURE_2D, mountainTextures[i]);
         gl.uniform2f(spriteUniform.center, 0, -1 + halfHeight + yOffset);
         gl.uniform2f(spriteUniform.size, halfWidth, halfHeight);
@@ -578,7 +581,7 @@ export function createWebGLBackend(
 
     // Mountain 1's bottom edge rises from the viewport bottom by `scroll`.
     // Keep the fill empty at the hero start; it only appears in the exposed gap.
-    const fillTop = frame.scroll;
+    const fillTop = viewport.isMobile ? 0 : frame.scroll;
     gl.disable(gl.BLEND);
     // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
     gl.useProgram(fillProgram);

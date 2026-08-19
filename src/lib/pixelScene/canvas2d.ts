@@ -280,7 +280,9 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
           const width = Math.ceil(Math.max(w * 1.04, minimumHeight * assetAspect));
           const height = Math.ceil(width / assetAspect);
           const x = Math.round((w - width) * 0.5);
-          const y = Math.round(h - height - scroll * layer.parallax * h);
+          const y = Math.round(
+            h - height - (v.isMobile ? 0 : scroll * layer.parallax * h),
+          );
           ctx.drawImage(mountain, x, y, width, height);
           ctx.globalAlpha = 1;
         }
@@ -290,8 +292,8 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
       drawCloudRange(8, CLOUD_LAYERS.length);
       drawMountainRange(2, MOUNTAIN_LAYERS.length);
 
-      // Mountain 1 is the front reference: its bottom rises by scroll * h.
-      const fillHeight = Math.round(h * scroll);
+      // Keep the mobile mountain horizon visible while sections scroll over it.
+      const fillHeight = v.isMobile ? 0 : Math.round(h * scroll);
       ctx.fillStyle = P.mountainFill;
       ctx.fillRect(0, h - fillHeight, w, fillHeight);
     },

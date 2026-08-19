@@ -42,6 +42,7 @@ export function createPixelSceneRenderer(
   let running = false;
   let startTime = 0;
   let scrollViewportHeight = viewport.cssHeight;
+  let resizeTimer: number | null = null;
   const scrollRef = { current: readScroll(scrollViewportHeight) };
 
   function applyCanvasSize() {
@@ -83,13 +84,14 @@ export function createPixelSceneRenderer(
     if (!running) drawOnce(0);
   }
 
-  function onResize() {
+  function applyResize() {
+    resizeTimer = null;
     const nextViewport = computeViewport(canvas);
-    // Mobile browser chrome changes innerHeight while scrolling (url bar /
-    // bottom bar show·hide). Ignore height-only resizes entirely: the canvas
-    // tracks a stable CSS viewport height + object-fit:cover, and re-buffering
-    // would change the scene aspect and jitter the mountains.
-    if (viewport.isMobile && nextViewport.isMobile && nextViewport.cssWidth === viewport.cssWidth) {
+    if (
+      viewport.isMobile &&
+      nextViewport.isMobile &&
+      nextViewport.cssWidth === viewport.cssWidth
+    ) {
       return;
     }
     viewport = nextViewport;
@@ -98,6 +100,29 @@ export function createPixelSceneRenderer(
     applyCanvasSize();
     backend?.resize(viewport);
     if (!running) drawOnce(0);
+  }
+
+  function onResize() {
+    const nextViewport = computeViewport(canvas);
+    const widthChanged = nextViewport.cssWidth !== viewport.cssWidth;
+    const heightChanged = nextViewport.cssHeight !== viewport.cssHeight;
+    const largeChange =
+      Math.max(
+        Math.abs(nextViewport.cssWidth - viewport.cssWidth) / Math.max(viewport.cssWidth, 1),
+        Math.abs(nextViewport.cssHeight - viewport.cssHeight) / Math.max(viewport.cssHeight, 1),
+      ) > 0.2;
+
+    if (viewport.cssWidth === 0 || widthChanged || largeChange) {
+      applyResize();
+      return;
+    }
+
+    // A small height-only change is mobile browser chrome, not a real layout
+    // change. Debounce it so the render buffer/aspect remains stable.
+    if (heightChanged) {
+      if (resizeTimer !== null) window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(applyResize, 200);
+    }
   }
 
   function onVisibility() {
@@ -155,6 +180,7 @@ export function createPixelSceneRenderer(
     resize: onResize,
     destroy() {
       stop();
+      if (resizeTimer !== null) window.clearTimeout(resizeTimer);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       document.removeEventListener("visibilitychange", onVisibility);
