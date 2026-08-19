@@ -43,7 +43,8 @@ export function createPixelSceneRenderer(
   let startTime = 0;
   let scrollViewportHeight = viewport.cssHeight;
   let resizeTimer: number | null = null;
-  const scrollRef = { current: readScroll(scrollViewportHeight) };
+  const pendingScroll = { current: readScroll(scrollViewportHeight) };
+  const scrollRef = { current: pendingScroll.current };
 
   function applyCanvasSize() {
     canvas.width = viewport.bufferWidth;
@@ -73,15 +74,19 @@ export function createPixelSceneRenderer(
   function frame(now: number) {
     if (!running) return;
     if (startTime === 0) startTime = now;
+    scrollRef.current = pendingScroll.current;
     drawOnce((now - startTime) * 0.001);
     rafId = requestAnimationFrame(frame);
   }
 
   // --- listeners ---
   function onScroll() {
-    scrollRef.current = readScroll(scrollViewportHeight);
+    pendingScroll.current = readScroll(scrollViewportHeight);
     // In static modes a scroll still needs a redraw to reposition the scene.
-    if (!running) drawOnce(0);
+    if (!running) {
+      scrollRef.current = pendingScroll.current;
+      drawOnce(0);
+    }
   }
 
   function applyResize() {
@@ -96,7 +101,8 @@ export function createPixelSceneRenderer(
     }
     viewport = nextViewport;
     scrollViewportHeight = viewport.cssHeight;
-    scrollRef.current = readScroll(scrollViewportHeight);
+    pendingScroll.current = readScroll(scrollViewportHeight);
+    scrollRef.current = pendingScroll.current;
     applyCanvasSize();
     backend?.resize(viewport);
     if (!running) drawOnce(0);
@@ -121,7 +127,14 @@ export function createPixelSceneRenderer(
     // change. Debounce it so the render buffer/aspect remains stable.
     if (heightChanged) {
       if (resizeTimer !== null) window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(applyResize, 200);
+      resizeTimer = window.setTimeout(() => {
+        applyResize();
+        pendingScroll.current = readScroll(scrollViewportHeight);
+        if (!running) {
+          scrollRef.current = pendingScroll.current;
+          drawOnce(0);
+        }
+      }, 240);
     }
   }
 
