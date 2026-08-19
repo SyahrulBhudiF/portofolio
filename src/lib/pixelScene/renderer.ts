@@ -74,7 +74,10 @@ export function createPixelSceneRenderer(
   function frame(now: number) {
     if (!running) return;
     if (startTime === 0) startTime = now;
-    scrollRef.current = pendingScroll.current;
+    // Read the current scroll position on the render frame. Scroll events are
+    // throttled on mobile during fast flings, which makes an event-cached value
+    // visibly trail behind the page.
+    scrollRef.current = readScroll(scrollViewportHeight);
     drawOnce((now - startTime) * 0.001);
     rafId = requestAnimationFrame(frame);
   }

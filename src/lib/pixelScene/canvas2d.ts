@@ -280,7 +280,9 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
           const width = Math.ceil(Math.max(w * 1.04, minimumHeight * assetAspect));
           const height = Math.ceil(width / assetAspect);
           const x = Math.round((w - width) * 0.5);
-          const y = Math.round(h - height - scroll * layer.parallax * h);
+          const y = v.isMobile
+            ? h - height - scroll * layer.parallax * h
+            : Math.round(h - height - scroll * layer.parallax * h);
           ctx.drawImage(mountain, x, y, width, height);
           ctx.globalAlpha = 1;
         }
