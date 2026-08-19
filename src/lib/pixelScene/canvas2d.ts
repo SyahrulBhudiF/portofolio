@@ -280,8 +280,7 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
           const width = Math.ceil(Math.max(w * 1.04, minimumHeight * assetAspect));
           const height = Math.ceil(width / assetAspect);
           const x = Math.round((w - width) * 0.5);
-          const parallaxDistance = v.isMobile ? 0.175 : 1;
-          const y = Math.round(h - height - scroll * layer.parallax * parallaxDistance * h);
+          const y = Math.round(h - height - scroll * layer.parallax * h);
           ctx.drawImage(mountain, x, y, width, height);
           ctx.globalAlpha = 1;
         }
@@ -292,9 +291,7 @@ export function createCanvas2DBackend(canvas: HTMLCanvasElement): SceneBackend |
       drawMountainRange(2, MOUNTAIN_LAYERS.length);
 
       // Fill the gap exposed below the parallaxing mountain.
-      const fillHeight = v.isMobile
-        ? Math.round(h * scroll * 0.175)
-        : Math.round(h * scroll);
+      const fillHeight = Math.round(h * scroll);
       ctx.fillStyle = P.mountainFill;
       ctx.fillRect(0, h - fillHeight, w, fillHeight);
     },
