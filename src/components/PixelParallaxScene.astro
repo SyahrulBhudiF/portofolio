@@ -41,7 +41,7 @@ const mountains = [
 ];
 ---
 
-<div class="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#0b070f]" aria-hidden="true">
+<div class="absolute left-0 top-0 z-0 h-screen w-full overflow-hidden pointer-events-none bg-[#0b070f]" aria-hidden="true" data-pixel-scene>
   <div class="absolute inset-0 bg-[linear-gradient(180deg,#0b070f_0%,#25162e_100%)]"></div>
   <div class="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-90" style={`background-image:url(${stars.src})`}></div>
   <div class="stars-secondary absolute inset-0" style={`background-image:url(${stars2.src})`}></div>
@@ -53,7 +53,7 @@ const mountains = [
   {clouds.map((cloud, index) => (
     <div
       class={`absolute inset-0 overflow-visible will-change-transform ${index >= 8 ? "cloud-near" : ""}`}
-      style={`z-index:${index < 8 ? 1 : 10};--x:${cloud.x};--y:${cloud.y};--cloud-scale:${cloud.scale};--parallax:${cloud.parallax};--cloud-opacity:${cloud.opacity};--cloud-duration:${cloud.duration}s`}
+      style={`z-index:${index < 8 ? 1 : 10};--x:${cloud.x};--y:${cloud.y};--cloud-scale:${cloud.scale};--parallax:${cloud.parallax};--cloud-opacity:${cloud.opacity};--cloud-duration:${Math.max(18, cloud.duration * 0.15)}s`}
       data-speed={cloud.parallax}
     >
       <img class="cloud-image absolute left-[calc(50%+var(--x)*50%)] top-[calc(50%-var(--y)*50%)] w-[calc(4*var(--cloud-scale)*var(--cloud-base)*100vh)] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={cloud.image.src} width={cloud.image.width} height={cloud.image.height} alt="" />
@@ -68,7 +68,7 @@ const mountains = [
 </div>
 
 <script>
-  const scene = document.querySelector<HTMLElement>("[aria-hidden='true'].fixed");
+  const scene = document.querySelector<HTMLElement>("[aria-hidden='true'][data-pixel-scene]");
   const layers = scene?.querySelectorAll<HTMLElement>("[data-speed]");
   let ticking = false;
 
@@ -102,17 +102,20 @@ const mountains = [
     --cloud-base: 0.1;
     width: calc(4 * var(--cloud-scale) * var(--cloud-base) * 100vh) !important;
     opacity: var(--cloud-opacity);
-    transform: translate3d(0, 18vh, 0);
     animation: cloud-drift var(--cloud-duration) ease-in-out infinite alternate;
   }
-  .cloud-near .cloud-image { opacity: calc(var(--cloud-opacity) * 0.9); }
+  .cloud-near .cloud-image {
+    top: calc(50% - (var(--y) + 0.18) * 50%);
+    opacity: calc(var(--cloud-opacity) * 0.9);
+  }
   .mountain-image { height: auto; }
   @media (max-width: 768px) {
     .moon-image { left: 50%; top: 26%; width: 7rem; }
+    .cloud-near .cloud-image { top: calc(50% - var(--y) * 50%); }
   }
   @keyframes cloud-drift {
-    from { margin-left: 0; margin-top: 0; }
-    to { margin-left: 18px; margin-top: 7px; }
+    from { margin-left: -40px; margin-top: 0; }
+    to { margin-left: 40px; margin-top: 7px; }
   }
   @media (max-width: 768px) {
     .cloud-image {
