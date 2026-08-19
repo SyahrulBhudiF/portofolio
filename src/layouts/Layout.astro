@@ -3,7 +3,7 @@ import "@/styles/globals.css";
 import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import Navbar from "../components/Navbar.astro";
-import PixelParallaxScene from "../components/PixelParallaxScene";
+import PixelParallaxScene from "../components/PixelParallaxScene.astro";
 ---
 
 <!DOCTYPE html>
@@ -25,7 +25,7 @@ import PixelParallaxScene from "../components/PixelParallaxScene";
 </head>
 <body class="bg-black overflow-x-hidden">
 <a href="#home" class="skip-link">Skip to main content</a>
-<PixelParallaxScene client:load/>
+<PixelParallaxScene />
 <slot/>
 <Navbar/>
 <SpeedInsights/>

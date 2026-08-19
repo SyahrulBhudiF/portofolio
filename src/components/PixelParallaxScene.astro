@@ -1,0 +1,76 @@
+---
+import awan1 from "@/assets/pixelScene/awan1.png";
+import awan2 from "@/assets/pixelScene/awan2.png";
+import awan3 from "@/assets/pixelScene/awan3.png";
+import awan4 from "@/assets/pixelScene/awan4.png";
+import awan5 from "@/assets/pixelScene/awan5.png";
+import awan6 from "@/assets/pixelScene/awan6.png";
+import awan7 from "@/assets/pixelScene/awan7.png";
+import awan8 from "@/assets/pixelScene/awan8.png";
+import awan9 from "@/assets/pixelScene/awan9.png";
+import awan10 from "@/assets/pixelScene/awan10.png";
+import awan11 from "@/assets/pixelScene/awan11.png";
+import awan12 from "@/assets/pixelScene/awan12.png";
+import moon from "@/assets/pixelScene/moon.png";
+import mount1 from "@/assets/pixelScene/mount1.png";
+import mount2 from "@/assets/pixelScene/mount2.png";
+import mount3 from "@/assets/pixelScene/mount3.png";
+import mount4 from "@/assets/pixelScene/mount4.png";
+import stars from "@/assets/pixelScene/stars.svg";
+
+const clouds = [awan3, awan5, awan7, awan8, awan1, awan2, awan4, awan6, awan9, awan10, awan11, awan12];
+const cloudSpeeds = [0.05, 0.06, 0.05, 0.07, 0.12, 0.13, 0.14, 0.15, 0.24, 0.26, 0.25, 0.28];
+const mountains = [mount4, mount3, mount2, mount1];
+const mountainSpeeds = [0.7, 0.8, 0.9, 1];
+---
+
+<div class="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#0b070f]" aria-hidden="true">
+  <div class="absolute inset-0 overflow-hidden bg-[linear-gradient(180deg,#0b070f_0%,#25162e_100%)]"></div>
+  <div
+    class="absolute inset-0 overflow-hidden bg-center bg-cover bg-no-repeat opacity-90"
+    style={`background-image: url(${stars.src})`}
+  ></div>
+  <div class="absolute inset-0 z-[2] overflow-hidden will-change-transform" data-speed="0.18">
+    <img class="absolute bottom-[64%] left-1/2 w-[clamp(48px,12vw,96px)] max-w-none -translate-x-1/2 image-rendering-crisp" src={moon.src} width={moon.width} height={moon.height} alt="" />
+  </div>
+  {clouds.map((cloud, index) => (
+    <div class:list={[
+      "absolute inset-0 z-[3] overflow-hidden will-change-transform",
+      index >= 4 && index <= 7 ? "opacity-[.72]" : "opacity-[.65]",
+    ]} data-speed={cloudSpeeds[index]}>
+      <img class="absolute bottom-0 left-1/2 w-[max(100vw,1280px)] max-w-none -translate-x-1/2 image-rendering-crisp" src={cloud.src} width={cloud.width} height={cloud.height} alt="" />
+    </div>
+  ))}
+  {mountains.map((mountain, index) => (
+    <div class="absolute inset-0 z-[5] overflow-hidden will-change-transform" style={`z-index: ${5 + index}`} data-speed={mountainSpeeds[index]}>
+      <img class="absolute bottom-0 left-1/2 w-[max(100vw,1600px)] max-w-none -translate-x-1/2 image-rendering-crisp" src={mountain.src} width={mountain.width} height={mountain.height} alt="" />
+    </div>
+  ))}
+</div>
+
+<script>
+  const scene = document.querySelector<HTMLElement>(".pixel-parallax-scene");
+  const layers = scene?.querySelectorAll<HTMLElement>("[data-speed]");
+  let ticking = false;
+
+  function updateParallax() {
+    const scrollY = window.scrollY;
+    layers?.forEach((layer) => {
+      layer.style.transform = `translate3d(0, ${-(scrollY * Number(layer.dataset.speed))}px, 0)`;
+    });
+    ticking = false;
+  }
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateParallax);
+  }
+
+  updateParallax();
+  window.addEventListener("scroll", onScroll, { passive: true });
+</script>
+
+<style>
+  .image-rendering-crisp { image-rendering: crisp-edges; }
+</style>
