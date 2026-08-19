@@ -120,7 +120,11 @@ const mountains = [
     opacity: calc(var(--cloud-opacity) * 0.9);
   }
   .cloud-near { z-index: 7 !important; }
-  .mountain-image { width: 100vw; height: auto; }
+  .mountain-image {
+    width: 100vw;
+    height: auto;
+    image-rendering: pixelated;
+  }
   @media (max-width: 768px) {
     .moon-image { left: 78%; top: 26%; width: 7rem; }
     .cloud-near .cloud-image { top: calc(50% - var(--y) * 50%); }
