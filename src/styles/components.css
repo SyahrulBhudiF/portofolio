@@ -11,12 +11,8 @@
 
 .pixel-parallax-wrapper {
   position: fixed;
-  inset-inline: 0;
-  bottom: 0;
-  top: auto;
+  inset: 0;
   z-index: 0;
-  height: 100vh; /* fallback */
-  height: 100svh; /* stable size; bottom-anchor keeps the ground fixed while chrome changes */
   overflow: hidden;
   pointer-events: none;
 }
