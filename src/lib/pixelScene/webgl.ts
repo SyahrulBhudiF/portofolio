@@ -280,22 +280,6 @@ void main() {
 }
 `;
 
-const displayFragment = `#version 300 es
-precision highp float;
-
-uniform sampler2D u_texture;
-uniform float u_yOffset;
-uniform vec2 u_screenSize;
-in vec2 v_uv;
-out vec4 outColor;
-
-void main() {
-  vec2 uv = v_uv;
-  uv.y += u_yOffset / u_screenSize.y;
-  outColor = texture(u_texture, uv);
-}
-`;
-
 function compile(gl: WebGL2RenderingContext, type: number, src: string): WebGLShader | null {
   const shader = gl.createShader(type);
   if (!shader) return null;
@@ -348,23 +332,6 @@ function createTexture(
   return texture;
 }
 
-function createFramebuffer(
-  gl: WebGL2RenderingContext,
-  texture: WebGLTexture,
-): WebGLFramebuffer | null {
-  const framebuffer = gl.createFramebuffer();
-  if (!framebuffer) return null;
-  gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
-  const ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
-  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-  if (!ok) {
-    gl.deleteFramebuffer(framebuffer);
-    return null;
-  }
-  return framebuffer;
-}
-
 export function createWebGLBackend(
   canvas: HTMLCanvasElement,
   opts: { isMobile: boolean; reducedMotion: boolean },
@@ -382,9 +349,8 @@ export function createWebGLBackend(
 
   const backgroundProgram = createProgram(gl, quadVertex, backgroundFragment);
   const fillProgram = createProgram(gl, quadVertex, fillFragment);
-  const displayProgram = createProgram(gl, quadVertex, displayFragment);
   const spriteProgram = createProgram(gl, spriteVertex, spriteFragment);
-  if (!backgroundProgram || !fillProgram || !displayProgram || !spriteProgram) return null;
+  if (!backgroundProgram || !fillProgram || !spriteProgram) return null;
 
   const buffer = gl.createBuffer();
   if (!buffer) return null;
@@ -398,7 +364,6 @@ export function createWebGLBackend(
   const attrib = {
     background: gl.getAttribLocation(backgroundProgram, "a_position"),
     fill: gl.getAttribLocation(fillProgram, "a_position"),
-    display: gl.getAttribLocation(displayProgram, "a_position"),
     sprite: gl.getAttribLocation(spriteProgram, "a_position"),
   };
 
@@ -414,12 +379,6 @@ export function createWebGLBackend(
     fillTop: gl.getUniformLocation(fillProgram, "u_fillTop"),
   };
 
-  const displayUniform = {
-    texture: gl.getUniformLocation(displayProgram, "u_texture"),
-    yOffset: gl.getUniformLocation(displayProgram, "u_yOffset"),
-    screenSize: gl.getUniformLocation(displayProgram, "u_screenSize"),
-  };
-
   const spriteUniform = {
     texture: gl.getUniformLocation(spriteProgram, "u_texture"),
     center: gl.getUniformLocation(spriteProgram, "u_center"),
@@ -429,8 +388,6 @@ export function createWebGLBackend(
 
   let viewport: SceneViewport | null = null;
   let lastFrame: SceneFrame | null = null;
-  let backgroundTexture: WebGLTexture | null = null;
-  let backgroundFramebuffer: WebGLFramebuffer | null = null;
   const cloudTextures = CLOUD_LAYERS.map(() => createTexture(gl, 1, 1));
   const cloudReady = CLOUD_LAYERS.map(() => false);
   const mountainTextures = MOUNTAIN_LAYERS.map(() => createTexture(gl, 1, 1));
@@ -440,48 +397,14 @@ export function createWebGLBackend(
   let alive = true;
   let moonReady = false;
 
-  function bindQuad(attribLocation: number) {
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.enableVertexAttribArray(attribLocation);
-    gl.vertexAttribPointer(attribLocation, 2, gl.FLOAT, false, 0, 0);
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  for (const location of Object.values(attrib)) {
+    gl.enableVertexAttribArray(location);
+    gl.vertexAttribPointer(location, 2, gl.FLOAT, false, 0, 0);
   }
 
-  function drawQuad(attribLocation: number) {
-    bindQuad(attribLocation);
+  function drawQuad() {
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-  }
-
-  function destroyTextures() {
-    if (backgroundTexture) gl.deleteTexture(backgroundTexture);
-    if (backgroundFramebuffer) gl.deleteFramebuffer(backgroundFramebuffer);
-    backgroundTexture = null;
-    backgroundFramebuffer = null;
-  }
-
-  function rebuildTextures(nextViewport: SceneViewport) {
-    destroyTextures();
-    backgroundTexture = createTexture(gl, nextViewport.bufferWidth, nextViewport.bufferHeight);
-    if (!backgroundTexture) return false;
-    backgroundFramebuffer = createFramebuffer(gl, backgroundTexture);
-    if (!backgroundFramebuffer) return false;
-
-    return true;
-  }
-
-  function renderBackground(frame: SceneFrame) {
-    if (!backgroundFramebuffer || !viewport) return;
-    gl.bindFramebuffer(gl.FRAMEBUFFER, backgroundFramebuffer);
-    gl.viewport(0, 0, viewport.bufferWidth, viewport.bufferHeight);
-    gl.disable(gl.BLEND);
-    // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
-    gl.useProgram(backgroundProgram);
-    gl.uniform2f(backgroundUniform.resolution, viewport.bufferWidth, viewport.bufferHeight);
-    gl.uniform1f(backgroundUniform.time, frame.time);
-    gl.uniform1f(backgroundUniform.scroll, frame.scroll);
-    gl.uniform1f(backgroundUniform.pixelGrid, viewport.isMobile ? 90.0 : 130.0);
-    gl.uniform1f(backgroundUniform.motion, opts.reducedMotion ? 0.0 : 1.0);
-    drawQuad(attrib.background);
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   }
 
   function drawMoon(frame: SceneFrame) {
@@ -499,25 +422,26 @@ export function createWebGLBackend(
     gl.uniform2f(spriteUniform.center, 0.56, (y + frame.scroll * 0.18) * 2 - 1);
     gl.uniform2f(spriteUniform.size, size / aspect, size);
     gl.uniform1f(spriteUniform.opacity, opacity);
-    drawQuad(attrib.sprite);
+    drawQuad();
   }
 
   function composite(frame: SceneFrame) {
-    if (!viewport || !backgroundTexture) return;
+    if (!viewport) return;
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, viewport.bufferWidth, viewport.bufferHeight);
     gl.clearColor(0.012, 0.016, 0.051, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
-    gl.useProgram(displayProgram);
-    gl.uniform2f(displayUniform.screenSize, viewport.bufferWidth, viewport.bufferHeight);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.uniform1i(displayUniform.texture, 0);
-
     gl.disable(gl.BLEND);
-    gl.bindTexture(gl.TEXTURE_2D, backgroundTexture);
-    gl.uniform1f(displayUniform.yOffset, 0);
-    drawQuad(attrib.display);
+    // Render the procedural background directly; avoid a framebuffer and
+    // fullscreen texture composite on every frame.
+    // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
+    gl.useProgram(backgroundProgram);
+    gl.uniform2f(backgroundUniform.resolution, viewport.bufferWidth, viewport.bufferHeight);
+    gl.uniform1f(backgroundUniform.time, frame.time);
+    gl.uniform1f(backgroundUniform.scroll, frame.scroll);
+    gl.uniform1f(backgroundUniform.pixelGrid, viewport.isMobile ? 90.0 : 130.0);
+    gl.uniform1f(backgroundUniform.motion, opts.reducedMotion ? 0.0 : 1.0);
+    drawQuad();
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -544,7 +468,7 @@ export function createWebGLBackend(
         gl.uniform2f(spriteUniform.center, x, y);
         gl.uniform2f(spriteUniform.size, halfWidth, halfHeight);
         gl.uniform1f(spriteUniform.opacity, layer.opacity);
-        drawQuad(attrib.sprite);
+        drawQuad();
       }
     };
     const drawMountainRange = (start: number, end: number) => {
@@ -567,7 +491,7 @@ export function createWebGLBackend(
         gl.uniform2f(spriteUniform.center, 0, -1 + halfHeight + yOffset);
         gl.uniform2f(spriteUniform.size, halfWidth, halfHeight);
         gl.uniform1f(spriteUniform.opacity, 1);
-        drawQuad(attrib.sprite);
+        drawQuad();
       }
     };
 
@@ -583,7 +507,7 @@ export function createWebGLBackend(
     // biome-ignore lint/correctness/useHookAtTopLevel: WebGL API, not a React hook.
     gl.useProgram(fillProgram);
     gl.uniform1f(fillUniform.fillTop, fillTop);
-    drawQuad(attrib.fill);
+    drawQuad();
   }
 
   for (let i = 0; i < CLOUD_LAYERS.length; i += 1) {
@@ -632,12 +556,10 @@ export function createWebGLBackend(
   return {
     resize(nextViewport) {
       viewport = nextViewport;
-      rebuildTextures(nextViewport);
     },
     draw(frame) {
       if (!viewport) return;
       lastFrame = frame;
-      renderBackground(frame);
       composite(frame);
     },
     destroy() {
@@ -651,7 +573,6 @@ export function createWebGLBackend(
       if (moonTexture) gl.deleteTexture(moonTexture);
       gl.deleteBuffer(buffer);
       gl.deleteProgram(backgroundProgram);
-      gl.deleteProgram(displayProgram);
       gl.deleteProgram(spriteProgram);
       const lose = gl.getExtension("WEBGL_lose_context");
       if (lose) lose.loseContext();
