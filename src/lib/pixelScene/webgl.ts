@@ -559,9 +559,7 @@ export function createWebGLBackend(
         const minimumHeight = viewport.isMobile ? 0.43 : 0.6;
         const halfWidth = Math.max(1.04, (minimumHeight * assetAspect) / aspect);
         const halfHeight = (halfWidth * aspect) / assetAspect;
-        const yOffset =
-          Math.round(frame.scroll * layer.parallax * 2 * viewport.bufferHeight) /
-          viewport.bufferHeight;
+        const yOffset = frame.scroll * layer.parallax * 2;
         gl.bindTexture(gl.TEXTURE_2D, mountainTextures[i]);
         gl.uniform2f(spriteUniform.center, 0, -1 + halfHeight + yOffset);
         gl.uniform2f(spriteUniform.size, halfWidth, halfHeight);
