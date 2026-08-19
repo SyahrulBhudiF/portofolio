@@ -17,11 +17,12 @@ import mount2 from "@/assets/pixelScene/mount2.png";
 import mount3 from "@/assets/pixelScene/mount3.png";
 import mount4 from "@/assets/pixelScene/mount4.png";
 import stars from "@/assets/pixelScene/stars.svg";
+import stars2 from "@/assets/pixelScene/stars2.svg";
 
 const clouds = [
   { image: awan3, x: -0.9, y: 0.77, scale: 0.58, parallax: 0.018, opacity: 0.56, duration: 150 },
   { image: awan5, x: 0.2, y: 0.63, scale: 0.68, parallax: 0.022, opacity: 0.56, duration: 170 },
-  { image: awan7, x: 1.05, y: 0.8, scale: 0.52, parallax: -0.018, opacity: 0.52, duration: 160 },
+  { image: awan7, x: 1.05, y: 0.8, scale: 0.52, parallax: 0.018, opacity: 0.52, duration: 160 },
   { image: awan8, x: -0.15, y: 0.49, scale: 0.62, parallax: 0.025, opacity: 0.58, duration: 140 },
   { image: awan1, x: -1.08, y: 0.32, scale: 0.82, parallax: 0.043, opacity: 0.72, duration: 120 },
   { image: awan2, x: 1.12, y: 0.4, scale: 0.76, parallax: 0.047, opacity: 0.7, duration: 115 },
@@ -43,15 +44,16 @@ const mountains = [
 <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#0b070f]" aria-hidden="true">
   <div class="absolute inset-0 bg-[linear-gradient(180deg,#0b070f_0%,#25162e_100%)]"></div>
   <div class="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-90" style={`background-image:url(${stars.src})`}></div>
+  <div class="stars-secondary absolute inset-0" style={`background-image:url(${stars2.src})`}></div>
 
   <div class="absolute inset-0 z-[2] will-change-transform" data-speed="0.18">
-    <img class="absolute left-1/2 top-[26%] w-[clamp(48px,12vw,96px)] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={moon.src} width={moon.width} height={moon.height} alt="" />
+    <img class="moon-image absolute left-[78%] top-[25%] w-[15vh] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={moon.src} width={moon.width} height={moon.height} alt="" />
   </div>
 
-  {clouds.map((cloud) => (
+  {clouds.map((cloud, index) => (
     <div
-      class="absolute inset-0 z-[3] overflow-visible will-change-transform"
-      style={`--x:${cloud.x};--y:${cloud.y};--cloud-scale:${cloud.scale};--parallax:${cloud.parallax};--cloud-opacity:${cloud.opacity};--cloud-duration:${cloud.duration}s`}
+      class={`absolute inset-0 overflow-visible will-change-transform ${index >= 8 ? "cloud-near" : ""}`}
+      style={`z-index:${index < 8 ? 1 : 10};--x:${cloud.x};--y:${cloud.y};--cloud-scale:${cloud.scale};--parallax:${cloud.parallax};--cloud-opacity:${cloud.opacity};--cloud-duration:${cloud.duration}s`}
       data-speed={cloud.parallax}
     >
       <img class="cloud-image absolute left-[calc(50%+var(--x)*50%)] top-[calc(50%-var(--y)*50%)] w-[calc(4*var(--cloud-scale)*var(--cloud-base)*100vh)] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={cloud.image.src} width={cloud.image.width} height={cloud.image.height} alt="" />
@@ -90,20 +92,34 @@ const mountains = [
 
 <style>
   .image-rendering-crisp { image-rendering: crisp-edges; }
+  .stars-secondary {
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.72;
+  }
   .cloud-image {
-    --cloud-base: clamp(0.09, 6.5vw / 100, 0.13);
-    width: calc(2 * var(--cloud-scale) * var(--cloud-base) * 100vh);
+    --cloud-base: 0.1;
+    width: calc(4 * var(--cloud-scale) * var(--cloud-base) * 100vh) !important;
     opacity: var(--cloud-opacity);
+    transform: translate3d(0, 18vh, 0);
     animation: cloud-drift var(--cloud-duration) ease-in-out infinite alternate;
   }
+  .cloud-near .cloud-image { opacity: calc(var(--cloud-opacity) * 0.9); }
   .mountain-image { height: auto; }
+  @media (max-width: 768px) {
+    .moon-image { left: 50%; top: 26%; width: 7rem; }
+  }
   @keyframes cloud-drift {
     from { margin-left: 0; margin-top: 0; }
     to { margin-left: 18px; margin-top: 7px; }
   }
   @media (max-width: 768px) {
-    .cloud-image { --cloud-base: 0.06; }
-    .mountain-image { width: 208vw; }
+    .cloud-image {
+      --cloud-base: 0.06;
+      width: calc(4 * var(--cloud-scale) * var(--cloud-base) * 100vh) !important;
+    }
+    .mountain-image { width: 104vw; }
   }
   @media (prefers-reduced-motion: reduce) {
     .cloud-image { animation: none; }
