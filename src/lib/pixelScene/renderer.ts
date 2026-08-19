@@ -6,9 +6,12 @@ const MOBILE_MAX_WIDTH = 768;
 const DESKTOP_BUFFER_W = 480;
 const MOBILE_BUFFER_W = 320;
 
-function computeViewport(): SceneViewport {
-  const cssWidth = window.innerWidth;
-  const cssHeight = window.innerHeight;
+function computeViewport(canvas: HTMLCanvasElement): SceneViewport {
+  // Use the canvas's own CSS box rather than innerWidth/innerHeight. The
+  // canvas uses a stable svh box, so browser chrome changes do not alter the
+  // render aspect or scale the scene.
+  const cssWidth = canvas.clientWidth || window.innerWidth;
+  const cssHeight = canvas.clientHeight || window.innerHeight;
   const isMobile = cssWidth <= MOBILE_MAX_WIDTH;
   const targetWidth = isMobile ? MOBILE_BUFFER_W : DESKTOP_BUFFER_W;
   const aspect = cssHeight / cssWidth;
@@ -34,7 +37,7 @@ export function createPixelSceneRenderer(
 ): PixelSceneRenderer {
   let backend: SceneBackend | null = null;
   let usingFallback = false;
-  let viewport = computeViewport();
+  let viewport = computeViewport(canvas);
   let rafId: number | null = null;
   let running = false;
   let startTime = 0;
@@ -81,10 +84,10 @@ export function createPixelSceneRenderer(
   }
 
   function onResize() {
-    const nextViewport = computeViewport();
+    const nextViewport = computeViewport(canvas);
     // Mobile browser chrome changes innerHeight while scrolling (url bar /
     // bottom bar show·hide). Ignore height-only resizes entirely: the canvas
-    // tracks the viewport via CSS 100dvh + object-fit:cover, and re-buffering
+    // tracks a stable CSS viewport height + object-fit:cover, and re-buffering
     // would change the scene aspect and jitter the mountains.
     if (viewport.isMobile && nextViewport.isMobile && nextViewport.cssWidth === viewport.cssWidth) {
       return;
