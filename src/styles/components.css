@@ -55,6 +55,7 @@
    ========================================================================== */
 
 .retro-tech-block {
+  font-family: "Silkscreen", monospace;
   --pixel-shape: polygon(
     6% 0,
     94% 0,
