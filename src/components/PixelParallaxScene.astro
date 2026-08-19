@@ -47,7 +47,7 @@ const mountains = [
   <div class="stars-secondary absolute inset-0" style={`background-image:url(${stars2.src})`}></div>
 
   <div class="absolute inset-0 z-[2] will-change-transform" data-speed="0.18" data-layer="moon">
-    <img class="moon-image absolute left-[78%] top-[25%] w-[15vh] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={moon.src} width={moon.width} height={moon.height} alt="" />
+    <img class="moon-image absolute left-[78%] top-[25%] w-[20vh] max-w-none -translate-x-1/2 -translate-y-1/2 image-rendering-crisp" src={moon.src} width={moon.width} height={moon.height} alt="" />
   </div>
 
   {clouds.map((cloud, index) => (
@@ -78,7 +78,7 @@ const mountains = [
     layers?.forEach((layer) => {
       const speed = Number(layer.dataset.speed);
       const distance = layer.dataset.layer === "mountain"
-        ? -(window.scrollY * speed)
+        ? -(window.scrollY * speed * (window.innerWidth <= 768 ? 0.45 : 1))
         : layer.dataset.layer === "near"
           ? window.scrollY * 0.3
           : layer.dataset.layer === "moon"
@@ -122,7 +122,7 @@ const mountains = [
   .cloud-near { z-index: 7 !important; }
   .mountain-image { width: 100vw; height: auto; }
   @media (max-width: 768px) {
-    .moon-image { left: 50%; top: 26%; width: 7rem; }
+    .moon-image { left: 78%; top: 26%; width: 7rem; }
     .cloud-near .cloud-image { top: calc(50% - var(--y) * 50%); }
   }
   @keyframes cloud-drift {
@@ -135,10 +135,11 @@ const mountains = [
   }
   @media (max-width: 768px) {
     .cloud-image {
-      --cloud-base: 0.035;
+      --cloud-base: 0.05;
       width: calc(4 * var(--cloud-scale) * var(--cloud-base) * var(--cloud-size) * 100vh) !important;
     }
-    .cloud-near { z-index: 7 !important; }
+    .cloud-near { z-index: 7 !important; --cloud-size: 0.85; }
+    .mountain-image { width: 160vw; }
   }
   @media (prefers-reduced-motion: reduce) {
     .cloud-image { animation: none; }
