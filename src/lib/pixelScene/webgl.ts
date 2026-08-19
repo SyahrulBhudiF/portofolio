@@ -566,7 +566,6 @@ export function createWebGLBackend(
       alive = false;
       for (const image of images) image.onload = null;
       lastFrame = null;
-      destroyTextures();
       for (const texture of [...cloudTextures, ...mountainTextures]) {
         if (texture) gl.deleteTexture(texture);
       }

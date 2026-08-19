@@ -5,6 +5,7 @@ import { createWebGLBackend } from "./webgl";
 const MOBILE_MAX_WIDTH = 768;
 const DESKTOP_BUFFER_W = 480;
 const MOBILE_BUFFER_W = 320;
+const FRAME_INTERVAL = 1000 / 30;
 
 function computeViewport(canvas: HTMLCanvasElement): SceneViewport {
   // Use the canvas's own CSS box rather than innerWidth/innerHeight. The
@@ -71,8 +72,15 @@ export function createPixelSceneRenderer(
     backend.draw({ viewport, time: timeSeconds, scroll: scrollRef.current });
   }
 
+  let lastFrameAt = 0;
+
   function frame(now: number) {
     if (!running) return;
+    if (now - lastFrameAt < FRAME_INTERVAL) {
+      rafId = requestAnimationFrame(frame);
+      return;
+    }
+    lastFrameAt = now;
     if (startTime === 0) startTime = now;
     // Read the current scroll position on the render frame. Scroll events are
     // throttled on mobile during fast flings, which makes an event-cached value
