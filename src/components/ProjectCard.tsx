@@ -12,7 +12,7 @@ import TechStackItem from "./ui/TechStackItem";
 const VISIBLE_STACK = 6;
 
 const linkClassName =
-  "pixel-tag flex w-fit items-center gap-1.5 px-2.5 py-1 text-xs text-white outline-none transition-transform duration-200 ease-out hover:-translate-y-0.5 focus-visible:-translate-y-0.5";
+  "pixel-tag relative z-[2] flex w-fit items-center gap-1.5 px-2.5 py-1 text-xs text-white outline-none transition-transform duration-200 ease-out hover:-translate-y-0.5 focus-visible:-translate-y-0.5";
 
 const GithubLink: React.FC<{ url: string; text: string }> = ({ url, text }) => (
   <a href={url} target="_blank" rel="noopener noreferrer" className={linkClassName}>
@@ -31,13 +31,16 @@ const DemoLink: React.FC<{ url: string }> = ({ url }) => (
 interface ProjectCardProps {
   project: ProjectMeta;
   href?: string;
+  slug: string;
   stars: number;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, stars }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, slug, stars }) => {
   const ref = useRef(null);
   const isMobile = useIsMobile();
-  const [imageExists, setImageExists] = useState<boolean | null>(null);
+  // `hasImage: false` is authoritative, so a project that declares it has no
+  // cover skips the probe instead of firing a request that 404s.
+  const [imageExists, setImageExists] = useState<boolean | null>(project.hasImage ? null : false);
 
   const inView = useInView(ref, {
     amount: isMobile ? 0.15 : 0.2,
@@ -48,7 +51,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, stars }) => {
   const cardVariants = useMemo(() => createCardVariants(isMobile), [isMobile]);
 
   useEffect(() => {
-    if (!href) {
+    if (!href || !project.hasImage) {
       setImageExists(false);
       return;
     }
@@ -57,7 +60,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, stars }) => {
     img.onload = () => setImageExists(true);
     img.onerror = () => setImageExists(false);
     img.src = href;
-  }, [href]);
+  }, [href, project.hasImage]);
 
   const shown = project.stack.slice(0, VISIBLE_STACK);
   const hidden = project.stack.slice(VISIBLE_STACK);
@@ -83,7 +86,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, stars }) => {
             loading="lazy"
           />
         ) : (
-          <div className="pixel-cover-fallback flex aspect-[16/9] items-center justify-center gap-6">
+          // Faint pixel grid so a coverless card still reads as a slot rather
+          // than a hole; the frame keeps the row's rhythm either way.
+          <div className="flex aspect-[16/9] items-center justify-center gap-6 bg-[#2a1236] bg-[linear-gradient(rgba(193,128,223,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(193,128,223,0.1)_1px,transparent_1px)] bg-size-[14px_14px]">
             {imageExists === false &&
               project.stack
                 .slice(0, 3)
@@ -100,7 +105,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, stars }) => {
         )}
       </div>
 
-      <h3 className="text-retro-card mt-3 text-2xl leading-tight">{project.title}</h3>
+      {/* The title's ::after covers the whole card, so anywhere that is not
+          another link opens the detail page. */}
+      <h3 className="text-retro-card mt-3 text-2xl leading-tight">
+        <a
+          href={`/projects/${slug}`}
+          className="outline-none after:absolute after:inset-0 after:z-[1] after:content-[''] hover:text-purple-100 focus-visible:text-purple-100"
+        >
+          {project.title}
+        </a>
+      </h3>
 
       {/* Type and role drop to dim mono so the title and cover carry the card
           instead of competing with three lines of purple body text. */}
@@ -113,19 +127,28 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, stars }) => {
         {project.description}
       </p>
 
-      <div className="mt-4 flex flex-wrap items-center gap-1.5">
+      {/* Equal-width tracks so the blocks line up in columns instead of
+          wrapping ragged; the gap carries each block's 15px shadow, which is
+          why the chip's own margin is turned off. */}
+      <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(8.5rem,1fr))] gap-x-5 gap-y-4">
         {shown.map((stack) => (
-          <TechStackItem key={stack.name} tech={stack.name} url={stack.url} variant="flat" />
+          <TechStackItem
+            key={stack.name}
+            tech={stack.name}
+            url={stack.url}
+            size="small"
+            className="relative z-[2] m-0 w-full justify-start"
+          />
         ))}
-        {hidden.length > 0 && (
-          <span
-            className="font-mono text-[0.625rem] tracking-wide text-purple-300/70"
-            title={hidden.map((stack) => stack.name).join(", ")}
-          >
-            +{hidden.length} more
-          </span>
-        )}
       </div>
+      {hidden.length > 0 && (
+        <p
+          className="mt-3 font-mono text-[0.625rem] tracking-wide text-purple-300/70"
+          title={hidden.map((stack) => stack.name).join(", ")}
+        >
+          +{hidden.length} more
+        </p>
+      )}
 
       {/* mt-auto pins the footer to the card floor, so a row of cards lines its
           links and stars up even when the copy above them differs in length. */}
@@ -141,7 +164,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, stars }) => {
                     href={contributor.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-purple-200 outline-none hover:text-white focus-visible:text-white"
+                    className="relative z-[2] text-purple-200 outline-none hover:text-white focus-visible:text-white"
                   >
                     {contributor.name}
                   </a>

@@ -7,7 +7,9 @@ interface Props {
 
 export default function NavbarItem({ href, label }: Props) {
   const [isActive, setIsActive] = useState(false);
-  const sectionId = href.replace("#", "");
+  // href is "/#projects", so split rather than strip — replace would leave the
+  // leading slash and the lookup would never match.
+  const sectionId = href.split("#")[1] ?? "";
 
   useEffect(() => {
     const section = document.getElementById(sectionId);

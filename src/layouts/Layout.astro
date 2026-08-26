@@ -4,6 +4,22 @@ import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import Navbar from "../components/Navbar.astro";
 import PixelParallaxScene from "../components/PixelParallaxScene.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** The parallax scene has no scrim, so any page whose content sits directly
+   *  on it becomes unreadable. Off for pages that are mostly prose. */
+  scene?: boolean;
+}
+
+const {
+  scene = true,
+  title = "Syahrul Bhudi Ferdiansyah – Portfolio",
+  description = "The official portfolio of Syahrul Bhudi Ferdiansyah, a Full-Stack Developer showcasing technical expertise in building scalable and efficient web applications using modern technologies such as Next.js, SvelteKit, TypeScript, Laravel, and Golang.",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://ryuko.my.id");
 ---
 
 <!DOCTYPE html>
@@ -18,14 +34,18 @@ import PixelParallaxScene from "../components/PixelParallaxScene.astro";
     <link rel="manifest" href="/favicon_io/site.webmanifest">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta name="generator" content={Astro.generator}/>
-    <meta name="description" content="The official portfolio of Syahrul Bhudi Ferdiansyah, a Full-Stack Developer showcasing technical expertise in building scalable and efficient web applications using modern technologies such as Next.js, SvelteKit, TypeScript, Laravel, and Golang."/>
+    <meta name="description" content={description}/>
     <meta name="author" content="Syahrul Bhudi Ferdiansyah"/>
     <meta name="keywords" content="Syahrul, Bhudi, Ferdiansyah, Portfolio, Web Developer, Software Engineer, Next.js, SvelteKit, TypeScript, Laravel, Golang, DevOps, Backend Developer, Frontend Developer, Database"/>
-    <title>Syahrul Bhudi Ferdiansyah – Portfolio</title>
+    <link rel="canonical" href={canonical}/>
+    <meta property="og:title" content={title}/>
+    <meta property="og:description" content={description}/>
+    <meta property="og:type" content="website"/>
+    <title>{title}</title>
 </head>
-<body class="bg-[#241735] overflow-x-hidden">
+<body class={`overflow-x-hidden ${scene ? "bg-[#241735]" : "bg-linear-to-b from-[#0a060f] via-[#201529] to-[#361d41] bg-fixed"}`}>
 <a href="#home" class="skip-link">Skip to main content</a>
-<PixelParallaxScene />
+{scene && <PixelParallaxScene />}
 <slot/>
 <Navbar/>
 <SpeedInsights/>

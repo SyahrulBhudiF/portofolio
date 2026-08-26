@@ -35,6 +35,7 @@ const ProjectsContainer = ({
           key={project.id}
           project={project.data}
           href={`/assets/projects/${project.id}/cover.webp`}
+          slug={project.data.slug ?? project.id}
           stars={projectStars(project, stars)}
         />
       ))}
@@ -110,6 +111,7 @@ const ProjectsContainer = ({
                       <ProjectCard
                         project={project.data}
                         href={`/assets/projects/${project.id}/cover.webp`}
+                        slug={project.data.slug ?? project.id}
                         stars={projectStars(project, stars)}
                       />
                     </motion.div>

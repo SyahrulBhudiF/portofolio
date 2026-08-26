@@ -9,8 +9,21 @@ const projectCollection = defineCollection({
     type: z.string(),
     role: z.string().nullable().optional(),
     hasImage: z.boolean().default(true),
+    /** Overrides the filename in /projects/<slug>. */
+    slug: z.string().optional(),
     date: z.coerce.date(),
     description: z.string(),
+    /** Extra shots for the detail page. `src` resolves inside the project's
+     *  own asset folder, so it is a bare filename, not a path. */
+    gallery: z
+      .array(
+        z.object({
+          src: z.string(),
+          alt: z.string(),
+          caption: z.string().optional(),
+        }),
+      )
+      .default([]),
     demo: z.url().nullable().default(null),
     sourceModel: z.url().nullable().default(null),
     sourceClient: z.url().nullable().default(null),

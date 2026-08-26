@@ -399,16 +399,6 @@
   display: block;
 }
 
-/* Stand-in for a project with no cover file. Sits in the same frame at the
-   same ratio so a coverless card keeps its row's rhythm instead of collapsing
-   and leaving the footer stranded at the bottom of a stretched cell. */
-.pixel-cover-fallback {
-  background-color: #2a1236;
-  background-image: linear-gradient(rgba(193, 128, 223, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(193, 128, 223, 0.1) 1px, transparent 1px);
-  background-size: 14px 14px;
-}
-
 .pixel-tag {
   --pixel-notch: 4px;
   background-color: #c180df;
