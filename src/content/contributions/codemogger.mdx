@@ -1,12 +1,14 @@
 ---
 title: codemogger
 repository: https://github.com/glommer/codemogger
-date: 2026-02-01
-description: Strengthened Codemogger's SQLite-backed indexing pipeline so cleanup is atomic and embedding work can be processed in controlled batches.
-highlights:
-  - Wrapped stale-file and chunk deletion in a transaction with rollback to prevent partially cleaned indexes.
-  - Added an optional limit to stale-embedding retrieval, enabling bounded embedding batches for large codebases.
-  - Preserved each result's stable chunk key through vector and reranked search results.
-  - Kept the existing unbounded retrieval behavior when no batch limit is supplied.
-pullRequest: https://github.com/glommer/codemogger/pull/2
+entries:
+  - title: Atomic index cleanup and bounded embedding batches
+    date: 2026-02-01
+    description: Strengthened Codemogger's SQLite-backed indexing pipeline so cleanup is atomic and embedding work can be processed in controlled batches.
+    highlights:
+      - Wrapped stale-file and chunk deletion in a transaction with rollback to prevent partially cleaned indexes.
+      - Added an optional limit to stale-embedding retrieval, enabling bounded embedding batches for large codebases.
+      - Preserved each result's stable chunk key through vector and reranked search results.
+      - Kept the existing unbounded retrieval behavior when no batch limit is supplied.
+    pullRequest: https://github.com/glommer/codemogger/pull/2
 ---

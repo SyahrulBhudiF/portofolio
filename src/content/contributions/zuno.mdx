@@ -1,13 +1,37 @@
 ---
 title: zuno
 repository: https://github.com/noFAYZ/zuno
-date: 2026-08-06
-description: Stopped forcing GTK window decorations on Linux so the app-drawn title bar is used, and added a Linux-only "Show in system media controls" toggle so the browser mediaSession bridge can never double up with SMTC or MPNowPlayingInfoCenter on Windows/macOS.
-highlights:
-  - Removed the Linux decorations override and defaulted native window controls off so the app's own title bar is used.
-  - Hid the app-drawn window buttons on tiling compositors (niri, sway, hyprland) where the WM owns window management, while GNOME/KDE keep close and minimize reachable.
-  - Added a Linux-only media-session toggle and gated the browser mediaSession bridge to Linux, since WebView2 and WKWebView already bridge it to SMTC and MPNowPlayingInfoCenter on their own.
-  - Cleared navigator.mediaSession metadata, playback state, and action handlers whenever the bridge is disabled so no duplicate now-playing entry survives.
-pullRequest: https://github.com/noFAYZ/zuno/pull/25
-issue: https://github.com/noFAYZ/zuno/issues/23
+entries:
+  - title: Native window controls and media-session bridge
+    date: 2026-08-06
+    description: Stopped forcing GTK window decorations on Linux so the app-drawn title bar is used, and added a Linux-only "Show in system media controls" toggle so the browser mediaSession bridge can never double up with SMTC or MPNowPlayingInfoCenter on Windows/macOS.
+    highlights:
+      - Removed the Linux decorations override and defaulted native window controls off so the app's own title bar is used.
+      - Hid the app-drawn window buttons on tiling compositors (niri, sway, hyprland) where the WM owns window management, while GNOME/KDE keep close and minimize reachable.
+      - Added a Linux-only media-session toggle and gated the browser mediaSession bridge to Linux, since WebView2 and WKWebView already bridge it to SMTC and MPNowPlayingInfoCenter on their own.
+      - Cleared navigator.mediaSession metadata, playback state, and action handlers whenever the bridge is disabled so no duplicate now-playing entry survives.
+    pullRequest: https://github.com/noFAYZ/zuno/pull/25
+    issues:
+      - https://github.com/noFAYZ/zuno/issues/23
+  - title: Fix carousel overflow
+    date: 2026-08-25
+    description: Rebuilt the recommendation carousel so dragging it no longer shifts the page or leaves a blank gap on the right.
+    highlights:
+      - Made the grid responsive at four columns on desktop and two at narrower widths, with no clipped icons.
+      - Clipped horizontal carousel overflow to its own viewport while leaving vertical overflow visible so the artwork arc is not cut off.
+    pullRequest: https://github.com/noFAYZ/zuno/pull/101
+    issues:
+      - https://github.com/noFAYZ/zuno/issues/100
+  - title: Playlist-wide shuffle and three-state loop toggle
+    date: 2026-08-26
+    description: Made playlist Shuffle rebuild the queue from the entire playlist instead of only reordering the remaining tail, and fixed the collection header Loop control that could be switched on but never back off.
+    highlights:
+      - "Split the two actions apart: Shuffle what's next reorders only upcoming tracks, while Shuffle the whole playlist rebuilds from every track, keeps the current one playing, and moves it to the front."
+      - Applied the shuffle while the queue is being prepared rather than after loading, so the Up next count no longer flashes a partial number before settling on the full one.
+      - Gave the collection header the same three loop states as the player controls off, loop all, loop one each with its own label, tooltip, accessible name, and icon.
+      - Gave each shuffled repeat-all lap a fresh order so a looping playlist no longer restarts with the same queue every time.
+    pullRequest: https://github.com/noFAYZ/zuno/pull/99
+    issues:
+      - https://github.com/noFAYZ/zuno/issues/88
+      - https://github.com/noFAYZ/zuno/issues/98
 ---

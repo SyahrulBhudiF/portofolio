@@ -173,7 +173,9 @@
 
 .pixel-panel,
 .pixel-tag,
-.pixel-tab {
+.pixel-tab,
+.pixel-row,
+.pixel-frame {
   --pixel-notch-shape: polygon(
     var(--pixel-notch) 0,
     calc(100% - var(--pixel-notch)) 0,
@@ -211,6 +213,91 @@
 
 .pixel-panel-tight {
   --pixel-notch: 8px;
+}
+
+/* Contribution card, traced from the reference design: a #7f2ca6 frame whose
+   silhouette pushes blocks OUT past the left and right edges, empty bands top
+   and bottom, and a #5a1977 face holding the content. */
+.pixel-card {
+  --inset: 18px; /* how far the strips sit in from the face edges */
+  --strip: 15px; /* height of the highlight/shadow strips */
+  --block: 12px; /* height of the corner blocks */
+  --line: 2px; /* outline drawn around every piece, as in the figma */
+  --face: #5a1977;
+  --edge: #7f2ca6; /* highlight, above the face */
+  --shade: #270337; /* shadow, below the face */
+  --stroke: #8d30b8; /* outline colour */
+  position: relative;
+  padding: calc(var(--strip) + 12px) 20px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  /* Every piece is painted twice — fill over a full-size rect in --stroke — so
+     each one carries its own outline. Fill and outline are interleaved so a
+     block's outline stays above the face rather than being covered by it. The
+     face fill is flush top/bottom, so the seam against a strip stays one line
+     wide instead of two stacking into a chunky 4px band. */
+  background-image:
+    linear-gradient(var(--edge), var(--edge)), linear-gradient(var(--stroke), var(--stroke)),
+    linear-gradient(var(--edge), var(--edge)), linear-gradient(var(--stroke), var(--stroke)),
+    linear-gradient(var(--edge), var(--edge)), linear-gradient(var(--stroke), var(--stroke)),
+    linear-gradient(var(--shade), var(--shade)), linear-gradient(var(--stroke), var(--stroke)),
+    linear-gradient(var(--shade), var(--shade)), linear-gradient(var(--stroke), var(--stroke)),
+    linear-gradient(var(--shade), var(--shade)), linear-gradient(var(--stroke), var(--stroke)),
+    linear-gradient(var(--face), var(--face)), linear-gradient(var(--stroke), var(--stroke));
+  background-size:
+    calc(100% - var(--inset) * 2 - var(--line) * 2) calc(var(--strip) - var(--line) * 2),
+    calc(100% - var(--inset) * 2) var(--strip),
+    calc(var(--inset) - var(--line) * 2) calc(var(--block) - var(--line) * 2),
+    var(--inset) var(--block),
+    calc(var(--inset) - var(--line) * 2) calc(var(--block) - var(--line) * 2),
+    var(--inset) var(--block),
+    calc(100% - var(--inset) * 2 - var(--line) * 2) calc(var(--strip) - var(--line) * 2),
+    calc(100% - var(--inset) * 2) var(--strip),
+    calc(var(--inset) - var(--line) * 2) calc(var(--block) - var(--line) * 2),
+    var(--inset) var(--block),
+    calc(var(--inset) - var(--line) * 2) calc(var(--block) - var(--line) * 2),
+    var(--inset) var(--block),
+    calc(100% - var(--line) * 2) calc(100% - var(--strip) * 2),
+    100% calc(100% - var(--strip) * 2);
+  background-position:
+    left calc(var(--inset) + var(--line)) top var(--line),
+    left var(--inset) top 0,
+    left var(--line) top calc(var(--strip) + var(--line)),
+    left 0 top var(--strip),
+    right var(--line) top calc(var(--strip) + var(--line)),
+    right 0 top var(--strip),
+    left calc(var(--inset) + var(--line)) bottom var(--line),
+    left var(--inset) bottom 0,
+    left var(--line) bottom calc(var(--strip) + var(--line)),
+    left 0 bottom var(--strip),
+    right var(--line) bottom calc(var(--strip) + var(--line)),
+    right 0 bottom var(--strip),
+    left var(--line) top var(--strip),
+    left 0 top var(--strip);
+}
+
+/* Registered so the face colour can actually interpolate on hover. */
+@property --face {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #5a1977;
+}
+
+.pixel-card-interactive {
+  transition: --face 160ms ease-out;
+}
+
+.pixel-card-interactive:hover {
+  --face: #642085;
+}
+
+@media (max-width: 640px) {
+  .pixel-card {
+    --inset: 12px;
+    --strip: 11px;
+    --block: 9px;
+    padding: calc(var(--strip) + 8px) 14px;
+  }
 }
 
 .pixel-tag {
@@ -288,6 +375,40 @@
 
 .pixel-tab[aria-selected="true"]::before {
   background-color: #652682;
+}
+
+/* Contribution row: idle it is invisible, on hover it takes the same notched
+   frame as .pixel-tab — light border, purple face. */
+.pixel-row {
+  --pixel-notch: 4px;
+  position: relative;
+  isolation: isolate;
+  clip-path: var(--pixel-notch-shape);
+  background-color: transparent;
+  transition: background-color 160ms ease-out;
+}
+
+.pixel-row::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  clip-path: var(--pixel-notch-shape);
+  background-color: transparent;
+  transition: background-color 160ms ease-out;
+}
+
+/* :has(:focus-visible) rather than :focus-within — a clicked row keeps DOM focus,
+   which would otherwise leave the frame stuck on after the pointer moves away. */
+.pixel-row:hover,
+.pixel-row:has(:focus-visible) {
+  background-color: #c180df;
+}
+
+/* Lighter than the #5a1977 face — the rail's #652682 is too close to it here. */
+.pixel-row:hover::before,
+.pixel-row:has(:focus-visible)::before {
+  background-color: #7f2ca6;
 }
 
 .pixel-tab-label {

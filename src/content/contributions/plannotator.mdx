@@ -1,13 +1,16 @@
 ---
 title: plannotator
 repository: https://github.com/backnotprop/plannotator
-date: 2026-07-31
-description: Fixed a Pi browser-session lifecycle bug where abandoned reviews kept remote port 19432 occupied, causing later annotation and review commands to fail with EADDRINUSE.
-highlights:
-  - Traced the failure from the fixed-port startup path to browser sessions abandoned without a decision.
-  - Added tracked browser-session cleanup for tool cancellation and robust HTTP connection draining during server shutdown.
-  - "Designed the Set-based session registry used by the merged self-preemption flow: stop stale same-process sessions, then retry the failed bind once."
-  - Added lifecycle coverage for cancellation, idempotent cleanup, and port-contention recovery.
-pullRequest: https://github.com/backnotprop/plannotator/pull/1160
-issue: https://github.com/backnotprop/plannotator/issues/1159
+entries:
+  - title: Browser-session lifecycle and port-contention recovery
+    date: 2026-07-31
+    description: Fixed a Pi browser-session lifecycle bug where abandoned reviews kept remote port 19432 occupied, causing later annotation and review commands to fail with EADDRINUSE.
+    highlights:
+      - Traced the failure from the fixed-port startup path to browser sessions abandoned without a decision.
+      - Added tracked browser-session cleanup for tool cancellation and robust HTTP connection draining during server shutdown.
+      - "Designed the Set-based session registry used by the merged self-preemption flow: stop stale same-process sessions, then retry the failed bind once."
+      - Added lifecycle coverage for cancellation, idempotent cleanup, and port-contention recovery.
+    pullRequest: https://github.com/backnotprop/plannotator/pull/1160
+    issues:
+      - https://github.com/backnotprop/plannotator/issues/1159
 ---

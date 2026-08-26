@@ -38,12 +38,20 @@ const contributionCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     repository: z.url(),
-    date: z.coerce.date(),
-    description: z.string(),
-    highlights: z.array(z.string()).default([]),
-    pullRequest: z.url().nullable().optional(),
-    issue: z.url().nullable().optional(),
-    commit: z.url().nullable().optional(),
+    // One file per repository; each merged change is an entry inside it.
+    entries: z
+      .array(
+        z.object({
+          title: z.string(),
+          date: z.coerce.date(),
+          description: z.string(),
+          highlights: z.array(z.string()).default([]),
+          pullRequest: z.url().nullable().optional(),
+          issues: z.array(z.url()).default([]),
+          commit: z.url().nullable().optional(),
+        }),
+      )
+      .min(1),
   }),
 });
 

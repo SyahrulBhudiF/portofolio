@@ -1,95 +1,78 @@
 ---
 import { getCollection } from "astro:content";
-import GitHubStars from "@/components/GitHubStars";
+import ContributionList from "@/components/ContributionList";
 import { getGitHubStars } from "@/lib/github";
-import { ExternalLink } from "lucide-react";
 
-const contributions = (await getCollection("contributions")).sort((a, b) =>
-  a.data.date > b.data.date ? -1 : 1,
-);
+const contributions = await getCollection("contributions");
 const contributionStars = await getGitHubStars(contributions.map(({ data }) => data.repository));
 
-const labels = {
-  pullRequest: "PR",
-  issue: "Issue",
-  commit: "Commit",
-} as const;
+/** "https://github.com/org/repo/pull/101" -> "#101" */
+const refLabel = (url: string, fallback: string) => {
+  const number = url.match(/\/(\d+)\/?$/)?.[1];
+  return number ? `#${number}` : fallback;
+};
+
+const singleLinkKeys = [
+  ["pullRequest", "PR"],
+  ["commit", "Commit"],
+] as const;
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
+
+// Newest entry first inside a repo, repos ordered by their newest entry.
+const repos = contributions
+  .map(({ data }) => {
+    const entries = [...data.entries]
+      .sort((a, b) => b.date.getTime() - a.date.getTime())
+      .map((entry) => ({
+        title: entry.title,
+        description: entry.description,
+        highlights: entry.highlights,
+        dateLabel: formatDate(entry.date),
+        dateISO: entry.date.toISOString(),
+        links: [
+          ...singleLinkKeys.flatMap(([key, fallback]) => {
+            const url = entry[key];
+            return url ? [{ label: refLabel(url, fallback), url }] : [];
+          }),
+          ...entry.issues.map((url) => ({ label: refLabel(url, "Issue"), url })),
+        ],
+      }));
+
+    return {
+      title: data.title,
+      repository: data.repository,
+      stars: contributionStars[data.repository] ?? 0,
+      entries,
+      latest: entries[0].dateISO,
+    };
+  })
+  .sort((a, b) => (a.latest > b.latest ? -1 : 1));
+
+const mergedCount = repos.reduce((total, repo) => total + repo.entries.length, 0);
 ---
 
-<div class="w-full mt-4 border-purple-300/30 pt-8">
-  <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 mb-5">
+<div class="w-full mt-4 pt-8">
+  <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 mb-6">
     <div>
       <p class="text-retro text-4xl max-sm:text-3xl">Open Source</p>
       <p class="mt-1 text-sm text-purple-200/80">Merged contributions to tools I use.</p>
     </div>
     <span class="font-mono text-xs tracking-[0.2em] text-purple-300/70">
-      {String(contributions.length).padStart(2, "0")} MERGED
+      {String(mergedCount).padStart(2, "0")} MERGED
     </span>
   </div>
 
-  <ul class="border-y border-purple-300/25 divide-y divide-purple-300/20">
-    {
-      contributions.map((contribution, index) => {
-        const links = (Object.keys(labels) as (keyof typeof labels)[]).flatMap((key) => {
-          const url = contribution.data[key];
-          return url ? [[labels[key], url] as const] : [];
-        });
+  <ContributionList repos={repos} client:visible />
 
-        return (
-          <li class="grid grid-cols-[auto_1fr_auto] items-start gap-x-4 gap-y-1 py-4 max-sm:grid-cols-[auto_1fr]">
-            <span class="mt-0.5 font-mono text-sm text-purple-400">{String(index + 1).padStart(2, "0")}</span>
-            <span>
-              <a
-                href={contribution.data.repository}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex w-fit items-center gap-2 font-mono text-lg text-white outline-none hover:text-purple-200 focus-visible:text-purple-200"
-              >
-                {contribution.data.title}
-                <ExternalLink size={14} aria-hidden="true" className="text-purple-300" />
-              </a>
-              <span class="mt-1 block text-sm leading-relaxed text-gray-300">{contribution.data.description}</span>
-              <span class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
-                {
-                  links.map(([label, url]) => (
-                    <a
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="font-mono text-xs text-purple-200/80 underline decoration-purple-300/35 underline-offset-4 outline-none hover:text-white focus-visible:text-white"
-                    >
-                      {label}
-                    </a>
-                  ))
-                }
-              </span>
-              {
-                contribution.data.highlights.length > 0 && (
-                  <details class="group mt-2 font-mono text-xs text-purple-200/80">
-                    <summary class="w-fit cursor-pointer list-none underline decoration-purple-300/35 underline-offset-4 outline-none hover:text-white focus-visible:text-white">
-                      <span class="group-open:hidden">View description</span>
-                      <span class="hidden group-open:inline">Hide description</span>
-                    </summary>
-                    <ul class="mt-3 list-none space-y-1 p-0 font-sans text-sm leading-relaxed text-purple-100/85">
-                      {contribution.data.highlights.map((highlight) => <li class="flex gap-2"><span aria-hidden="true" class="text-purple-400">-</span><span>{highlight}</span></li>)}
-                    </ul>
-                  </details>
-                )
-              }
-            </span>
-            <span class="flex items-center gap-3 font-mono text-xs text-purple-200/70 max-sm:col-start-2">
-              <GitHubStars
-                stars={contributionStars[contribution.data.repository] ?? 0}
-                size={13}
-                className="text-purple-200/70"
-              />
-              <time datetime={contribution.data.date.toISOString()}>
-                {contribution.data.date.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
-              </time>
-            </span>
-          </li>
-        );
-      })
-    }
-  </ul>
+  {/* The cards ship with framer's initial opacity:0; keep them readable without JS. */}
+  <noscript>
+    <style>
+      .pixel-card {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    </style>
+  </noscript>
 </div>
