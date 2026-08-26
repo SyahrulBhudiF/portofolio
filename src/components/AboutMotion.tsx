@@ -15,7 +15,7 @@ const AboutMotion = ({ children }: Props) => {
   const fadeUpVariants = useMemo(() => createFadeUpVariants(isMobile), [isMobile]);
 
   return (
-    <div className="w-full max-w-6xl h-full flex flex-col items-center justify-center gap-16 text-white z-10">
+    <div className="z-10 flex h-full w-full max-w-6xl flex-col items-center justify-start gap-16 text-white">
       <motion.div
         className="flex flex-col w-full h-fit items-start gap-4"
         variants={fadeUpVariants}

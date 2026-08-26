@@ -21,11 +21,20 @@ const THUMB_FRAME = {
   "--drop": "clamp(5px, 2.2cqw, 11px)",
 } as CSSProperties;
 
-const ProjectGallery: FC<Props> = ({ images }) => {
-  const reduceMotion = useReducedMotion();
+interface GalleryItemProps {
+  image: GalleryImage;
+  index: number;
+  images: GalleryImage[];
+  reduceMotion: ReturnType<typeof useReducedMotion>;
+}
+
+// The selection belongs to the item that opened the dialog. That keeps the
+// static gallery grid outside the state update when opening or paging images.
+const GalleryItem: FC<GalleryItemProps> = ({ image, index, images, reduceMotion }) => {
   const [openAt, setOpenAt] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const isOpen = openAt !== null;
+  const active = openAt === null ? null : images[openAt];
 
   const step = useCallback(
     (delta: number) =>
@@ -58,43 +67,30 @@ const ProjectGallery: FC<Props> = ({ images }) => {
     };
   }, [isOpen]);
 
-  if (images.length === 0) return null;
-
-  const active = openAt === null ? null : images[openAt];
-
   return (
-    <>
-      {/* Two up at every width — the shots are wide, so a single mobile column
-          would render them too small to read either way. */}
-      <ul className="grid grid-cols-2 gap-4 sm:gap-6">
-        {images.map((image, index) => (
-          <motion.li
-            key={image.src}
-            className="@container"
-            initial={reduceMotion ? false : { opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.3, ease: "easeOut", delay: (index % 2) * 0.06 }}
-          >
-            <button
-              type="button"
-              onClick={() => setOpenAt(index)}
-              className="block w-full cursor-zoom-in text-left outline-none"
-            >
-              <Magnetic className="block">
-                <span className="pixel-photo block" style={THUMB_FRAME}>
-                  <img src={image.src} alt={image.alt} loading="lazy" className="block w-full" />
-                </span>
-              </Magnetic>
-              {image.caption && (
-                <span className="mt-2 block font-mono text-xs tracking-[0.12em] text-purple-200/80 uppercase">
-                  {image.caption}
-                </span>
-              )}
-            </button>
-          </motion.li>
-        ))}
-      </ul>
+    <motion.li
+      className="@container"
+      initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.3, ease: "easeOut", delay: (index % 2) * 0.06 }}
+    >
+      <button
+        type="button"
+        onClick={() => setOpenAt(index)}
+        className="block w-full cursor-zoom-in text-left outline-none"
+      >
+        <Magnetic className="block">
+          <span className="pixel-photo block" style={THUMB_FRAME}>
+            <img src={image.src} alt={image.alt} loading="lazy" className="block w-full" />
+          </span>
+        </Magnetic>
+        {image.caption && (
+          <span className="mt-2 block font-mono text-xs tracking-[0.12em] text-purple-200/80 uppercase">
+            {image.caption}
+          </span>
+        )}
+      </button>
 
       <dialog
         ref={dialogRef}
@@ -113,8 +109,6 @@ const ProjectGallery: FC<Props> = ({ images }) => {
       >
         {active && (
           <div className="flex h-full w-full flex-col items-center justify-center gap-5 p-4">
-            {/* Positioned by a wrapper: .pixel-tag sets position:relative from
-                an unlayered stylesheet, which would beat `absolute` here. */}
             <div className="absolute top-5 right-5">
               <button
                 type="button"
@@ -171,7 +165,27 @@ const ProjectGallery: FC<Props> = ({ images }) => {
           </div>
         )}
       </dialog>
-    </>
+    </motion.li>
+  );
+};
+
+const ProjectGallery: FC<Props> = ({ images }) => {
+  const reduceMotion = useReducedMotion();
+
+  if (images.length === 0) return null;
+
+  return (
+    <ul className="grid grid-cols-2 gap-4 sm:gap-6">
+      {images.map((image, index) => (
+        <GalleryItem
+          key={image.src}
+          image={image}
+          index={index}
+          images={images}
+          reduceMotion={reduceMotion}
+        />
+      ))}
+    </ul>
   );
 };
 

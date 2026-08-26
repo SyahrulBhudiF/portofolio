@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronDown, ExternalLink, Star } from "lucide-react";
-import { type FC, useState } from "react";
+import { type FC, memo, useCallback, useState } from "react";
 
 export interface ContributionLink {
   label: string;
@@ -27,19 +27,22 @@ interface Props {
   repos: ContributionRepo[];
 }
 
-const Row: FC<{
+interface RowProps {
   entry: ContributionEntry;
+  entryKey: string;
   panelId: string;
   isOpen: boolean;
-  onToggle: () => void;
-}> = ({ entry, panelId, isOpen, onToggle }) => {
+  onToggle: (key: string) => void;
+}
+
+const Row = memo(({ entry, entryKey, panelId, isOpen, onToggle }: RowProps) => {
   // The row bleeds out to the card edge, stopping short of the 3px face border.
   return (
     <li>
       <div className="pixel-row group -mx-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 px-4">
         <button
           type="button"
-          onClick={onToggle}
+          onClick={() => onToggle(entryKey)}
           aria-expanded={isOpen}
           aria-controls={panelId}
           className="flex min-w-0 cursor-pointer items-center gap-2 py-2.5 text-left"
@@ -120,12 +123,77 @@ const Row: FC<{
       </AnimatePresence>
     </li>
   );
-};
+});
+
+Row.displayName = "ContributionRow";
+
+interface RepoSectionProps {
+  repo: ContributionRepo;
+  repoIndex: number;
+  reduceMotion: ReturnType<typeof useReducedMotion>;
+}
+
+const RepoSection = memo(({ repo, repoIndex, reduceMotion }: RepoSectionProps) => {
+  // An accordion is scoped to its repository, so expanding one row does not
+  // rerender every other repository's contribution list.
+  const [openEntry, setOpenEntry] = useState<string | null>(null);
+  const toggleEntry = useCallback(
+    (key: string) => setOpenEntry((current) => (current === key ? null : key)),
+    [],
+  );
+
+  return (
+    <motion.section
+      className={repoIndex > 0 ? "mt-5 border-t-2 border-[#652682] pt-5" : ""}
+      initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ delay: repoIndex * 0.07, duration: 0.3, ease: "easeOut" }}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-1">
+        <a
+          href={repo.repository}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex min-w-0 items-center gap-2 text-lg text-white outline-none hover:text-purple-100 focus-visible:text-purple-100"
+        >
+          <span className="truncate">{repo.title}</span>
+          <ExternalLink size={13} aria-hidden="true" className="shrink-0 text-purple-200" />
+        </a>
+
+        <span className="flex shrink-0 items-center gap-4 font-mono text-xs text-white/60">
+          <span>{repo.entries.length} merged</span>
+          <span className="flex items-center gap-1">
+            <Star size={12} aria-hidden="true" className="fill-current" />
+            {repo.stars.toLocaleString()}
+          </span>
+        </span>
+      </div>
+
+      <ul className="mt-1 flex flex-col">
+        {repo.entries.map((entry) => {
+          const key = `${repo.repository}-${entry.dateISO}-${entry.title}`;
+
+          return (
+            <Row
+              key={key}
+              entry={entry}
+              entryKey={key}
+              panelId={`contribution-${repoIndex}-${entry.dateISO}`}
+              isOpen={openEntry === key}
+              onToggle={toggleEntry}
+            />
+          );
+        })}
+      </ul>
+    </motion.section>
+  );
+});
+
+RepoSection.displayName = "ContributionRepoSection";
 
 const ContributionList: FC<Props> = ({ repos }) => {
   const reduceMotion = useReducedMotion();
-  // Single accordion: one open row at a time, across every repo section.
-  const [openEntry, setOpenEntry] = useState<string | null>(null);
 
   return (
     <motion.article
@@ -136,50 +204,12 @@ const ContributionList: FC<Props> = ({ repos }) => {
       transition={{ duration: 0.35, ease: "easeOut" }}
     >
       {repos.map((repo, repoIndex) => (
-        <motion.section
+        <RepoSection
           key={repo.repository}
-          className={repoIndex > 0 ? "mt-5 border-t-2 border-[#652682] pt-5" : ""}
-          initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ delay: repoIndex * 0.07, duration: 0.3, ease: "easeOut" }}
-        >
-          <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-1">
-            <a
-              href={repo.repository}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex min-w-0 items-center gap-2 text-lg text-white outline-none hover:text-purple-100 focus-visible:text-purple-100"
-            >
-              <span className="truncate">{repo.title}</span>
-              <ExternalLink size={13} aria-hidden="true" className="shrink-0 text-purple-200" />
-            </a>
-
-            <span className="flex shrink-0 items-center gap-4 font-mono text-xs text-white/60">
-              <span>{repo.entries.length} merged</span>
-              <span className="flex items-center gap-1">
-                <Star size={12} aria-hidden="true" className="fill-current" />
-                {repo.stars.toLocaleString()}
-              </span>
-            </span>
-          </div>
-
-          <ul className="mt-1 flex flex-col">
-            {repo.entries.map((entry) => {
-              const key = `${repo.repository}-${entry.dateISO}-${entry.title}`;
-
-              return (
-                <Row
-                  key={key}
-                  entry={entry}
-                  panelId={`contribution-${repoIndex}-${entry.dateISO}`}
-                  isOpen={openEntry === key}
-                  onToggle={() => setOpenEntry((current) => (current === key ? null : key))}
-                />
-              );
-            })}
-          </ul>
-        </motion.section>
+          repo={repo}
+          repoIndex={repoIndex}
+          reduceMotion={reduceMotion}
+        />
       ))}
     </motion.article>
   );

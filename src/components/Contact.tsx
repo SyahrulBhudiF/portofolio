@@ -42,9 +42,7 @@ export default function Contact() {
               href={href}
               aria-label={label}
               target={href.startsWith("mailto:") ? undefined : "_blank"}
-              rel={
-                href.startsWith("mailto:") ? undefined : "noopener noreferrer"
-              }
+              rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
               className="pixel-frame flex size-11 items-center justify-center border-2 border-[#c180df] bg-[#2a1236] text-[#dcb8f0] [--pixel-notch:4px] outline-none transition-[transform,background-color,color] duration-300 ease-in-out hover:-translate-y-1 hover:bg-[#652682] hover:text-white focus-visible:-translate-y-1 focus-visible:bg-[#652682] focus-visible:text-white"
             >
               <Icon size={20} />

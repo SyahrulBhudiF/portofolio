@@ -1,5 +1,5 @@
 import TechStackItem from "@/components/ui/TechStackItem";
-import { motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { type FC, type KeyboardEvent, useRef, useState } from "react";
 
 export interface TechStackCategoryData {
@@ -39,6 +39,8 @@ const TechStackTabs: FC<Props> = ({ categories }) => {
 
   if (categories.length === 0) return null;
 
+  const activeCategory = categories[active];
+
   return (
     <div className="w-full">
       <div
@@ -68,35 +70,29 @@ const TechStackTabs: FC<Props> = ({ categories }) => {
         ))}
       </div>
 
-      <div className="mt-8 grid">
-        {categories.map((category, index) => {
-          const isActive = index === active;
-
-          return (
-            <motion.div
-              key={category.title}
-              role="tabpanel"
-              id={`tech-panel-${slugify(category.title)}`}
-              aria-labelledby={`tech-tab-${slugify(category.title)}`}
-              inert={!isActive}
-              initial={false}
-              animate={{ opacity: isActive ? 1 : 0, y: isActive || reduceMotion ? 0 : 6 }}
-              transition={{ duration: reduceMotion ? 0 : 0.22, ease: "easeOut" }}
-              className={`col-start-1 row-start-1 grid auto-rows-min content-start grid-cols-2 gap-x-3 gap-y-4 md:grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] md:gap-x-6 md:gap-y-5 ${
-                isActive ? "" : "pointer-events-none max-md:hidden"
-              }`}
-            >
-              {category.items.map((tech) => (
-                <TechStackItem
-                  key={tech.name}
-                  tech={tech.name}
-                  url={tech.url}
-                  className="m-0 w-full justify-start"
-                />
-              ))}
-            </motion.div>
-          );
-        })}
+      <div className="mt-8">
+        <AnimatePresence initial={false} mode="popLayout">
+          <motion.div
+            key={activeCategory.title}
+            role="tabpanel"
+            id={`tech-panel-${slugify(activeCategory.title)}`}
+            aria-labelledby={`tech-tab-${slugify(activeCategory.title)}`}
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.22, ease: "easeOut" }}
+            className="grid auto-rows-min content-start grid-cols-2 gap-x-3 gap-y-4 md:grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] md:gap-x-6 md:gap-y-5"
+          >
+            {activeCategory.items.map((tech) => (
+              <TechStackItem
+                key={tech.name}
+                tech={tech.name}
+                url={tech.url}
+                className="m-0 w-full justify-start"
+              />
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
