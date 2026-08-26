@@ -168,6 +168,217 @@
 }
 
 /* ==========================================================================
+   Pixel Panel / Pixel Tag - notched corners + hard offset shadow
+   ========================================================================== */
+
+.pixel-panel,
+.pixel-tag,
+.pixel-tab {
+  --pixel-notch-shape: polygon(
+    var(--pixel-notch) 0,
+    calc(100% - var(--pixel-notch)) 0,
+    calc(100% - var(--pixel-notch)) var(--pixel-notch),
+    100% var(--pixel-notch),
+    100% calc(100% - var(--pixel-notch)),
+    calc(100% - var(--pixel-notch)) calc(100% - var(--pixel-notch)),
+    calc(100% - var(--pixel-notch)) 100%,
+    var(--pixel-notch) 100%,
+    var(--pixel-notch) calc(100% - var(--pixel-notch)),
+    0 calc(100% - var(--pixel-notch)),
+    0 var(--pixel-notch),
+    var(--pixel-notch) var(--pixel-notch)
+  );
+  position: relative;
+  isolation: isolate;
+  clip-path: var(--pixel-notch-shape);
+}
+
+.pixel-panel {
+  --pixel-notch: 12px;
+  background-color: #3e1d4d;
+  transition: background-color 220ms ease-out;
+}
+
+.pixel-panel:hover {
+  background-color: #48225a;
+}
+
+/* Static surfaces (rails, panels) keep the notch but skip the hover lift. */
+.pixel-panel-static,
+.pixel-panel-static:hover {
+  background-color: #3e1d4d;
+}
+
+.pixel-panel-tight {
+  --pixel-notch: 8px;
+}
+
+.pixel-tag {
+  --pixel-notch: 4px;
+  background-color: #c180df;
+  transition: background-color 200ms ease-out;
+}
+
+.pixel-tag::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  clip-path: var(--pixel-notch-shape);
+  background-color: #652682;
+  transition: background-color 200ms ease-out;
+}
+
+.pixel-tag:hover::before {
+  background-color: #7c2f9f;
+}
+
+/* ==========================================================================
+   Pixel Tab - vertical master list in the experience explorer
+   ========================================================================== */
+
+/* Same notched frame as .pixel-tag, so a selected row reads as a pressed chip. */
+.pixel-tab {
+  --pixel-notch: 4px;
+  position: relative;
+  isolation: isolate;
+  display: block;
+  width: 100%;
+  padding: 7px 12px;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+  clip-path: var(--pixel-notch-shape);
+  background-color: transparent; /* border layer */
+  transition: background-color 180ms ease-out, color 180ms ease-out;
+}
+
+.pixel-tab::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  clip-path: var(--pixel-notch-shape);
+  background-color: transparent; /* face layer */
+  transition: background-color 180ms ease-out;
+}
+
+.pixel-tab + .pixel-tab {
+  margin-top: 6px;
+}
+
+.pixel-tab:hover {
+  background-color: rgba(193, 128, 223, 0.45);
+  color: #fff;
+}
+
+.pixel-tab:hover::before {
+  background-color: rgba(101, 38, 130, 0.55);
+}
+
+.pixel-tab:focus-visible {
+  outline: 2px solid #c180df;
+  outline-offset: 2px;
+}
+
+.pixel-tab[aria-selected="true"] {
+  background-color: #c180df;
+  color: #fff;
+}
+
+.pixel-tab[aria-selected="true"]::before {
+  background-color: #652682;
+}
+
+.pixel-tab-label {
+  padding: 0 12px 8px 4px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(193, 128, 223, 0.65);
+}
+
+.pixel-tab-group + .pixel-tab-group {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 2px solid rgba(101, 38, 130, 0.55);
+}
+
+/* ==========================================================================
+   Pixel List - square bullets for the detail panel
+   ========================================================================== */
+
+.pixel-list li {
+  position: relative;
+  padding-left: 20px;
+}
+
+.pixel-list li::before {
+  content: "";
+  position: absolute;
+  top: 0.55em;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background-color: #c180df;
+}
+
+/* ==========================================================================
+   Pixel Timeline - chronology rail beside experience cards
+   ========================================================================== */
+
+.pixel-timeline {
+  --rail-x: 14px;
+  --rail-width: 4px;
+  --rail-pad: 48px; /* matches pl-12 on the wrapper */
+  --node-size: 14px;
+}
+
+.pixel-timeline-rail {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: var(--rail-x);
+  width: var(--rail-width);
+  /* Pixel dashes instead of a solid line, matching the 8-bit type treatment. */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #652682 0 6px,
+    transparent 6px 12px
+  );
+}
+
+.pixel-timeline-node {
+  position: absolute;
+  top: 26px;
+  /* Centre the node on the rail, compensating for the wrapper's left padding. */
+  left: calc(
+    var(--rail-x) + (var(--rail-width) / 2) - var(--rail-pad) - (var(--node-size) / 2)
+  );
+  width: var(--node-size);
+  height: var(--node-size);
+  background-color: #3e1d4d;
+  box-shadow: inset 0 0 0 3px #652682;
+}
+
+.pixel-timeline-node-current {
+  background-color: #c180df;
+  box-shadow: inset 0 0 0 3px #652682, 0 0 0 3px rgba(193, 128, 223, 0.25);
+}
+
+@media (max-width: 640px) {
+  .pixel-timeline {
+    --rail-x: 8px;
+    --rail-pad: 32px; /* matches max-sm:pl-8 on the wrapper */
+    --node-size: 10px;
+  }
+
+  .pixel-timeline-node {
+    top: 20px;
+  }
+}
+
+/* ==========================================================================
    Shadow Effects
    ========================================================================== */
 

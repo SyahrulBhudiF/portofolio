@@ -1,6 +1,6 @@
 import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible.tsx";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronsUpDown, LucideCalendar1, LucideMapPinned } from "lucide-react";
+import { LucideCalendar1, LucideMapPinned } from "lucide-react";
 import { type FC, useState } from "react";
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
   description: string[];
   tags?: string[];
   skills?: string[];
+  defaultOpen?: boolean;
 }
 
 const ExperienceCard: FC<Props> = ({
@@ -21,28 +22,30 @@ const ExperienceCard: FC<Props> = ({
   description,
   tags = [],
   skills = [],
+  defaultOpen = false,
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
 
   return (
     <Collapsible
       open={isOpen}
       onOpenChange={setIsOpen}
-      className="flex w-full flex-col items-start rounded-lg border border-white/5 bg-gray-900/80 p-4 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-gray-800/85"
+      className="pixel-panel flex w-full flex-col items-start p-6 max-sm:p-4"
     >
       <div className="flex w-full gap-3 justify-between max-sm:flex-col">
         <div className="min-w-0 flex-1">
-          <p className="font-medium text-xl leading-tight text-white">{title}</p>
-          <p className="mt-2 font-bold text-lg text-white/70 leading-snug">{subtitle}</p>
+          <p className="font-medium text-2xl leading-tight text-white max-sm:text-lg break-words">
+            {title}
+          </p>
+          <p className="mt-1 text-base text-white/75 leading-snug max-sm:text-sm break-words">
+            {subtitle}
+          </p>
         </div>
 
         {tags.length > 0 && (
           <div className="flex shrink-0 gap-2 flex-wrap justify-end self-start max-sm:justify-start">
             {tags.map((tag) => (
-              <div
-                key={tag}
-                className="px-3 py-1 h-fit rounded-lg border bg-white text-black text-sm opacity-80"
-              >
+              <div key={tag} className="pixel-tag px-5 py-1.5 h-fit text-white text-sm max-sm:px-3">
                 {tag}
               </div>
             ))}
@@ -50,27 +53,25 @@ const ExperienceCard: FC<Props> = ({
         )}
       </div>
 
-      <div className="w-full pt-5 space-y-1 self-start">
-        <p className="font-medium text-sm text-white/50 flex gap-1 items-center">
-          <LucideCalendar1 className="w-4 h-4" />
+      <div className="w-full pt-4 self-start flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/85">
+        <span className="flex gap-2 items-center">
+          <LucideCalendar1 className="w-4 h-4 shrink-0" />
           {duration}
-        </p>
-        <p className="font-medium text-sm text-white/50 flex gap-1 items-center">
-          <LucideMapPinned className="w-4 h-4" />
+        </span>
+        <span aria-hidden="true" className="h-3 w-px bg-white/25 max-sm:hidden" />
+        <span className="flex gap-2 items-center">
+          <LucideMapPinned className="w-4 h-4 shrink-0" />
           {location}
-        </p>
+        </span>
       </div>
 
-      <div className="w-full flex justify-between items-center mt-auto pt-3">
+      <div className="w-full flex justify-between items-center mt-auto pt-2">
         <CollapsibleTrigger asChild>
           <button
             type="button"
-            className="flex items-center gap-2 text-purple-200 hover:text-purple-300 hover:bg-transparent transition-colors duration-200 cursor-pointer text-xs"
+            className="text-[#a23fd0] hover:text-[#c180df] hover:bg-transparent transition-colors duration-200 cursor-pointer text-sm"
           >
-            <span>{isOpen ? "See Less" : "See More"}</span>
-            <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
-              <ChevronsUpDown className="h-4 w-4" />
-            </motion.div>
+            {isOpen ? "See Less" : "See More"}
           </button>
         </CollapsibleTrigger>
       </div>
@@ -114,7 +115,7 @@ const ExperienceCard: FC<Props> = ({
                   {skills.map((skill, index) => (
                     <motion.div
                       key={skill}
-                      className="px-3 py-1 max-sm:px-1 max-sm:text-sm rounded-lg border border-dashed text-sm opacity-65 w-fit hover:opacity-100 hover:border-purple-400 hover:text-purple-300 transition-all duration-200"
+                      className="pixel-tag px-4 py-1.5 max-sm:px-3 max-sm:text-xs text-sm text-white w-fit"
                       initial={{ y: 150 }}
                       animate={{ y: 0 }}
                       transition={{
