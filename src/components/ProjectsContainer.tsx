@@ -27,7 +27,7 @@ const ProjectsContainer = ({
   return (
     <div
       ref={containerRef}
-      className="w-full grid grid-cols-1 items-center gap-10"
+      className="grid w-full grid-cols-1 items-stretch gap-6 sm:grid-cols-2"
       style={{ overflowAnchor: "none" }}
     >
       {initialProjects.map((project) => (
@@ -40,11 +40,11 @@ const ProjectsContainer = ({
       ))}
 
       {remainingProjects.length > 0 && (
-        <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
+        <Collapsible open={isOpen} onOpenChange={setIsOpen} className="col-span-full w-full">
           <div className="w-full flex justify-center items-center mt-8">
             <CollapsibleTrigger asChild>
               <div className="relative flex flex-col items-center group cursor-pointer transition duration-300 ease-in-out hover:scale-110">
-                <span className="text-lg mb-2 px-4 py-2 bg-purple-900/20 border border-purple-700/30 text-purple-300 rounded-lg shadow-lg">
+                <span className="pixel-tag mb-2 px-5 py-2 text-base text-white">
                   {isOpen ? "See Less" : "See More"}
                 </span>
 
@@ -92,10 +92,11 @@ const ProjectsContainer = ({
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
-                <div className="pt-8 grid grid-cols-1 gap-10">
+                <div className="grid grid-cols-1 items-stretch gap-6 pt-8 sm:grid-cols-2">
                   {remainingProjects.map((project, index) => (
                     <motion.div
                       key={project.id}
+                      className="h-full"
                       initial={{ opacity: 0, y: -20 }}
                       animate={{
                         opacity: 1,

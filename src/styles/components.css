@@ -50,6 +50,14 @@
   color: white;
 }
 
+/* Same face, but the 5px light shadow reads as a ghosted duplicate at card
+   sizes rather than as depth. A 2px dark offset keeps the pixel weight. */
+.text-retro-card {
+  font-family: "VT323", monospace;
+  text-shadow: 2px 2px 0px #6a2f8c;
+  color: white;
+}
+
 /* ==========================================================================
    Retro Tech Block - 3D Card Effect
    ========================================================================== */
@@ -281,6 +289,126 @@
   }
 }
 
+/* Project card, traced from the reference design: a flat face inside a thin
+   bright outline whose four corners are cut at 45° rather than notched square.
+   The design's #331642 face and #ca8de7 outline round to the theme's existing
+   #3e1d4d / #c180df, so the section keeps one palette. */
+.pixel-accent-card {
+  --chamfer: 12px;
+  --edge: 2px;
+  --accent-face: #3e1d4d;
+  --accent-line: #c180df;
+  position: relative;
+  isolation: isolate;
+  clip-path: polygon(
+    var(--chamfer) 0,
+    calc(100% - var(--chamfer)) 0,
+    100% var(--chamfer),
+    100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%,
+    var(--chamfer) 100%,
+    0 calc(100% - var(--chamfer)),
+    0 var(--chamfer)
+  );
+  background-color: var(--accent-line);
+}
+
+.pixel-accent-card::before {
+  content: "";
+  position: absolute;
+  inset: var(--edge);
+  z-index: -1;
+  clip-path: polygon(
+    calc(var(--chamfer) - var(--edge)) 0,
+    calc(100% - var(--chamfer) + var(--edge)) 0,
+    100% calc(var(--chamfer) - var(--edge)),
+    100% calc(100% - var(--chamfer) + var(--edge)),
+    calc(100% - var(--chamfer) + var(--edge)) 100%,
+    calc(var(--chamfer) - var(--edge)) 100%,
+    0 calc(100% - var(--chamfer) + var(--edge)),
+    0 calc(var(--chamfer) - var(--edge))
+  );
+  background-color: var(--accent-face);
+}
+
+@media (max-width: 640px) {
+  .pixel-accent-card {
+    --chamfer: 9px;
+  }
+}
+
+/* Photo frame, traced from the reference: four separate #ca7fed bands laid
+   flush against the image — the horizontals span its width, the verticals its
+   height, and all four corners stay empty, so it reads as a cross rather than
+   a ring. The same four bands repeat in #8d30b8 one --drop lower, which is
+   what shows as the dark strip under the frame and the dark blocks at both
+   bottom corners. Ratios follow the design: --drop is a shade over --band.
+   Keep --drop >= --band or the shadow's top band peeks above the image. */
+.pixel-photo {
+  --band: 14px;
+  --drop: 15px;
+  --photo-light: #ca7fed;
+  --photo-shade: #8d30b8;
+  display: block;
+  padding: var(--band) var(--band) calc(var(--band) + var(--drop));
+  background-repeat: no-repeat;
+  /* Light bands first so they paint over the shadow copy beneath them. */
+  background-image: linear-gradient(var(--photo-light), var(--photo-light)),
+    linear-gradient(var(--photo-light), var(--photo-light)),
+    linear-gradient(var(--photo-light), var(--photo-light)),
+    linear-gradient(var(--photo-light), var(--photo-light)),
+    linear-gradient(var(--photo-shade), var(--photo-shade)),
+    linear-gradient(var(--photo-shade), var(--photo-shade)),
+    linear-gradient(var(--photo-shade), var(--photo-shade)),
+    linear-gradient(var(--photo-shade), var(--photo-shade));
+  background-size:
+    calc(100% - var(--band) * 2) var(--band),
+    calc(100% - var(--band) * 2) var(--band),
+    var(--band) calc(100% - var(--band) * 2 - var(--drop)),
+    var(--band) calc(100% - var(--band) * 2 - var(--drop)),
+    calc(100% - var(--band) * 2) var(--band),
+    /* Taller than a band, so no seam opens up when --drop exceeds --band. */
+    calc(100% - var(--band) * 2) var(--drop),
+    var(--band) calc(100% - var(--band) * 2 - var(--drop)),
+    var(--band) calc(100% - var(--band) * 2 - var(--drop));
+  background-position:
+    left var(--band) top 0,
+    left var(--band) bottom var(--drop),
+    left 0 top var(--band),
+    right 0 top var(--band),
+    left var(--band) top var(--drop),
+    left var(--band) bottom 0,
+    left 0 top calc(var(--band) + var(--drop)),
+    right 0 top calc(var(--band) + var(--drop));
+}
+
+@media (max-width: 640px) {
+  .pixel-photo {
+    --band: 9px;
+    --drop: 10px;
+  }
+}
+
+/* Width only — this file is unlayered, so setting `display` here would beat
+   Tailwind's utilities and stop the fallback from laying its icons out. */
+.pixel-photo > * {
+  width: 100%;
+}
+
+.pixel-photo > img {
+  display: block;
+}
+
+/* Stand-in for a project with no cover file. Sits in the same frame at the
+   same ratio so a coverless card keeps its row's rhythm instead of collapsing
+   and leaving the footer stranded at the bottom of a stretched cell. */
+.pixel-cover-fallback {
+  background-color: #2a1236;
+  background-image: linear-gradient(rgba(193, 128, 223, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(193, 128, 223, 0.1) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
 .pixel-tag {
   --pixel-notch: 4px;
   background-color: #c180df;
@@ -443,20 +571,14 @@
   left: var(--rail-x);
   width: var(--rail-width);
   /* Pixel dashes instead of a solid line, matching the 8-bit type treatment. */
-  background-image: repeating-linear-gradient(
-    to bottom,
-    #652682 0 6px,
-    transparent 6px 12px
-  );
+  background-image: repeating-linear-gradient(to bottom, #652682 0 6px, transparent 6px 12px);
 }
 
 .pixel-timeline-node {
   position: absolute;
   top: 26px;
   /* Centre the node on the rail, compensating for the wrapper's left padding. */
-  left: calc(
-    var(--rail-x) + (var(--rail-width) / 2) - var(--rail-pad) - (var(--node-size) / 2)
-  );
+  left: calc(var(--rail-x) + (var(--rail-width) / 2) - var(--rail-pad) - (var(--node-size) / 2));
   width: var(--node-size);
   height: var(--node-size);
   background-color: #3e1d4d;

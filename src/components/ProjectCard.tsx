@@ -6,53 +6,25 @@ import { ExternalLink } from "lucide-react";
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import GitHubStars from "./GitHubStars";
-import LinkedInIcon from "./icons/LinkedInIcon";
 import TechStackItem from "./ui/TechStackItem";
 
-interface GithubLinkProps {
-  url: string;
-  text: string;
-}
+/** Every card shows at most this many badges; the rest collapse into a count. */
+const VISIBLE_STACK = 6;
 
 const linkClassName =
-  "flex w-fit items-center gap-2 rounded-lg border-2 border-purple-800 bg-transparent px-4 py-2 text-white transition-all duration-300 ease-out hover:scale-105";
+  "pixel-tag flex w-fit items-center gap-1.5 px-2.5 py-1 text-xs text-white outline-none transition-transform duration-200 ease-out hover:-translate-y-0.5 focus-visible:-translate-y-0.5";
 
-const GithubLink: React.FC<GithubLinkProps> = ({ url, text }) => (
+const GithubLink: React.FC<{ url: string; text: string }> = ({ url, text }) => (
   <a href={url} target="_blank" rel="noopener noreferrer" className={linkClassName}>
-    <img src="/assets/icon/github.svg" alt="" width={24} height={24} loading="lazy" />
+    <img src="/assets/icon/github.svg" alt="" width={14} height={14} loading="lazy" />
     <span>{text}</span>
   </a>
 );
 
 const DemoLink: React.FC<{ url: string }> = ({ url }) => (
   <a href={url} target="_blank" rel="noopener noreferrer" className={linkClassName}>
-    <ExternalLink size={20} aria-hidden />
+    <ExternalLink size={13} aria-hidden />
     <span>Live Demo</span>
-  </a>
-);
-
-interface ContributorLinkProps {
-  contributor: {
-    name: string;
-    role: string;
-    link?: string | null;
-  };
-}
-
-const ContributorLink: React.FC<ContributorLinkProps> = ({ contributor }) => (
-  <a
-    href={contributor.link || "#"}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex items-center gap-3 text-gray-300 hover:text-white bg-purple-900/20 hover:bg-purple-800/30 p-2 rounded-lg transition-all duration-300 ease-out border-2 border-purple-700/30 hover:border-purple-700/60"
-  >
-    <div className="flex items-center justify-center w-8 h-8 bg-purple-700 rounded-full">
-      <LinkedInIcon className="w-5 h-5 text-white" />
-    </div>
-    <div className="flex flex-col">
-      <span className="font-medium text-purple-200">{contributor.name}</span>
-      <span className="text-sm text-gray-400">{contributor.role}</span>
-    </div>
   </a>
 );
 
@@ -68,9 +40,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, stars }) => {
   const [imageExists, setImageExists] = useState<boolean | null>(null);
 
   const inView = useInView(ref, {
-    amount: isMobile ? 0.15 : 0.25,
+    amount: isMobile ? 0.15 : 0.2,
     once: true,
-    margin: isMobile ? "0px 0px -30px 0px" : "0px 0px -80px 0px",
+    margin: isMobile ? "0px 0px -30px 0px" : "0px 0px -60px 0px",
   });
 
   const cardVariants = useMemo(() => createCardVariants(isMobile), [isMobile]);
@@ -87,81 +59,111 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, stars }) => {
     img.src = href;
   }, [href]);
 
-  const renderTechStack = () => (
-    <div className="flex flex-wrap gap-2 -mx-2">
-      {project.stack.map((stack) => (
-        <TechStackItem key={stack.name} tech={stack.name} url={stack.url} size="medium" />
-      ))}
-    </div>
-  );
-
-  const renderProjectLinks = () => (
-    <div className="mt-4 flex flex-wrap gap-4">
-      {project.demo && <DemoLink url={project.demo} />}
-      {project.sourceClient && <GithubLink url={project.sourceClient} text="Client Source" />}
-      {project.sourceServer && <GithubLink url={project.sourceServer} text="Server Source" />}
-      {project.sourceModel && <GithubLink url={project.sourceModel} text="Model Source" />}
-    </div>
-  );
-
-  const renderContributors = () => {
-    if (!project.contributors?.length) return null;
-
-    return (
-      <div className="mt-6 w-full">
-        <p className="font-semibold text-xl text-purple-300 mb-3">Contributors</p>
-        <div className="flex flex-wrap flex-col space-y-2">
-          {project.contributors.map((contributor) => (
-            <ContributorLink
-              key={`${contributor.name}-${contributor.role}`}
-              contributor={contributor}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  };
+  const shown = project.stack.slice(0, VISIBLE_STACK);
+  const hidden = project.stack.slice(VISIBLE_STACK);
+  const contributors = project.contributors ?? [];
 
   return (
-    <div className="w-full flex justify-center">
-      <motion.div
-        ref={ref}
-        variants={cardVariants}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        className="flex items-center justify-center w-full mt-10 max-md:mt-0"
-        style={{ willChange: "transform, opacity" }}
-      >
-        <div className="flex flex-row self-center gap-4 max-lg:flex-col-reverse">
-          {imageExists && (
-            <div className="w-full flex flex-col gap-4">
-              <img
-                src={href}
-                alt={`${project.title} project screenshot`}
-                className="rounded-lg shadow-xl transition-all duration-300 ease-out"
-                loading="eager"
-              />
-              {renderTechStack()}
-            </div>
-          )}
-
-          <div className="w-full text-white flex flex-col gap-2">
-            <div className="flex items-center gap-3">
-              <p className="font-semibold text-3xl text-gray-100">{project.title}</p>
-              <GitHubStars stars={stars} className="text-purple-200" />
-            </div>
-            <p className="text-xl text-purple-300">{project.type}</p>
-            <p className="text-md text-gray-400 font-semibold">{project.role}</p>
-            <p className="text-base text-gray-300 mt-4 leading-relaxed">{project.description}</p>
-
-            {renderProjectLinks()}
-            {renderContributors()}
-
-            {!imageExists && <div className="mt-4">{renderTechStack()}</div>}
+    <motion.article
+      ref={ref}
+      variants={cardVariants}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      className="pixel-accent-card flex h-full flex-col p-5 text-white max-sm:p-4"
+      style={{ willChange: "transform, opacity" }}
+    >
+      {/* The frame is always present, so the card never reflows between the
+          probe resolving and the cover painting. */}
+      <div className="pixel-photo">
+        {imageExists ? (
+          <img
+            src={href}
+            alt={`${project.title} project screenshot`}
+            className="aspect-[16/9] object-cover object-top"
+            loading="lazy"
+          />
+        ) : (
+          <div className="pixel-cover-fallback flex aspect-[16/9] items-center justify-center gap-6">
+            {imageExists === false &&
+              project.stack
+                .slice(0, 3)
+                .map((stack) => (
+                  <img
+                    key={stack.name}
+                    src={`/assets/icon/${stack.name.toLowerCase()}.svg`}
+                    alt=""
+                    className="h-10 w-10 brightness-150 max-sm:h-8 max-sm:w-8"
+                    loading="lazy"
+                  />
+                ))}
           </div>
+        )}
+      </div>
+
+      <h3 className="text-retro-card mt-3 text-2xl leading-tight">{project.title}</h3>
+
+      {/* Type and role drop to dim mono so the title and cover carry the card
+          instead of competing with three lines of purple body text. */}
+      <p className="mt-1.5 font-mono text-[0.6875rem] tracking-[0.16em] text-purple-300/70 uppercase">
+        {project.type} · {project.role}
+      </p>
+
+      {/* Clamped so a long description cannot stretch its whole grid row. */}
+      <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-gray-300">
+        {project.description}
+      </p>
+
+      <div className="mt-4 flex flex-wrap items-center gap-1.5">
+        {shown.map((stack) => (
+          <TechStackItem key={stack.name} tech={stack.name} url={stack.url} variant="flat" />
+        ))}
+        {hidden.length > 0 && (
+          <span
+            className="font-mono text-[0.625rem] tracking-wide text-purple-300/70"
+            title={hidden.map((stack) => stack.name).join(", ")}
+          >
+            +{hidden.length} more
+          </span>
+        )}
+      </div>
+
+      {/* mt-auto pins the footer to the card floor, so a row of cards lines its
+          links and stars up even when the copy above them differs in length. */}
+      <div className="mt-auto pt-5">
+        {contributors.length > 0 && (
+          <p className="mb-2 truncate font-mono text-[0.625rem] tracking-[0.16em] text-purple-300/60 uppercase">
+            With{" "}
+            {contributors.map((contributor, index) => (
+              <span key={`${contributor.name}-${contributor.role}`}>
+                {index > 0 && ", "}
+                {contributor.link ? (
+                  <a
+                    href={contributor.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-purple-200 outline-none hover:text-white focus-visible:text-white"
+                  >
+                    {contributor.name}
+                  </a>
+                ) : (
+                  contributor.name
+                )}
+              </span>
+            ))}
+          </p>
+        )}
+
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t-2 border-[#652682] pt-3">
+          <div className="flex flex-wrap gap-2">
+            {project.demo && <DemoLink url={project.demo} />}
+            {project.sourceClient && <GithubLink url={project.sourceClient} text="Client Source" />}
+            {project.sourceServer && <GithubLink url={project.sourceServer} text="Server Source" />}
+            {project.sourceModel && <GithubLink url={project.sourceModel} text="Model Source" />}
+          </div>
+          <GitHubStars stars={stars} className="text-purple-200" />
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </motion.article>
   );
 };
 

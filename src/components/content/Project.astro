@@ -10,8 +10,9 @@ const sortedPersonalProjects = personalProjects.sort((a: Project, b: Project) =>
   a.data.date > b.data.date ? -1 : 1,
 );
 
-const initialProjects = sortedPersonalProjects.slice(0, 3);
-const remainingProjects = sortedPersonalProjects.slice(3);
+// Two full rows of the two-up grid, so the fold never lands on a lone card.
+const initialProjects = sortedPersonalProjects.slice(0, 4);
+const remainingProjects = sortedPersonalProjects.slice(4);
 const projectStars = await getGitHubStars(
   sortedPersonalProjects.flatMap(({ data }) => [
     data.sourceClient,

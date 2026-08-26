@@ -78,9 +78,8 @@ const Row: FC<{
 
       <AnimatePresence initial={false}>
         {isOpen && (
-          <motion.div
+          <motion.section
             id={panelId}
-            role="region"
             className="overflow-hidden"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -116,7 +115,7 @@ const Row: FC<{
                 ))}
               </div>
             </div>
-          </motion.div>
+          </motion.section>
         )}
       </AnimatePresence>
     </li>
