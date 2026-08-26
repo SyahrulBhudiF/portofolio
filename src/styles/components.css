@@ -205,12 +205,6 @@
   background-color: #48225a;
 }
 
-/* Static surfaces (rails, panels) keep the notch but skip the hover lift. */
-.pixel-panel-static,
-.pixel-panel-static:hover {
-  background-color: #3e1d4d;
-}
-
 .pixel-panel-tight {
   --pixel-notch: 8px;
 }
@@ -223,10 +217,12 @@
   --strip: 15px; /* height of the highlight/shadow strips */
   --block: 12px; /* height of the corner blocks */
   --line: 2px; /* outline drawn around every piece, as in the figma */
-  --face: #5a1977;
-  --edge: #7f2ca6; /* highlight, above the face */
-  --shade: #270337; /* shadow, below the face */
-  --stroke: #8d30b8; /* outline colour */
+  /* Same palette as the experience panels: #3e1d4d surface, #652682 accent,
+     so this card reads as part of the theme rather than a brighter outlier. */
+  --face: #3e1d4d;
+  --edge: #652682; /* highlight, above the face */
+  --shade: #1e0d2a; /* shadow, below the face */
+  --stroke: #7e3c9d; /* outline colour */
   position: relative;
   padding: calc(var(--strip) + 12px) 20px;
   background-color: transparent;
@@ -274,21 +270,6 @@
     right 0 bottom var(--strip),
     left var(--line) top var(--strip),
     left 0 top var(--strip);
-}
-
-/* Registered so the face colour can actually interpolate on hover. */
-@property --face {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #5a1977;
-}
-
-.pixel-card-interactive {
-  transition: --face 160ms ease-out;
-}
-
-.pixel-card-interactive:hover {
-  --face: #642085;
 }
 
 @media (max-width: 640px) {
@@ -405,10 +386,10 @@
   background-color: #c180df;
 }
 
-/* Lighter than the #5a1977 face — the rail's #652682 is too close to it here. */
+/* Same fill as the experience rail's active tab, on the same #3e1d4d surface. */
 .pixel-row:hover::before,
 .pixel-row:has(:focus-visible)::before {
-  background-color: #7f2ca6;
+  background-color: #652682;
 }
 
 .pixel-tab-label {

@@ -27,17 +27,21 @@ interface Props {
   repos: ContributionRepo[];
 }
 
-const Row: FC<{ entry: ContributionEntry }> = ({ entry }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const Row: FC<{
+  entry: ContributionEntry;
+  panelId: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}> = ({ entry, panelId, isOpen, onToggle }) => {
   // The row bleeds out to the card edge, stopping short of the 3px face border.
   return (
     <li>
       <div className="pixel-row group -mx-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 px-4">
         <button
           type="button"
-          onClick={() => setIsOpen((open) => !open)}
+          onClick={onToggle}
           aria-expanded={isOpen}
+          aria-controls={panelId}
           className="flex min-w-0 cursor-pointer items-center gap-2 py-2.5 text-left"
         >
           <motion.span
@@ -75,6 +79,8 @@ const Row: FC<{ entry: ContributionEntry }> = ({ entry }) => {
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
+            id={panelId}
+            role="region"
             className="overflow-hidden"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -119,6 +125,8 @@ const Row: FC<{ entry: ContributionEntry }> = ({ entry }) => {
 
 const ContributionList: FC<Props> = ({ repos }) => {
   const reduceMotion = useReducedMotion();
+  // Single accordion: one open row at a time, across every repo section.
+  const [openEntry, setOpenEntry] = useState<string | null>(null);
 
   return (
     <motion.article
@@ -131,7 +139,7 @@ const ContributionList: FC<Props> = ({ repos }) => {
       {repos.map((repo, repoIndex) => (
         <motion.section
           key={repo.repository}
-          className={repoIndex > 0 ? "mt-5 border-t-2 border-[#7f2ca6]/45 pt-5" : ""}
+          className={repoIndex > 0 ? "mt-5 border-t-2 border-[#652682] pt-5" : ""}
           initial={reduceMotion ? false : { opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
@@ -158,9 +166,19 @@ const ContributionList: FC<Props> = ({ repos }) => {
           </div>
 
           <ul className="mt-1 flex flex-col">
-            {repo.entries.map((entry) => (
-              <Row key={entry.dateISO + entry.title} entry={entry} />
-            ))}
+            {repo.entries.map((entry) => {
+              const key = `${repo.repository}-${entry.dateISO}-${entry.title}`;
+
+              return (
+                <Row
+                  key={key}
+                  entry={entry}
+                  panelId={`contribution-${repoIndex}-${entry.dateISO}`}
+                  isOpen={openEntry === key}
+                  onToggle={() => setOpenEntry((current) => (current === key ? null : key))}
+                />
+              );
+            })}
           </ul>
         </motion.section>
       ))}
