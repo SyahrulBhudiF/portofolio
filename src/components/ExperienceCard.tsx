@@ -34,11 +34,9 @@ const ExperienceCard: FC<Props> = ({
     >
       <div className="flex w-full gap-3 justify-between max-sm:flex-col">
         <div className="min-w-0 flex-1">
-          <p className="font-medium text-2xl leading-tight text-white max-sm:text-lg break-words">
+          <p className="text-2xl leading-tight text-white max-sm:text-xl break-words">{subtitle}</p>
+          <p className="mt-1 text-base leading-snug text-white/75 max-sm:text-sm break-words">
             {title}
-          </p>
-          <p className="mt-1 text-base text-white/75 leading-snug max-sm:text-sm break-words">
-            {subtitle}
           </p>
         </div>
 

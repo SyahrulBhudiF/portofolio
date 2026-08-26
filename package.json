@@ -38,7 +38,8 @@
     "@biomejs/biome": "^1.9.4",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
-    "react-doctor": "^0.2.6"
+    "react-doctor": "^0.2.6",
+    "react-scan": "^0.5.7"
   },
   "devEngines": {
     "packageManager": {

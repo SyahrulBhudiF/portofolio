@@ -101,16 +101,16 @@ const portraitTiles = PORTRAIT_TILES.map(([cls, x, y, w, h]) => ({
                 <SliderHome client:idle/>
             </div>
             <div class="hero-socials" aria-label="Social links">
-                <a href="assets/cv_syahrul.pdf" download="Syahrul_CV.pdf" aria-label="Download CV">
+                <a class="pixel-frame" href="assets/cv_syahrul.pdf" download="Syahrul_CV.pdf" aria-label="Download CV">
                     <FileUser size={24}/>
                 </a>
-                <a href="https://github.com/SyahrulBhudiF" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <a class="pixel-frame" href="https://github.com/SyahrulBhudiF" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                     <GithubIcon size={24}/>
                 </a>
-                <a href="mailto:syahrulbhudif@ryuko.my.id" aria-label="Email">
+                <a class="pixel-frame" href="mailto:syahrulbhudif@ryuko.my.id" aria-label="Email">
                     <Mail size={24}/>
                 </a>
-                <a href="https://www.linkedin.com/in/syahrulbhudif/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <a class="pixel-frame" href="https://www.linkedin.com/in/syahrulbhudif/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                     <LinkedinIcon size={24}/>
                 </a>
             </div>
@@ -275,18 +275,18 @@ const portraitTiles = PORTRAIT_TILES.map(([cls, x, y, w, h]) => ({
 
     .real-name {
         margin-top: 1rem;
-        font-size: clamp(1.95rem, 3.4vw, 3.1rem);
-        font-weight: 300;
-        line-height: 0.92;
-        letter-spacing: 0.28em;
+        font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+        font-weight: 400;
+        line-height: 1;
+        letter-spacing: 0.16em;
         color: #fff;
         white-space: nowrap;
     }
 
     .role-line {
         margin-top: 1rem;
-        font-size: clamp(1.4rem, 2vw, 2rem);
-        line-height: 1;
+        font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+        line-height: 1.1;
         text-shadow: 4px 4px 0 #6c548f;
     }
 
@@ -300,22 +300,26 @@ const portraitTiles = PORTRAIT_TILES.map(([cls, x, y, w, h]) => ({
         margin-top: 1.45rem;
     }
 
+    /* Same treatment as the contact block: .pixel-frame supplies the notched
+       silhouette, the colours come from the site palette. */
     .hero-socials a {
+        --pixel-notch: 4px;
         display: grid;
         place-items: center;
         width: 3rem;
         height: 3rem;
-        color: #081226;
-        background: #fff;
-        border-radius: 0.42rem;
-        box-shadow: 0 5px 0 rgb(0 0 0 / 0.1);
+        color: #dcb8f0;
+        background: #2a1236;
+        border: 2px solid #c180df;
         transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
     }
 
-    .hero-socials a:hover {
-        transform: translateY(-3px);
+    .hero-socials a:hover,
+    .hero-socials a:focus-visible {
+        transform: translateY(-4px);
         color: #fff;
-        background: #cda6ed;
+        background: #652682;
+        outline: none;
     }
 
     @media (max-width: 1023px) {
@@ -353,13 +357,13 @@ const portraitTiles = PORTRAIT_TILES.map(([cls, x, y, w, h]) => ({
         }
 
         .real-name {
-            font-size: clamp(1.15rem, 5.6vw, 1.55rem);
-            letter-spacing: 0.1em;
+            font-size: clamp(1.15rem, 5.6vw, 1.4rem);
+            letter-spacing: 0.08em;
             white-space: normal;
         }
 
         .role-line {
-            font-size: clamp(1rem, 4.8vw, 1.25rem);
+            font-size: clamp(1rem, 4.8vw, 1.125rem);
             width: 100%;
             justify-content: center;
             text-align: center;

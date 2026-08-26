@@ -153,10 +153,10 @@ const ExperienceExplorer: FC<Props> = ({ groups }) => {
             >
               <div className="flex gap-4 justify-between items-start border-b-2 border-[#652682] pb-5 max-xl:flex-col">
                 <div className="min-w-0">
-                  <p className="text-xl xl:text-2xl leading-tight text-white break-words">
+                  <p className="text-xl leading-tight text-white xl:text-2xl break-words">
                     {item.subtitle}
                   </p>
-                  <p className="mt-1 text-base xl:text-lg text-white/70 leading-snug break-words">
+                  <p className="mt-1 text-base leading-snug text-white/70 xl:text-lg break-words">
                     {item.title}
                   </p>
 
@@ -212,7 +212,9 @@ const ExperienceExplorer: FC<Props> = ({ groups }) => {
       <div className="lg:hidden">
         {groups.map((group) => (
           <div key={group.label} className="mb-8 last:mb-0">
-            <h3 className="text-2xl font-bold text-purple-300 mb-4 text-center">{group.label}</h3>
+            <h3 className="text-retro text-3xl leading-none text-center text-purple-200 mb-4">
+              {group.label}
+            </h3>
             <div className="pixel-timeline relative flex flex-col gap-4 pl-8">
               <span className="pixel-timeline-rail" aria-hidden="true" />
               {group.items.map((groupItem, index) => (

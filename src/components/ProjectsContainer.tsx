@@ -1,9 +1,9 @@
 import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible.tsx";
 import type { Project } from "@/model/projects";
 import { AnimatePresence, motion } from "framer-motion";
-import { LucideChevronDown } from "lucide-react";
 import { useRef, useState } from "react";
 import ProjectCard from "./ProjectCard";
+import PixelDiamondIcon from "./icons/PixelDiamondIcon";
 
 interface ProjectsContainerProps {
   initialProjects: Project[];
@@ -44,11 +44,11 @@ const ProjectsContainer = ({
         <Collapsible open={isOpen} onOpenChange={setIsOpen} className="col-span-full w-full">
           <div className="w-full flex justify-center items-center mt-8">
             <CollapsibleTrigger asChild>
-              <div className="relative flex flex-col items-center group cursor-pointer transition duration-300 ease-in-out hover:scale-110">
-                <span className="pixel-tag mb-2 px-5 py-2 text-base text-white">
-                  {isOpen ? "See Less" : "See More"}
-                </span>
-
+              <button
+                type="button"
+                aria-label={isOpen ? "Show fewer projects" : "Show more projects"}
+                className="relative flex flex-col items-center group cursor-pointer bg-transparent border-none p-2 outline-none transition duration-300 ease-in-out hover:scale-110 focus-visible:scale-110"
+              >
                 <motion.div
                   className="relative"
                   animate={{
@@ -77,10 +77,10 @@ const ProjectsContainer = ({
                       },
                     }}
                   >
-                    <LucideChevronDown className="text-purple-500" size={24} />
+                    <PixelDiamondIcon className="size-6 text-[#e09eff]" />
                   </motion.div>
                 </motion.div>
-              </div>
+              </button>
             </CollapsibleTrigger>
           </div>
 

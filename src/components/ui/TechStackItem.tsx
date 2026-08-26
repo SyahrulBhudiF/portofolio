@@ -16,13 +16,13 @@ const sizeClasses: Record<TechStackSize, string> = {
   // middle band runs all the way out to 0. 16px plus the inner 0.15rem nudge
   // lands on the ~18px the reference blocks use.
   small: "px-4 py-1 text-sm",
-  medium: "px-4 py-2 text-base md:text-xl",
+  medium: "px-3 py-1.5 text-sm md:text-lg",
   large: "px-6 py-3 text-lg lg:text-2xl",
 };
 
 const iconSizeClasses: Record<TechStackSize, string> = {
   small: "w-6 h-6",
-  medium: "w-6 h-6 md:w-8 md:h-8",
+  medium: "w-6 h-6 md:w-7 md:h-7",
   large: "w-6 h-6 lg:w-10 lg:h-10",
 };
 

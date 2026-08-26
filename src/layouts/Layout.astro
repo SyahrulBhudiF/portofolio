@@ -42,6 +42,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://ryuko.my.id
     <meta property="og:description" content={description}/>
     <meta property="og:type" content="website"/>
     <title>{title}</title>
+    {import.meta.env.DEV && (
+      <script>
+        import { scan } from "react-scan";
+
+        scan({ enabled: true });
+      </script>
+    )}
 </head>
 <body class={`overflow-x-hidden ${scene ? "bg-[#241735]" : "bg-linear-to-b from-[#0a060f] via-[#201529] to-[#361d41] bg-fixed"}`}>
 <a href="#home" class="skip-link">Skip to main content</a>

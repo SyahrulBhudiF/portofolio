@@ -1,5 +1,4 @@
-@import url("https://fonts.cdnfonts.com/css/sf-pro-display") layer(base);
-@import url("https://fonts.googleapis.com/css2?family=Jersey+10&family=Merriweather&family=Silkscreen:wght@400;700&family=Space+Mono:wght@400;700&family=VT323&display=swap")
+@import url("https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Mono:wght@400;700&family=VT323&display=swap")
   layer(base);
 
 @import "tailwindcss";
@@ -10,6 +9,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --font-mono: "Space Mono", monospace;
+
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);

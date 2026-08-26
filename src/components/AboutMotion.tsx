@@ -17,14 +17,14 @@ const AboutMotion = ({ children }: Props) => {
   return (
     <div className="w-full max-w-6xl h-full flex flex-col items-center justify-center gap-16 text-white z-10">
       <motion.div
-        className="flex flex-col w-full h-fit items-center gap-4"
+        className="flex flex-col w-full h-fit items-start gap-4"
         variants={fadeUpVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: isMobile ? 0.1 : 0.2 }}
       >
-        <h2 className="text-6xl font-bold text-retro self-start max-sm:text-5xl">About Me</h2>
-        <p className="text-lg max-sm:text-base">
+        <h2 className="section-title self-start">About Me</h2>
+        <p className="max-w-5xl text-lg leading-relaxed max-sm:text-base">
           I'm a software developer focused on building reliable full-stack applications, with a
           particular interest in backend systems. Over the past{" "}
           <strong className="font-bold text-purple-300">two years</strong>, I've worked with
@@ -38,7 +38,7 @@ const AboutMotion = ({ children }: Props) => {
       </motion.div>
 
       <motion.div
-        className="flex flex-col w-full items-center gap-8"
+        className="flex flex-col w-full items-start gap-8"
         variants={fadeUpVariants}
         initial="hidden"
         whileInView="visible"
@@ -47,7 +47,7 @@ const AboutMotion = ({ children }: Props) => {
           delay: isMobile ? 0.1 : 0.2,
         }}
       >
-        <h2 className="text-6xl font-bold text-retro max-sm:text-5xl">Tech Stack</h2>
+        <h2 className="section-title">Tech Stack</h2>
         <div className="w-full flex flex-col gap-6">{children}</div>
       </motion.div>
     </div>

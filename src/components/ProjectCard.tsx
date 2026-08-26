@@ -6,13 +6,14 @@ import { ExternalLink } from "lucide-react";
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import GitHubStars from "./GitHubStars";
-import TechStackItem from "./ui/TechStackItem";
 
 /** Every card shows at most this many badges; the rest collapse into a count. */
 const VISIBLE_STACK = 6;
 
+// Secondary to the "View project" tag, so these drop to dim mono text; two
+// equally bright buttons is what made the footer read as having no primary.
 const linkClassName =
-  "pixel-tag relative z-[2] flex w-fit items-center gap-1.5 px-2.5 py-1 text-xs text-white outline-none transition-transform duration-200 ease-out hover:-translate-y-0.5 focus-visible:-translate-y-0.5";
+  "relative z-[2] flex items-center gap-1.5 font-mono text-[0.6875rem] tracking-[0.12em] text-purple-200 uppercase outline-none transition-colors duration-200 ease-out hover:text-white focus-visible:text-white";
 
 const GithubLink: React.FC<{ url: string; text: string }> = ({ url, text }) => (
   <a href={url} target="_blank" rel="noopener noreferrer" className={linkClassName}>
@@ -107,18 +108,21 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, slug, stars })
 
       {/* The title's ::after covers the whole card, so anywhere that is not
           another link opens the detail page. */}
-      <h3 className="text-retro-card mt-3 text-2xl leading-tight">
-        <a
-          href={`/projects/${slug}`}
-          className="outline-none after:absolute after:inset-0 after:z-[1] after:content-[''] hover:text-purple-100 focus-visible:text-purple-100"
-        >
-          {project.title}
-        </a>
-      </h3>
+      <div className="mt-3 flex items-baseline gap-2">
+        <h3 className="text-retro-card text-2xl leading-tight">
+          <a
+            href={`/projects/${slug}`}
+            className="outline-none after:absolute after:inset-0 after:z-1 after:content-[''] hover:text-purple-100 focus-visible:text-purple-100"
+          >
+            {project.title}
+          </a>
+        </h3>
+        <GitHubStars stars={stars} size={13} className="relative z-2 shrink-0 text-purple-200/90" />
+      </div>
 
       {/* Type and role drop to dim mono so the title and cover carry the card
           instead of competing with three lines of purple body text. */}
-      <p className="mt-1.5 font-mono text-[0.6875rem] tracking-[0.16em] text-purple-300/70 uppercase">
+      <p className="mt-1.5 font-mono text-xs tracking-[0.12em] text-purple-200/80 uppercase">
         {project.type} · {project.role}
       </p>
 
@@ -127,34 +131,32 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, slug, stars })
         {project.description}
       </p>
 
-      {/* Equal-width tracks so the blocks line up in columns instead of
-          wrapping ragged; the gap carries each block's 15px shadow, which is
-          why the chip's own margin is turned off. */}
-      <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(8.5rem,1fr))] gap-x-5 gap-y-4">
+      {/* Bare logos rather than blocks. The blocks were the brightest thing on
+          the card, so the eye landed on the framework names instead of the
+          project's. No z-index either — these stay under the title's overlay so
+          the whole card keeps opening the detail page. */}
+      <ul className="mt-4 flex flex-wrap items-center gap-3.5">
         {shown.map((stack) => (
-          <TechStackItem
-            key={stack.name}
-            tech={stack.name}
-            url={stack.url}
-            size="small"
-            className="relative z-[2] m-0 w-full justify-start"
-          />
+          <li key={stack.name}>
+            <img
+              src={`/assets/icon/${stack.name.toLowerCase()}.svg`}
+              alt={stack.name}
+              className="h-6 w-6 brightness-150"
+              loading="lazy"
+            />
+          </li>
         ))}
-      </div>
-      {hidden.length > 0 && (
-        <p
-          className="mt-3 font-mono text-[0.625rem] tracking-wide text-purple-300/70"
-          title={hidden.map((stack) => stack.name).join(", ")}
-        >
-          +{hidden.length} more
-        </p>
-      )}
+        {hidden.length > 0 && (
+          <li className="font-mono text-xs tracking-[0.08em] text-purple-200/75">
+            +{hidden.length}
+          </li>
+        )}
+      </ul>
 
-      {/* mt-auto pins the footer to the card floor, so a row of cards lines its
-          links and stars up even when the copy above them differs in length. */}
+      {/* mt-auto pins the source links to the card floor across the grid. */}
       <div className="mt-auto pt-5">
         {contributors.length > 0 && (
-          <p className="mb-2 truncate font-mono text-[0.625rem] tracking-[0.16em] text-purple-300/60 uppercase">
+          <p className="mb-2 truncate font-mono text-xs tracking-[0.12em] text-purple-200/70 uppercase">
             With{" "}
             {contributors.map((contributor, index) => (
               <span key={`${contributor.name}-${contributor.role}`}>
@@ -176,14 +178,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, slug, stars })
           </p>
         )}
 
-        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t-2 border-[#652682] pt-3">
-          <div className="flex flex-wrap gap-2">
-            {project.demo && <DemoLink url={project.demo} />}
-            {project.sourceClient && <GithubLink url={project.sourceClient} text="Client Source" />}
-            {project.sourceServer && <GithubLink url={project.sourceServer} text="Server Source" />}
-            {project.sourceModel && <GithubLink url={project.sourceModel} text="Model Source" />}
-          </div>
-          <GitHubStars stars={stars} className="text-purple-200" />
+        <div className="flex flex-wrap items-center gap-1.5 border-t-2 border-[#652682] pt-3">
+          <a
+            href={`/projects/${slug}`}
+            className="pixel-tag relative z-[2] flex w-fit items-center gap-2 px-3.5 py-1.5 text-xs text-white outline-none transition-transform duration-200 ease-out hover:-translate-y-0.5 focus-visible:-translate-y-0.5"
+          >
+            View project &rsaquo;
+          </a>
+          {project.demo && <DemoLink url={project.demo} />}
+          {project.sourceClient && <GithubLink url={project.sourceClient} text="Client" />}
+          {project.sourceServer && <GithubLink url={project.sourceServer} text="Server" />}
+          {project.sourceModel && <GithubLink url={project.sourceModel} text="Model" />}
         </div>
       </div>
     </motion.article>

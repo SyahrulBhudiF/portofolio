@@ -82,7 +82,7 @@ const sourceLinks = [
                     <h1 class="text-retro-card text-5xl leading-tight max-sm:text-3xl">{data.title}</h1>
                     <GitHubStars stars={stars} size={20} className="text-purple-200 text-lg"/>
                 </div>
-                <p class="font-mono text-xs tracking-[0.16em] text-purple-300/70 uppercase">{meta}</p>
+                <p class="font-mono text-xs tracking-[0.12em] text-purple-200/80 uppercase">{meta}</p>
             </header>
 
             {cover && (
@@ -131,8 +131,8 @@ const sourceLinks = [
             <div class="flex flex-col gap-10">
                     {hasOverview && (
                             <section>
-                                <p class="font-mono text-[0.6875rem] tracking-[0.2em] text-purple-300/70 uppercase">Overview</p>
-                                <div class="mt-3 border-t-2 border-[#652682] pt-4 leading-[1.75] text-white/80 [&>*+*]:mt-4 [&_a]:text-[#d8aef0] [&_a]:underline [&_a]:underline-offset-[3px] [&_code]:bg-[#2a1236] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.875em] [&_h2]:mt-7 [&_h2]:font-['VT323'] [&_h2]:text-2xl [&_h2]:leading-tight [&_h2]:text-white [&_h3]:mt-7 [&_h3]:font-['VT323'] [&_h3]:text-2xl [&_h3]:leading-tight [&_h3]:text-white [&_li+li]:mt-1.5 [&_ol]:list-decimal [&_ol]:pl-5 [&_pre]:overflow-x-auto [&_pre]:bg-[#2a1236] [&_pre]:p-4 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_ul]:list-disc [&_ul]:pl-5">
+                                <h2 class="detail-eyebrow">Overview</h2>
+                                <div class="mt-3 border-t-2 border-[#652682] pt-4 leading-[1.75] text-white/80 [&>*+*]:mt-4 [&_a]:text-[#d8aef0] [&_a]:underline [&_a]:underline-offset-[3px] [&_code]:bg-[#2a1236] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.875em] [&_h2]:mt-7 [&_h2]:font-['VT323'] [&_h2]:text-2xl [&_h2]:leading-tight [&_h2]:text-white [&_h3]:mt-5 [&_h3]:font-['VT323'] [&_h3]:text-xl [&_h3]:leading-tight [&_h3]:text-purple-100 [&_li+li]:mt-1.5 [&_ol]:list-decimal [&_ol]:pl-5 [&_pre]:overflow-x-auto [&_pre]:bg-[#2a1236] [&_pre]:p-4 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_ul]:list-disc [&_ul]:pl-5">
                                     <Content/>
                                 </div>
                             </section>
@@ -140,7 +140,7 @@ const sourceLinks = [
 
                     {gallery.length > 0 && (
                             <section>
-                                <p class="font-mono text-[0.6875rem] tracking-[0.2em] text-purple-300/70 uppercase">Gallery</p>
+                                <h2 class="detail-eyebrow">Gallery</h2>
                                 <div class="mt-3 border-t-2 border-[#652682] pt-5">
                                     <ProjectGallery images={gallery} client:visible/>
                                 </div>
@@ -148,7 +148,7 @@ const sourceLinks = [
                     )}
 
                     <section>
-                        <p class="font-mono text-[0.6875rem] tracking-[0.2em] text-purple-300/70 uppercase">Stack</p>
+                        <h2 class="detail-eyebrow">Stack</h2>
                         <!-- Equal-width tracks, and the gap carries each block's
                              15px shadow now that the chip's own margin is off. -->
                         <div class="mt-3 grid grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] gap-x-6 gap-y-5 border-t-2 border-[#652682] pt-5">
@@ -160,7 +160,7 @@ const sourceLinks = [
 
                     {data.contributors && data.contributors.length > 0 && (
                             <section>
-                                <p class="font-mono text-[0.6875rem] tracking-[0.2em] text-purple-300/70 uppercase">Contributors</p>
+                                <h2 class="detail-eyebrow">Contributors</h2>
                                 <ul class="mt-3 flex flex-wrap gap-x-10 gap-y-3 border-t-2 border-[#652682] pt-4">
                                     {data.contributors.map((contributor) => (
                                             <li>
@@ -171,7 +171,7 @@ const sourceLinks = [
                                                         class="flex flex-col outline-none hover:text-purple-100 focus-visible:text-purple-100"
                                                 >
                                                     <span class="text-sm text-white">{contributor.name}</span>
-                                                    <span class="font-mono text-[0.625rem] tracking-[0.16em] text-purple-300/60 uppercase">{contributor.role}</span>
+                                                    <span class="font-mono text-xs tracking-[0.12em] text-purple-200/70 uppercase">{contributor.role}</span>
                                                 </a>
                                             </li>
                                     ))}
@@ -186,7 +186,7 @@ const sourceLinks = [
                                 href={`/projects/${projectSlug(previous)}`}
                                 class="flex min-w-0 flex-col outline-none hover:text-purple-100 focus-visible:text-purple-100"
                         >
-                            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-purple-300/60 uppercase">&lsaquo; Newer</span>
+                            <span class="font-mono text-xs tracking-[0.12em] text-purple-200/70 uppercase">&lsaquo; Newer</span>
                             <span class="truncate text-sm text-white">{previous.data.title}</span>
                         </a>
                 ) : <span/>}
@@ -196,7 +196,7 @@ const sourceLinks = [
                                 href={`/projects/${projectSlug(next)}`}
                                 class="flex min-w-0 flex-col text-right outline-none hover:text-purple-100 focus-visible:text-purple-100"
                         >
-                            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-purple-300/60 uppercase">Older &rsaquo;</span>
+                            <span class="font-mono text-xs tracking-[0.12em] text-purple-200/70 uppercase">Older &rsaquo;</span>
                             <span class="truncate text-sm text-white">{next.data.title}</span>
                         </a>
                 ) : <span/>}

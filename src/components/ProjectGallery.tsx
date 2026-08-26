@@ -1,7 +1,7 @@
 import Magnetic from "@/components/ui/Magnetic";
 import { motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { type FC, useCallback, useEffect, useRef, useState } from "react";
+import { type CSSProperties, type FC, useCallback, useEffect, useRef, useState } from "react";
 
 export interface GalleryImage {
   src: string;
@@ -12,6 +12,14 @@ export interface GalleryImage {
 interface Props {
   images: GalleryImage[];
 }
+
+// Inline, because components.css is unlayered and would beat a Tailwind
+// arbitrary property. cqw resolves against the thumbnail's own grid cell, so
+// the frame thins out with the image instead of staying at the cover's 14px.
+const THUMB_FRAME = {
+  "--band": "clamp(4px, 2cqw, 10px)",
+  "--drop": "clamp(5px, 2.2cqw, 11px)",
+} as CSSProperties;
 
 const ProjectGallery: FC<Props> = ({ images }) => {
   const reduceMotion = useReducedMotion();
@@ -62,6 +70,7 @@ const ProjectGallery: FC<Props> = ({ images }) => {
         {images.map((image, index) => (
           <motion.li
             key={image.src}
+            className="@container"
             initial={reduceMotion ? false : { opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -72,11 +81,13 @@ const ProjectGallery: FC<Props> = ({ images }) => {
               onClick={() => setOpenAt(index)}
               className="block w-full cursor-zoom-in text-left outline-none"
             >
-              <Magnetic className="pixel-photo block">
-                <img src={image.src} alt={image.alt} loading="lazy" className="block w-full" />
+              <Magnetic className="block">
+                <span className="pixel-photo block" style={THUMB_FRAME}>
+                  <img src={image.src} alt={image.alt} loading="lazy" className="block w-full" />
+                </span>
               </Magnetic>
               {image.caption && (
-                <span className="mt-1 block font-mono text-[0.625rem] tracking-[0.16em] text-purple-300/70 uppercase">
+                <span className="mt-2 block font-mono text-xs tracking-[0.12em] text-purple-200/80 uppercase">
                   {image.caption}
                 </span>
               )}
@@ -129,7 +140,7 @@ const ProjectGallery: FC<Props> = ({ images }) => {
                   className="block max-h-[70vh] w-auto max-w-full object-contain"
                 />
               </span>
-              <figcaption className="text-center font-mono text-xs tracking-[0.16em] text-purple-200/80 uppercase">
+              <figcaption className="text-center font-mono text-xs tracking-[0.12em] text-purple-200/80 uppercase">
                 {active.caption ?? active.alt}
                 <span className="ml-3 text-purple-300/50">
                   {openAt + 1}/{images.length}

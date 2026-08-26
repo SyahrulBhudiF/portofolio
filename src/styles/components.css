@@ -58,6 +58,22 @@
   color: white;
 }
 
+.section-title {
+  font-family: "VT323", monospace;
+  font-size: clamp(3rem, 5vw, 3.75rem);
+  font-weight: 400;
+  line-height: 0.9;
+  text-shadow: 5px 5px 0 #cda6ed;
+}
+
+.detail-eyebrow {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(216 174 240 / 0.75);
+}
+
 /* ==========================================================================
    Retro Tech Block - 3D Card Effect
    ========================================================================== */
@@ -207,10 +223,6 @@
   --pixel-notch: 12px;
   background-color: #3e1d4d;
   transition: background-color 220ms ease-out;
-}
-
-.pixel-panel:hover {
-  background-color: #48225a;
 }
 
 .pixel-panel-tight {
