@@ -1,5 +1,6 @@
 import Magnetic from "@/components/ui/Magnetic";
-import { motion, useReducedMotion } from "framer-motion";
+import { LazyMotion, domAnimation, useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { type CSSProperties, type FC, useCallback, useEffect, useRef, useState } from "react";
 
@@ -68,7 +69,7 @@ const GalleryItem: FC<GalleryItemProps> = ({ image, index, images, reduceMotion 
   }, [isOpen]);
 
   return (
-    <motion.li
+    <m.li
       className="@container"
       initial={reduceMotion ? false : { opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -101,11 +102,6 @@ const GalleryItem: FC<GalleryItemProps> = ({ image, index, images, reduceMotion 
           if (event.key === "ArrowRight") step(1);
           if (event.key === "ArrowLeft") step(-1);
         }}
-        // A click on the backdrop targets the dialog itself, so this dismisses
-        // on backdrop clicks without swallowing clicks on the content.
-        onClick={(event) => {
-          if (event.target === dialogRef.current) setOpenAt(null);
-        }}
       >
         {active && (
           <div className="flex h-full w-full flex-col items-center justify-center gap-5 p-4">
@@ -120,7 +116,7 @@ const GalleryItem: FC<GalleryItemProps> = ({ image, index, images, reduceMotion 
               </button>
             </div>
 
-            <motion.figure
+            <m.figure
               key={active.src}
               className="flex max-h-full min-h-0 flex-col items-center gap-3"
               initial={reduceMotion ? false : { scale: 0.97, opacity: 0 }}
@@ -140,7 +136,7 @@ const GalleryItem: FC<GalleryItemProps> = ({ image, index, images, reduceMotion 
                   {openAt + 1}/{images.length}
                 </span>
               </figcaption>
-            </motion.figure>
+            </m.figure>
 
             {images.length > 1 && (
               <div className="flex items-center gap-3">
@@ -165,7 +161,7 @@ const GalleryItem: FC<GalleryItemProps> = ({ image, index, images, reduceMotion 
           </div>
         )}
       </dialog>
-    </motion.li>
+    </m.li>
   );
 };
 
@@ -175,17 +171,19 @@ const ProjectGallery: FC<Props> = ({ images }) => {
   if (images.length === 0) return null;
 
   return (
-    <ul className="grid grid-cols-2 gap-4 sm:gap-6">
-      {images.map((image, index) => (
-        <GalleryItem
-          key={image.src}
-          image={image}
-          index={index}
-          images={images}
-          reduceMotion={reduceMotion}
-        />
-      ))}
-    </ul>
+    <LazyMotion features={domAnimation} strict>
+      <ul className="grid grid-cols-2 gap-4 sm:gap-6">
+        {images.map((image, index) => (
+          <GalleryItem
+            key={image.src}
+            image={image}
+            index={index}
+            images={images}
+            reduceMotion={reduceMotion}
+          />
+        ))}
+      </ul>
+    </LazyMotion>
   );
 };
 

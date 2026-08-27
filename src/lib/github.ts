@@ -38,5 +38,3 @@ const toRepository = (url: string) => {
   const [owner, repository] = pathname.split("/").filter(Boolean);
   return owner && repository ? `${owner}/${repository}` : null;
 };
-
-export const getRepositoryFromGitHubUrl = (url: string) => toRepository(url);

@@ -1,4 +1,5 @@
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, LazyMotion, domMax, useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
 import { ChevronDown, ExternalLink, Star } from "lucide-react";
 import { type FC, memo, useCallback, useState } from "react";
 
@@ -47,13 +48,13 @@ const Row = memo(({ entry, entryKey, panelId, isOpen, onToggle }: RowProps) => {
           aria-controls={panelId}
           className="flex min-w-0 cursor-pointer items-center gap-2 py-2.5 text-left"
         >
-          <motion.span
+          <m.span
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="flex shrink-0 text-purple-200/70"
           >
             <ChevronDown size={14} aria-hidden="true" />
-          </motion.span>
+          </m.span>
           <span className="truncate text-sm text-white group-hover:text-purple-100">
             {entry.title}
           </span>
@@ -81,12 +82,13 @@ const Row = memo(({ entry, entryKey, panelId, isOpen, onToggle }: RowProps) => {
 
       <AnimatePresence initial={false}>
         {isOpen && (
-          <motion.section
+          <m.section
+            layout
             id={panelId}
             className="overflow-hidden"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.28, ease: "easeInOut" }}
           >
             <div className="pt-1 pb-4 pl-6">
@@ -118,7 +120,7 @@ const Row = memo(({ entry, entryKey, panelId, isOpen, onToggle }: RowProps) => {
                 ))}
               </div>
             </div>
-          </motion.section>
+          </m.section>
         )}
       </AnimatePresence>
     </li>
@@ -143,7 +145,7 @@ const RepoSection = memo(({ repo, repoIndex, reduceMotion }: RepoSectionProps) =
   );
 
   return (
-    <motion.section
+    <m.section
       className={repoIndex > 0 ? "mt-5 border-t-2 border-[#652682] pt-5" : ""}
       initial={reduceMotion ? false : { opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -186,7 +188,7 @@ const RepoSection = memo(({ repo, repoIndex, reduceMotion }: RepoSectionProps) =
           );
         })}
       </ul>
-    </motion.section>
+    </m.section>
   );
 });
 
@@ -196,22 +198,24 @@ const ContributionList: FC<Props> = ({ repos }) => {
   const reduceMotion = useReducedMotion();
 
   return (
-    <motion.article
-      className="pixel-card"
-      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
-    >
-      {repos.map((repo, repoIndex) => (
-        <RepoSection
-          key={repo.repository}
-          repo={repo}
-          repoIndex={repoIndex}
-          reduceMotion={reduceMotion}
-        />
-      ))}
-    </motion.article>
+    <LazyMotion features={domMax} strict>
+      <m.article
+        className="pixel-card"
+        initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
+      >
+        {repos.map((repo, repoIndex) => (
+          <RepoSection
+            key={repo.repository}
+            repo={repo}
+            repoIndex={repoIndex}
+            reduceMotion={reduceMotion}
+          />
+        ))}
+      </m.article>
+    </LazyMotion>
   );
 };
 

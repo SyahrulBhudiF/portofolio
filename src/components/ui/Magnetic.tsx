@@ -1,4 +1,5 @@
-import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import * as m from "framer-motion/m";
 import { type FC, type PointerEvent, type ReactNode, useRef } from "react";
 
 interface MagneticProps {
@@ -54,9 +55,9 @@ const Magnetic: FC<MagneticProps> = ({ children, className, pull = 0.05 }) => {
     // displacement back in; harmless on a small button, but it drifts on
     // something this size.
     <span ref={areaRef} onPointerMove={track} onPointerLeave={release} className="block">
-      <motion.span style={{ x: springX, y: springY }} className={className}>
+      <m.span style={{ x: springX, y: springY }} className={className}>
         {children}
-      </motion.span>
+      </m.span>
     </span>
   );
 };

@@ -23,8 +23,8 @@ const formatDate = (date: Date) =>
 // Newest entry first inside a repo, repos ordered by their newest entry.
 const repos = contributions
   .map(({ data }) => {
-    const entries = [...data.entries]
-      .sort((a, b) => b.date.getTime() - a.date.getTime())
+    const entries = data.entries
+      .toSorted((a, b) => b.date.getTime() - a.date.getTime())
       .map((entry) => ({
         title: entry.title,
         description: entry.description,

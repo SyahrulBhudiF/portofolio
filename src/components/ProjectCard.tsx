@@ -1,7 +1,8 @@
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { createCardVariants } from "@/lib/animations";
 import type { ProjectMeta } from "@/model/projects";
-import { motion, useInView } from "framer-motion";
+import { useInView } from "framer-motion";
+import * as m from "framer-motion/m";
 import { ExternalLink } from "lucide-react";
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -68,13 +69,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, slug, stars })
   const contributors = project.contributors ?? [];
 
   return (
-    <motion.article
+    <m.article
       ref={ref}
       variants={cardVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
       className="pixel-accent-card flex h-full flex-col p-5 text-white max-sm:p-4"
-      style={{ willChange: "transform, opacity" }}
     >
       {/* The frame is always present, so the card never reflows between the
           probe resolving and the cover painting. */}
@@ -191,7 +191,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, slug, stars })
           {project.sourceModel && <GithubLink url={project.sourceModel} text="Model" />}
         </div>
       </div>
-    </motion.article>
+    </m.article>
   );
 };
 

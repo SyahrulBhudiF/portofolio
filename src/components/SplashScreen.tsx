@@ -1,4 +1,5 @@
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, LazyMotion, domAnimation, useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
 import { useEffect, useState } from "react";
 
 const SEGMENTS = Array.from({ length: 12 }, (_, index) => index);
@@ -44,34 +45,36 @@ export default function SplashScreen() {
   }, [showSplash]);
 
   return (
-    <AnimatePresence>
-      {showSplash && (
-        <motion.div
-          className="fixed inset-0 z-[100] grid place-items-center"
-          style={{ background: BG }}
-          initial={{ opacity: 1 }}
-          exit={{
-            opacity: 0,
-            transition: { duration: reduced ? 0 : 0.6, ease: [0.4, 0, 0.2, 1] },
-          }}
-        >
-          <motion.div
-            className="flex h-2.5 gap-1"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            aria-label="Loading scene"
+    <LazyMotion features={domAnimation} strict>
+      <AnimatePresence>
+        {showSplash && (
+          <m.div
+            className="fixed inset-0 z-[100] grid place-items-center"
+            style={{ background: BG }}
+            initial={{ opacity: 1 }}
+            exit={{
+              opacity: 0,
+              transition: { duration: reduced ? 0 : 0.6, ease: [0.4, 0, 0.2, 1] },
+            }}
           >
-            {SEGMENTS.map((segment) => (
-              <motion.span
-                key={segment}
-                variants={segmentVariants}
-                className="block h-2.5 w-3 bg-purple-300"
-              />
-            ))}
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+            <m.div
+              className="flex h-2.5 gap-1"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              aria-label="Loading scene"
+            >
+              {SEGMENTS.map((segment) => (
+                <m.span
+                  key={segment}
+                  variants={segmentVariants}
+                  className="block h-2.5 w-3 bg-purple-300"
+                />
+              ))}
+            </m.div>
+          </m.div>
+        )}
+      </AnimatePresence>
+    </LazyMotion>
   );
 }

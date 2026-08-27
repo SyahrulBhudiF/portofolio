@@ -1,6 +1,7 @@
 import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible.tsx";
 import type { Project } from "@/model/projects";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, LazyMotion, domMax } from "framer-motion";
+import * as m from "framer-motion/m";
 import { useState } from "react";
 import ProjectCard from "./ProjectCard";
 import PixelDiamondIcon from "./icons/PixelDiamondIcon";
@@ -35,7 +36,7 @@ const RemainingProjects = ({ projects, stars }: RemainingProjectsProps) => {
             aria-label={isOpen ? "Show fewer projects" : "Show more projects"}
             className="relative flex flex-col items-center group cursor-pointer bg-transparent border-none p-2 outline-none transition duration-300 ease-in-out hover:scale-110 focus-visible:scale-110"
           >
-            <motion.div
+            <m.div
               className="relative"
               animate={{
                 y: [0, 5, 0],
@@ -47,7 +48,7 @@ const RemainingProjects = ({ projects, stars }: RemainingProjectsProps) => {
                 ease: "easeInOut",
               }}
             >
-              <motion.div
+              <m.div
                 animate={{
                   rotate: isOpen ? 180 : 0,
                   scale: [1, 1.1, 1],
@@ -64,24 +65,25 @@ const RemainingProjects = ({ projects, stars }: RemainingProjectsProps) => {
                 }}
               >
                 <PixelDiamondIcon className="size-6 text-[#e09eff]" />
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           </button>
         </CollapsibleTrigger>
       </div>
 
       <AnimatePresence initial={false}>
         {isOpen && (
-          <motion.div
+          <m.div
+            layout
             className="w-full overflow-hidden"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             <div className="grid grid-cols-1 items-stretch gap-6 pt-8 sm:grid-cols-2">
               {projects.map((project, index) => (
-                <motion.div
+                <m.div
                   key={project.id}
                   className="h-full"
                   initial={{ opacity: 0, y: -20 }}
@@ -100,10 +102,10 @@ const RemainingProjects = ({ projects, stars }: RemainingProjectsProps) => {
                     slug={project.data.slug ?? project.id}
                     stars={projectStars(project, stars)}
                   />
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </Collapsible>
@@ -116,24 +118,26 @@ const ProjectsContainer = ({
   stars,
 }: ProjectsContainerProps) => {
   return (
-    <div
-      className="grid w-full grid-cols-1 items-stretch gap-6 sm:grid-cols-2"
-      style={{ overflowAnchor: "none" }}
-    >
-      {initialProjects.map((project) => (
-        <ProjectCard
-          key={project.id}
-          project={project.data}
-          href={`/assets/projects/${project.id}/cover.webp`}
-          slug={project.data.slug ?? project.id}
-          stars={projectStars(project, stars)}
-        />
-      ))}
+    <LazyMotion features={domMax} strict>
+      <div
+        className="grid w-full grid-cols-1 items-stretch gap-6 sm:grid-cols-2"
+        style={{ overflowAnchor: "none" }}
+      >
+        {initialProjects.map((project) => (
+          <ProjectCard
+            key={project.id}
+            project={project.data}
+            href={`/assets/projects/${project.id}/cover.webp`}
+            slug={project.data.slug ?? project.id}
+            stars={projectStars(project, stars)}
+          />
+        ))}
 
-      {remainingProjects.length > 0 && (
-        <RemainingProjects projects={remainingProjects} stars={stars} />
-      )}
-    </div>
+        {remainingProjects.length > 0 && (
+          <RemainingProjects projects={remainingProjects} stars={stars} />
+        )}
+      </div>
+    </LazyMotion>
   );
 };
 

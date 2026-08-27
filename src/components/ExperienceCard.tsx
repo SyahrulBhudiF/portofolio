@@ -1,5 +1,6 @@
 import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible.tsx";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
+import * as m from "framer-motion/m";
 import { LucideCalendar1, LucideMapPinned } from "lucide-react";
 import { type FC, useState } from "react";
 
@@ -76,19 +77,20 @@ const ExperienceCard: FC<Props> = ({
 
       <AnimatePresence initial={false}>
         {isOpen && (
-          <motion.div
+          <m.div
+            layout
             className="w-full overflow-hidden"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             <div className="pt-4">
               {description.length > 0 && (
                 <ul className="list-disc space-y-2">
                   {description.map((item, index) => (
-                    <motion.li
-                      key={`desc-${item.slice(0, 20)}-${index}`}
+                    <m.li
+                      key={item}
                       className="font-medium text-sm text-white ml-4"
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -98,20 +100,20 @@ const ExperienceCard: FC<Props> = ({
                       }}
                     >
                       {item}
-                    </motion.li>
+                    </m.li>
                   ))}
                 </ul>
               )}
 
               {skills.length > 0 && (
-                <motion.div
+                <m.div
                   className="flex gap-2 items-center flex-wrap mt-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2, duration: 0.3 }}
                 >
                   {skills.map((skill, index) => (
-                    <motion.div
+                    <m.div
                       key={skill}
                       className="pixel-tag px-4 py-1.5 max-sm:px-3 max-sm:text-xs text-sm text-white w-fit"
                       initial={{ y: 150 }}
@@ -123,12 +125,12 @@ const ExperienceCard: FC<Props> = ({
                       }}
                     >
                       {skill}
-                    </motion.div>
+                    </m.div>
                   ))}
-                </motion.div>
+                </m.div>
               )}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </Collapsible>
