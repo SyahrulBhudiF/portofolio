@@ -1,3 +1,4 @@
+import { compactRange } from "@/lib/duration";
 import { AnimatePresence, LazyMotion, domMax } from "framer-motion";
 import * as m from "framer-motion/m";
 import { LucideCalendar1, LucideMapPinned } from "lucide-react";
@@ -22,17 +23,6 @@ export interface ExperienceGroup {
 interface Props {
   groups: ExperienceGroup[];
 }
-
-/** "May 2026 - Present" -> "2026-Now", "Feb 2025 - Dec 2025" -> "2025". */
-const compactRange = (duration: string): string => {
-  const years = duration.match(/\d{4}/g);
-  if (!years?.length) return duration;
-
-  const start = years[0];
-  const end = /present|now/i.test(duration) ? "Now" : years[years.length - 1];
-
-  return start === end ? start : `${start}-${end}`;
-};
 
 const ExperienceExplorer: FC<Props> = ({ groups }) => {
   // Flatten once so keyboard navigation can walk every tab across group headings.
@@ -212,9 +202,9 @@ const ExperienceExplorer: FC<Props> = ({ groups }) => {
 
         {/* Mobile: the tab rail has nowhere to live, so fall back to the accordion. */}
         <div className="lg:hidden">
-          {groups.map((group) => (
+          {groups.map((group, groupIndex) => (
             <div key={group.label} className="mb-8 last:mb-0">
-              <h3 className="text-retro text-3xl leading-none text-center text-purple-200 mb-4">
+              <h3 className="text-retro text-3xl leading-none text-purple-200 mb-4">
                 {group.label}
               </h3>
               <div className="pixel-timeline relative flex flex-col gap-4 pl-8">
@@ -236,7 +226,9 @@ const ExperienceExplorer: FC<Props> = ({ groups }) => {
                       description={groupItem.description}
                       tags={groupItem.tags}
                       skills={groupItem.skills}
-                      defaultOpen={index === 0}
+                      // Only the newest role opens itself. Education opening
+                      // too added 520px of scroll for the least-read group.
+                      defaultOpen={groupIndex === 0 && index === 0}
                     />
                   </div>
                 ))}

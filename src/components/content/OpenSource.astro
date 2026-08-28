@@ -57,26 +57,32 @@ const repos = contributions
 const mergedCount = repos.reduce((total, repo) => total + repo.entries.length, 0);
 ---
 
-<div class="w-full">
-  <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 mb-6">
-    <div>
-      <h3 class="text-retro text-3xl leading-none max-sm:text-2xl">Open Source</h3>
-      <p class="mt-1 text-sm text-purple-200/80">Merged contributions to tools I use.</p>
+<section
+  class="text-white w-full h-fit flex justify-center relative z-10 px-16 pt-20 pb-20 max-md:px-4 max-md:pt-14 max-md:pb-14"
+  id="open-source"
+>
+  <div class="flex w-full max-w-6xl flex-col items-start gap-8 z-10">
+    <div class="flex flex-col items-start gap-3">
+      <h2 class="section-title">Open Source</h2>
+      <p class="font-mono text-xs tracking-[0.2em] text-purple-300/70 uppercase">
+        {String(mergedCount).padStart(2, "0")} merged &middot; contributions to tools I use
+      </p>
     </div>
-    <span class="font-mono text-xs tracking-[0.2em] text-purple-300/70">
-      {String(mergedCount).padStart(2, "0")} MERGED
-    </span>
+
+    {/* The column sizes to its children, so the card needs w-full or it shrinks
+        to its content width and stops lining up with the other sections. */}
+    <div class="w-full">
+      <ContributionList repos={repos} client:visible />
+    </div>
+
+    {/* The cards ship with framer's initial opacity:0; keep them readable without JS. */}
+    <noscript>
+      <style>
+        .pixel-card {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
   </div>
-
-  <ContributionList repos={repos} client:visible />
-
-  {/* The cards ship with framer's initial opacity:0; keep them readable without JS. */}
-  <noscript>
-    <style>
-      .pixel-card {
-        opacity: 1 !important;
-        transform: none !important;
-      }
-    </style>
-  </noscript>
-</div>
+</section>

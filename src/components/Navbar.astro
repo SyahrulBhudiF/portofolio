@@ -1,13 +1,23 @@
 ---
+import MobileNav from "./MobileNav";
 import NavbarItem from "./NavbarItem";
+
+// Absolute so the links still resolve from /projects/<slug>.
+const links = [
+  { href: "/#home", label: "Home" },
+  { href: "/#about", label: "About" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#open-source", label: "Open Source" },
+  { href: "/#projects", label: "Projects" },
+];
 ---
 
-<nav class="fixed right-0 bottom-0 left-0 z-25 flex w-full items-center justify-center rounded-t-lg bg-[#241735] shadow-md">
+<nav class="fixed right-0 bottom-0 left-0 z-25 flex w-full items-center justify-center rounded-t-lg bg-[#241735] shadow-md max-sm:hidden">
     <ul class="flex justify-evenly items-center pb-5 pt-3 text-white">
-        <!-- Absolute so the links still resolve from /projects/<slug>. -->
-        <NavbarItem client:load href="/#home" label="Home"/>
-        <NavbarItem client:load href="/#about" label="About"/>
-        <NavbarItem client:load href="/#experience" label="Experience"/>
-        <NavbarItem client:load href="/#projects" label="Projects"/>
+        {links.map((link) => <NavbarItem client:load href={link.href} label={link.label} />)}
     </ul>
 </nav>
+
+{/* Five labels no longer fit a phone-width bar, so mobile gets a trigger and a
+    popover instead of a row that wraps and clips. */}
+<MobileNav client:load links={links} />

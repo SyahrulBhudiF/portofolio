@@ -29,13 +29,13 @@ const AboutMotion = ({ children }: Props) => {
           <p className="max-w-5xl text-lg leading-relaxed max-sm:text-base">
             I'm a software developer focused on building reliable full-stack applications, with a
             particular interest in backend systems. Over the past{" "}
-            <strong className="font-bold text-purple-300">two years</strong>, I've worked with
-            TypeScript, Laravel, and Go on the backend, and Next.js and TanStack Start on the
-            frontend.
+            <strong className="font-bold text-purple-300">two years</strong> I've worked with Go,
+            TypeScript, and Laravel — most recently a Go route planner at Venturo Pro and a
+            multi-tenant Elysia/TanStack platform at Ariverse Studio.
             <br />
             <br />
-            Comfortable in Linux environments, I learn quickly, adapt to complex projects, and enjoy
-            contributing to collaborative teams while continuing to sharpen my technical skills.
+            Comfortable in Linux environments, happiest around concurrency, data modelling, and the
+            deployment side — and I ship patches to the open source tools I use.
           </p>
         </m.div>
 
