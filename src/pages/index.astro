@@ -9,14 +9,15 @@ import OpenSource from "../components/content/OpenSource.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
-<div>
+{/* Layout renders the whole document, so nothing may sit outside it — a wrapper
+    element here pushes <html> past the parser's implicit <body>, the stylesheet
+    links land in the body, and the page paints unstyled first. */}
+<Layout>
     <SplashScreen client:load/>
-    <Layout>
-        <Home/>
-        <About/>
-        <Experience/>
-        <OpenSource/>
-        <Project/>
-        <Collaborate/>
-    </Layout>
-</div>
+    <Home/>
+    <About/>
+    <Experience/>
+    <OpenSource/>
+    <Project/>
+    <Collaborate/>
+</Layout>
