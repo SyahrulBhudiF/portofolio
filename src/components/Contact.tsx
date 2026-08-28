@@ -17,17 +17,36 @@ const socialLinks: { href: string; label: string; icon: BrandIcon }[] = [
 
 export default function Contact() {
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div>
-        <p className="font-mono text-[0.625rem] tracking-[0.18em] text-purple-300/50 uppercase max-sm:text-[0.5625rem]">
-          Built with Astro React Tailwind
+    <div className="flex flex-col items-center gap-8">
+      {/* Was 10px uppercase at 50% opacity with 0.18em tracking — three
+          legibility penalties stacked on the same line. Sentence case at 12px
+          reads; the rule above it makes this a deliberate colophon rather than
+          fine print that drifted into the middle of the block. */}
+      <div className="flex flex-col items-center gap-3">
+        <span aria-hidden="true" className="h-0.5 w-16 bg-[#652682]" />
+        <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center font-mono text-xs text-purple-200/70">
+          <span>Built with Astro, React &amp; Tailwind</span>
+          {/* A 3px square rather than a middle dot: no glyph, so nothing to
+              mis-encode, and it matches the pixel motif. */}
+          <span aria-hidden="true" className="size-[3px] bg-purple-300/40 max-sm:hidden" />
+          <span>
+            Art by{" "}
+            <a
+              href="https://nacila.itch.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#e09eff] underline decoration-[#c180df]/50 underline-offset-4 outline-none transition-colors duration-200 hover:text-white hover:decoration-white focus-visible:text-white focus-visible:decoration-white"
+            >
+              Nacila
+            </a>
+          </span>
         </p>
       </div>
       <div className="flex flex-col items-center gap-6">
         <a
           href="/assets/cv_syahrul.pdf"
           download="Syahrul_CV.pdf"
-          className="pixel-tag mt-4 flex items-center gap-2 px-6 py-2.5 text-base text-white outline-none transition-transform duration-300 ease-in-out hover:-translate-y-1 focus-visible:-translate-y-1 max-sm:px-5 max-sm:py-2 max-sm:text-sm"
+          className="pixel-tag flex items-center gap-2 px-6 py-2.5 text-base text-white outline-none transition-transform duration-300 ease-in-out hover:-translate-y-1 focus-visible:-translate-y-1 max-sm:px-5 max-sm:py-2 max-sm:text-sm"
         >
           Download CV
           <FileUser size={18} />
