@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import type React from "react";
 
-type TechStackSize = "small" | "medium" | "large";
+type TechStackSize = "compact" | "small" | "medium" | "large";
 
 interface TechStackItemProps {
   tech: string;
@@ -15,12 +15,16 @@ const sizeClasses: Record<TechStackSize, string> = {
   // 8px left the icon flush against the block's edge, since the clip-path's
   // middle band runs all the way out to 0. 16px plus the inner 0.15rem nudge
   // lands on the ~18px the reference blocks use.
+  // Sized to fit three across a 390px phone; the stack list is 35 chips, so a
+  // chip that wraps after two costs hundreds of pixels of scroll.
+  compact: "px-2.5 py-1 text-xs md:text-sm",
   small: "px-4 py-1 text-sm",
   medium: "px-3 py-1.5 text-sm md:text-lg",
   large: "px-6 py-3 text-lg lg:text-2xl",
 };
 
 const iconSizeClasses: Record<TechStackSize, string> = {
+  compact: "w-3.5 h-3.5 md:w-[18px] md:h-[18px]",
   small: "w-6 h-6",
   medium: "w-6 h-6 md:w-7 md:h-7",
   large: "w-6 h-6 lg:w-10 lg:h-10",

@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import AboutMotion from "../AboutMotion";
-import TechStackTabs from "../TechStackTabs";
+import TechStackGrid from "../TechStackGrid";
 
 // Get tech stack from content collection
 const techstackRaw = await getCollection("techstack");
@@ -13,7 +13,7 @@ const techStackCategories = techstackRaw.sort((a, b) => a.data.order - b.data.or
     id="about"
 >
     <AboutMotion client:idle>
-        <TechStackTabs
+        <TechStackGrid
                 categories={techStackCategories.map((category) => ({
                     title: category.data.title,
                     items: category.data.items,
