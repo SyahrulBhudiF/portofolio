@@ -22,16 +22,18 @@ const projectStars = await getGitHubStars(
 );
 ---
 <section
-        class="text-white w-full h-fit flex justify-center relative z-10 px-16 max-md:px-4 pb-26"
+        class="text-white w-full h-fit flex justify-center relative z-10 px-16 pt-14 pb-14 max-md:px-4 max-md:pt-10 max-md:pb-10"
         id="projects">
-    <div class="flex flex-col gap-10 max-md:gap-14 z-10 items-center w-full max-w-6xl">
-        <h2 class="section-title">Projects</h2>
-        <ProjectsContainer
-                initialProjects={initialProjects}
-                remainingProjects={remainingProjects}
-                stars={projectStars}
-                client:idle
-        />
+    <div class="flex flex-col gap-16 max-md:gap-12 z-10 items-center w-full max-w-6xl">
+        <div class="flex w-full flex-col items-center gap-8">
+            <h2 class="section-title">Projects</h2>
+            <ProjectsContainer
+                    initialProjects={initialProjects}
+                    remainingProjects={remainingProjects}
+                    stars={projectStars}
+                    client:idle
+            />
+        </div>
         <OpenSourceContributions />
     </div>
 </section>

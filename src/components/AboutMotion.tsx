@@ -19,7 +19,7 @@ const AboutMotion = ({ children }: Props) => {
     <LazyMotion features={domAnimation} strict>
       <div className="z-10 flex h-full w-full max-w-6xl flex-col items-center justify-start gap-16 text-white">
         <m.div
-          className="flex flex-col w-full h-fit items-start gap-4"
+          className="flex flex-col w-full h-fit items-start gap-8"
           variants={fadeUpVariants}
           initial="hidden"
           whileInView="visible"
