@@ -13,8 +13,8 @@ const refLabel = (url: string, fallback: string) => {
 };
 
 const singleLinkKeys = [
-  ["pullRequest", "PR"],
-  ["commit", "Commit"],
+  ["pullRequest", "PR", "pr"],
+  ["commit", "Commit", "commit"],
 ] as const;
 
 const formatDate = (date: Date) =>
@@ -32,11 +32,15 @@ const repos = contributions
         dateLabel: formatDate(entry.date),
         dateISO: entry.date.toISOString(),
         links: [
-          ...singleLinkKeys.flatMap(([key, fallback]) => {
+          ...singleLinkKeys.flatMap(([key, fallback, kind]) => {
             const url = entry[key];
-            return url ? [{ label: refLabel(url, fallback), url }] : [];
+            return url ? [{ label: refLabel(url, fallback), url, kind }] : [];
           }),
-          ...entry.issues.map((url) => ({ label: refLabel(url, "Issue"), url })),
+          ...entry.issues.map((url) => ({
+            label: refLabel(url, "Issue"),
+            url,
+            kind: "issue" as const,
+          })),
         ],
       }));
 

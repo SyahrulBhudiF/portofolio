@@ -1,0 +1,17 @@
+---
+title: foldkit
+repository: https://github.com/foldkit/foldkit
+entries:
+  - title: Reusable HoverIntent primitive for @foldkit/ui
+    date: 2026-08-28
+    description: Added a headless HoverIntent Submodel so Hover Card and Navigation Menu integrations share one interaction state machine instead of each duplicating delayed pointer intent, focus transfer, grace-period closing, and Escape handling.
+    highlights:
+      - Built the primitive as a Submodel that owns interaction state, timer Commands, and trigger/panel event bundles, leaving markup, ARIA semantics, positioning, portals, styling, and click behavior to consumers.
+      - "Covered the full interaction set: delayed pointer opening, immediate focus opening, trigger-to-panel transitions, grace-period closing, Escape dismissal, focus restoration to an optional trigger selector, and re-entry after disengagement."
+      - Guarded timer completion with a version counter so a stale timer can no longer resolve against a newer interaction.
+      - Added Story and Scene coverage plus a browser regression for Escape from interactive panel content.
+      - Shipped an API reference page, interactive Hover Card and Navigation Menu examples with consumer-owned ARIA relationships, an integration snippet, and a UI showcase route.
+    pullRequest: https://github.com/foldkit/foldkit/pull/1179
+    issues:
+      - https://github.com/foldkit/foldkit/issues/1178
+---

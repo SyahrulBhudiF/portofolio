@@ -1,12 +1,28 @@
 import { AnimatePresence, LazyMotion, domMax, useReducedMotion } from "framer-motion";
 import * as m from "framer-motion/m";
-import { ChevronDown, ExternalLink, Star } from "lucide-react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 import { type FC, memo, useCallback, useState } from "react";
+import PixelCommitIcon from "./icons/PixelCommitIcon";
+import PixelIssueIcon from "./icons/PixelIssueIcon";
+import PixelPullRequestIcon from "./icons/PixelPullRequestIcon";
+import PixelStarIcon from "./icons/PixelStarIcon";
+
+export type ContributionLinkKind = "pr" | "commit" | "issue";
 
 export interface ContributionLink {
   label: string;
   url: string;
+  kind: ContributionLinkKind;
 }
+
+// A bare "#1179" does not say whether it is the change or the report it closes.
+// These are hand-drawn on a 12-unit grid rather than lucide's round strokes,
+// which turned to mush at the 11px this tag runs at.
+const LINK_ICON: Record<ContributionLinkKind, typeof PixelIssueIcon> = {
+  pr: PixelPullRequestIcon,
+  commit: PixelCommitIcon,
+  issue: PixelIssueIcon,
+};
 
 export interface ContributionEntry {
   title: string;
@@ -62,17 +78,22 @@ const Row = memo(({ entry, entryKey, panelId, isOpen, onToggle }: RowProps) => {
 
         <span className="flex shrink-0 items-center gap-3">
           <span className="flex gap-1.5 max-sm:hidden">
-            {entry.links.map((link) => (
-              <a
-                key={link.url}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="pixel-tag px-2.5 py-0.5 text-[0.6875rem] text-white outline-none focus-visible:text-purple-100"
-              >
-                {link.label}
-              </a>
-            ))}
+            {entry.links.map((link) => {
+              const Icon = LINK_ICON[link.kind];
+
+              return (
+                <a
+                  key={link.url}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pixel-tag flex items-center gap-1 px-2.5 py-0.5 text-[0.6875rem] text-white outline-none focus-visible:text-purple-100"
+                >
+                  <Icon width={12} height={12} />
+                  {link.label}
+                </a>
+              );
+            })}
           </span>
           <time dateTime={entry.dateISO} className="font-mono text-xs text-white/50">
             {entry.dateLabel}
@@ -107,17 +128,22 @@ const Row = memo(({ entry, entryKey, panelId, isOpen, onToggle }: RowProps) => {
                 </ul>
               )}
               <div className="mt-3 flex flex-wrap items-center gap-2 sm:hidden">
-                {entry.links.map((link) => (
-                  <a
-                    key={link.url}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="pixel-tag px-4 py-1 text-xs text-white outline-none focus-visible:text-purple-100"
-                  >
-                    {link.label}
-                  </a>
-                ))}
+                {entry.links.map((link) => {
+                  const Icon = LINK_ICON[link.kind];
+
+                  return (
+                    <a
+                      key={link.url}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="pixel-tag flex items-center gap-1.5 px-4 py-1 text-xs text-white outline-none focus-visible:text-purple-100"
+                    >
+                      <Icon width={12} height={12} />
+                      {link.label}
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </m.section>
@@ -153,22 +179,30 @@ const RepoSection = memo(({ repo, repoIndex, reduceMotion }: RepoSectionProps) =
       transition={{ delay: repoIndex * 0.07, duration: 0.3, ease: "easeOut" }}
     >
       <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-1">
-        <a
-          href={repo.repository}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex min-w-0 items-center gap-2 text-lg text-white outline-none hover:text-purple-100 focus-visible:text-purple-100"
-        >
-          <span className="truncate">{repo.title}</span>
-          <ExternalLink size={13} aria-hidden="true" className="shrink-0 text-purple-200" />
-        </a>
-
-        <span className="flex shrink-0 items-center gap-4 font-mono text-xs text-white/60">
-          <span>{repo.entries.length} merged</span>
-          <span className="flex items-center gap-1">
-            <Star size={12} aria-hidden="true" className="fill-current" />
+        {/* Star count sits next to the repo name, same as the project cards, so
+            the repo reads as one unit instead of splitting its weight across
+            both ends of the row. */}
+        <div className="flex min-w-0 items-baseline gap-2">
+          <a
+            href={repo.repository}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex min-w-0 items-center gap-2 text-lg text-white outline-none hover:text-purple-100 focus-visible:text-purple-100"
+          >
+            <span className="truncate">{repo.title}</span>
+            <ExternalLink size={13} aria-hidden="true" className="shrink-0 text-purple-200" />
+          </a>
+          <span
+            className="flex shrink-0 items-center gap-1 font-mono text-xs text-purple-200/90"
+            aria-label={`${repo.stars} GitHub stars`}
+          >
+            <PixelStarIcon width={12} height={12} />
             {repo.stars.toLocaleString()}
           </span>
+        </div>
+
+        <span className="shrink-0 font-mono text-xs text-white/60">
+          {repo.entries.length} merged
         </span>
       </div>
 
