@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">リュウコ — Syahrul Bhudi Ferdiansyah</title>
+  <desc id="description">A pixel-art night landscape with the title SYAHRUL, リュウコ, SOFTWARE ENGINEER, and a pixel moon.</desc>
+  <defs>
+    <clipPath id="katakana-window">
+      <rect x="377" y="164" width="450" height="126"/>
+    </clipPath>
+  </defs>
+  <image href="/og-image.png" width="1200" height="630"/>
+  <g clip-path="url(#katakana-window)">
+    <image href="/og-image.png" width="1200" height="630" image-rendering="pixelated" transform="translate(-903 -340.5) scale(2.5)"/>
+  </g>
+</svg>
