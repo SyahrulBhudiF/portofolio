@@ -20,7 +20,7 @@ const {
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://ryuko.my.id");
-const ogImage = new URL("/og-image.png?v=moon-v2", canonical);
+const ogImage = new URL("/og-moon.png", canonical);
 ---
 
 <!DOCTYPE html>
