@@ -4,58 +4,96 @@ repository: https://github.com/elianiva/foldcn
 entries:
   - title: Fix combobox popup anchoring and styling
     date: 2026-09-28
-    description: Unified combobox trigger styling, corrected selected-item indicators, and constrained the popup to the anchor width while preserving multi-select chip behavior.
+    description: Fixed inconsistent combobox styling and popup sizing across single- and multi-select variants, while preserving chip selection behavior.
+    highlights:
+      - Matched multi-select focus styling to single-select and aligned selected-item indicators on the left.
+      - Constrained the popup to the anchor width and removed a duplicate-anchor workaround that broke multi-select interaction.
+      - Kept the multi-select anchor unique so selecting, removing, and wrapping chips remains reliable.
     pullRequest: https://github.com/elianiva/foldcn/pull/68
   - title: Anchor multi-select combobox popup to the chip group
     date: 2026-09-17
-    description: Fixed the multi-select popup jumping horizontally as chips were selected, removed, hovered, or wrapped by anchoring it to the stable chip group.
+    description: Fixed a jumping popup caused by anchoring it to an input wrapper that changes size as selected chips are added or removed.
+    highlights:
+      - Moved the popup anchor to the stable chip group so selecting, removing, hovering, or wrapping chips no longer shifts the menu horizontally.
     pullRequest: https://github.com/elianiva/foldcn/pull/67
   - title: Add navigation menu hover intent
     date: 2026-09-03
-    description: Added hover-intent behavior to the navigation menu so pointer movement can open and transition between menu items naturally.
+    description: Added hover-intent behavior to navigation dropdowns, making pointer movement between menu items feel deliberate instead of opening and closing immediately.
+    highlights:
+      - Shared the hover intent behavior across navigation menu items to make transitions between triggers easier.
     pullRequest: https://github.com/elianiva/foldcn/pull/43
   - title: Use shared hover intent in the hover card
     date: 2026-08-31
-    description: Replaced the hover card's hand-rolled pointer behavior with the shared HoverIntent submodel and updated its interactive demo.
+    description: Replaced the hover card's hand-rolled pointer timing with the shared HoverIntent submodel, keeping hover behavior consistent across components.
+    highlights:
+      - Updated the demo to show a second hover card with a 500 ms open delay.
+      - Removed the stale hover-card gap note after the shared behavior was wired in.
     pullRequest: https://github.com/elianiva/foldcn/pull/34
   - title: Rebuild navigation menu on the Popover contract
     date: 2026-08-24
-    description: Reworked navigation dropdowns around Popover submodels, with single-open behavior and Floating UI positioning.
+    description: Reworked navigation dropdowns around Popover submodels, replacing presentational builders with stateful menus that coordinate opening and delegate positioning to Floating UI.
+    highlights:
+      - Enforced single-open behavior so opening one dropdown closes the others.
+      - Added a trigger-and-panel view contract that only renders the panel while visible.
+      - Updated the demo to the new API and configured a bottom placement with an 8 px gap.
     pullRequest: https://github.com/elianiva/foldcn/pull/12
   - title: Swap avatar fallback when image loading fails
     date: 2026-08-24
-    description: Added an Avatar.picture submodel that switches to the fallback when the image fails to load.
+    description: Added an Avatar.picture submodel that reacts to image load errors and shows the fallback instead of leaving a broken image beside it.
+    highlights:
+      - Wired the avatar submodel's state and handlers through the demo model and update flow.
+      - Removed the obsolete avatar gap entry after the behavior was implemented.
     pullRequest: https://github.com/elianiva/foldcn/pull/11
   - title: Make the hover card hover-driven
     date: 2026-08-22
-    description: Changed the hover card to open and close from pointer intent with configurable delays.
+    description: Changed the hover card to respond directly to pointer intent, with configurable delays for opening and closing rather than relying on click-driven state.
+    highlights:
+      - Made pointer movement into and out of the card control its open state.
     pullRequest: https://github.com/elianiva/foldcn/pull/9
   - title: Stabilize calendar layout and hover spacing
     date: 2026-08-22
-    description: Switched calendar headers and rows to a fixed CSS grid layout, reserving space for six week rows to prevent alignment shifts between months.
+    description: Rebuilt calendar headers and week rows with fixed CSS grid columns to keep dates and labels aligned consistently across months.
+    highlights:
+      - Reserved space for six week rows so the calendar does not change height between months.
+      - Replaced content-sized width with a calculated seven-column layout for predictable spacing.
     pullRequest: https://github.com/elianiva/foldcn/pull/8
   - title: Add accordion modes and improve its preview
     date: 2026-08-22
-    description: Added a controlled accordion group supporting single or multiple open items, and improved its animation demo and preview layout.
+    description: Added a controlled accordion group with single-open and multiple-open modes, and refined its trigger behavior, animation demo, and preview layout.
+    highlights:
+      - Stored open state per item and supported both single and multiple expansion modes.
+      - Made triggers span the available width and rotate the chevron when expanded.
     pullRequest: https://github.com/elianiva/foldcn/pull/6
   - title: Smooth component motion and wire demo navigation
     date: 2026-08-19
-    description: Refined component transitions with reduced-motion support and wired demo navigation clicks to update selected state.
+    description: Refined transition behavior across UI components and connected demo navigation to the app's selected-item state.
+    highlights:
+      - Limited transitions to relevant CSS properties and respected reduced-motion preferences.
+      - Added press and hover feedback to navigation links, with active styling driven by model state.
     pullRequest: https://github.com/elianiva/foldcn/pull/5
   - title: Use a custom select in the fieldset demo
     date: 2026-08-19
-    description: Replaced the fieldset form's inline select with a custom LanguageSelect submodel.
+    description: Replaced the fieldset demo's inline native select with the shared, styled LanguageSelect submodel.
+    highlights:
+      - Connected the new select to the demo's model and stored the chosen value in its state.
     pullRequest: https://github.com/elianiva/foldcn/pull/4
   - title: Fix switch sizing and restore disclosure borders
     date: 2026-08-19
-    description: Restored disclosure panel borders and background styling, and aligned switch sizing and animation with the base styles.
+    description: Restored disclosure panel borders and background styling, and corrected switch sizing and animation to match the base component styles.
+    highlights:
+      - Brought the switch thumb and track back in line with the intended dimensions and motion.
     pullRequest: https://github.com/elianiva/foldcn/pull/3
   - title: Replace the native select in the demo
     date: 2026-08-19
-    description: Replaced the demo form's native language select with a styled, Listbox-backed select component and submodel.
+    description: Replaced the demo form's native language selector with a styled, Listbox-backed select component built around a LanguageSelect submodel.
+    highlights:
+      - Added placeholder and selected-item treatments, including a checkmark for the active option.
+      - Routed the select's state and messages through the demo model and update flow.
     pullRequest: https://github.com/elianiva/foldcn/pull/2
   - title: Restore disclosure panel styling
     date: 2026-08-19
-    description: Restored borders and background styling to the animated disclosure panel.
+    description: Fixed the animated disclosure panel appearing without its intended borders and background by restoring its surface styling.
+    highlights:
+      - Returned the panel's border and background treatments to the disclosure component.
     pullRequest: https://github.com/elianiva/foldcn/pull/1
 ---

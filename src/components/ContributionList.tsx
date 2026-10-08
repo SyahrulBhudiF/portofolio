@@ -1,6 +1,11 @@
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible.tsx";
 import { AnimatePresence, LazyMotion, domMax, useReducedMotion } from "framer-motion";
 import * as m from "framer-motion/m";
-import { ChevronDown, ExternalLink } from "lucide-react";
+import { ChevronDown, ChevronsDown, ExternalLink } from "lucide-react";
 import { type FC, memo, useCallback, useState } from "react";
 import PixelCommitIcon from "./icons/PixelCommitIcon";
 import PixelIssueIcon from "./icons/PixelIssueIcon";
@@ -53,10 +58,10 @@ interface RowProps {
 }
 
 const Row = memo(({ entry, entryKey, panelId, isOpen, onToggle }: RowProps) => {
-  // The row bleeds out to the card edge, stopping short of the 3px face border.
+  // Keep the hover frame inside the card's painted face so clip-path cannot cut it off.
   return (
     <li>
-      <div className="pixel-row group -mx-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 px-4">
+      <div className="pixel-row group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 px-4">
         <button
           type="button"
           onClick={() => onToggle(entryKey)}
@@ -165,6 +170,9 @@ const RepoSection = memo(({ repo, repoIndex, reduceMotion }: RepoSectionProps) =
   // An accordion is scoped to its repository, so expanding one row does not
   // rerender every other repository's contribution list.
   const [openEntry, setOpenEntry] = useState<string | null>(null);
+  const [showAllEntries, setShowAllEntries] = useState(false);
+  const initialEntries = repo.entries.slice(0, 5);
+  const remainingEntries = repo.entries.slice(5);
   const toggleEntry = useCallback(
     (key: string) => setOpenEntry((current) => (current === key ? null : key)),
     [],
@@ -207,7 +215,7 @@ const RepoSection = memo(({ repo, repoIndex, reduceMotion }: RepoSectionProps) =
       </div>
 
       <ul className="mt-1 flex flex-col">
-        {repo.entries.map((entry) => {
+        {initialEntries.map((entry) => {
           const key = `${repo.repository}-${entry.dateISO}-${entry.title}`;
 
           return (
@@ -222,6 +230,57 @@ const RepoSection = memo(({ repo, repoIndex, reduceMotion }: RepoSectionProps) =
           );
         })}
       </ul>
+      {remainingEntries.length > 0 && (
+        <Collapsible open={showAllEntries} onOpenChange={setShowAllEntries}>
+          <CollapsibleTrigger asChild>
+            <button
+              type="button"
+              className="mt-1 flex cursor-pointer items-center gap-1.5 font-mono text-xs text-purple-200/80 outline-none transition-colors hover:text-white focus-visible:text-white"
+            >
+              <m.span
+                animate={{ rotate: showAllEntries ? 180 : 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="flex"
+              >
+                <ChevronsDown size={14} aria-hidden="true" />
+              </m.span>
+              {showAllEntries
+                ? "Show fewer contributions"
+                : `Show all ${repo.entries.length} contributions`}
+            </button>
+          </CollapsibleTrigger>
+          <AnimatePresence initial={false}>
+            {showAllEntries && (
+              <CollapsibleContent asChild forceMount>
+                <m.div
+                  className="overflow-hidden"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.24, ease: "easeOut" }}
+                >
+                  <ul className="flex flex-col">
+                    {remainingEntries.map((entry) => {
+                      const key = `${repo.repository}-${entry.dateISO}-${entry.title}`;
+
+                      return (
+                        <Row
+                          key={key}
+                          entry={entry}
+                          entryKey={key}
+                          panelId={`contribution-${repoIndex}-${entry.dateISO}`}
+                          isOpen={openEntry === key}
+                          onToggle={toggleEntry}
+                        />
+                      );
+                    })}
+                  </ul>
+                </m.div>
+              </CollapsibleContent>
+            )}
+          </AnimatePresence>
+        </Collapsible>
+      )}
     </m.section>
   );
 });
