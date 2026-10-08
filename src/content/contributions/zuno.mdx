@@ -34,4 +34,21 @@ entries:
     issues:
       - https://github.com/noFAYZ/zuno/issues/88
       - https://github.com/noFAYZ/zuno/issues/98
+  - title: Hide Discord presence when paused
+    date: 2026-10-07
+    description: Added an opt-in Discord setting to clear Rich Presence while playback is paused and restore it on resume, with serialized updates to prevent stale clears from overwriting newer presence.
+    highlights:
+      - Added “Hide status when paused” under Settings → Account → Discord, disabled by default.
+      - Serialized Discord presence synchronization so pause and resume updates cannot finish out of order.
+      - Stabilized selected and hovered segmented-tab labels on the red accent.
+    pullRequest: https://github.com/noFAYZ/zuno/pull/119
+    issues:
+      - https://github.com/noFAYZ/zuno/issues/63
+  - title: Responsive settings search
+    date: 2026-10-07
+    description: Added global Settings search across setting titles and descriptions, with category-aware results and a responsive layout that adapts to the Settings pane width.
+    highlights:
+      - Search results identify their category and open it when selected.
+      - Used container queries so narrow settings panes stack the header, expand the search field, and turn the category sidebar into a horizontally scrollable rail.
+    pullRequest: https://github.com/noFAYZ/zuno/pull/121
 ---
