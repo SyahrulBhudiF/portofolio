@@ -1,0 +1,187 @@
+---
+title: meiro
+repository: https://github.com/elianiva/meiro
+entries:
+  - title: Add playlist sorting controls
+    date: 2026-10-15
+    description: Added playlist sorting by original order, title, artist, and duration, with ascending and descending directions applied consistently across the page and playback queue.
+    highlights:
+      - Kept Play, Shuffle, direct track activation, and playlist search results aligned with the selected order.
+      - Preserved the correct queue position when filtered results contain duplicate tracks.
+      - Kept a non-empty playlist search open when focus leaves the search field.
+    pullRequest: https://github.com/elianiva/meiro/pull/156
+    issues:
+      - https://github.com/elianiva/meiro/issues/154
+  - title: Center the playlist track play overlay
+    date: 2026-10-14
+    description: Fixed the playlist track hover overlay so its scrim and play icon stay centered inside the 48×48 artwork box instead of dropping below the row.
+    highlights:
+      - Anchored the overlay to the artwork container and prevented it from overlapping the next track.
+      - Added a visual regression capture and an unreleased changelog entry.
+    pullRequest: https://github.com/elianiva/meiro/pull/150
+  - title: Stop recommendation loading text flicker
+    date: 2026-10-13
+    description: Removed transient recommendation-loading text that caused playback rows to flicker while keeping a fixed-height status slot and preserving request errors.
+    highlights:
+      - Added playback-response and rendered-layout regression coverage.
+      - Retried recommendation loading when the selected queue reaches its last track.
+    pullRequest: https://github.com/elianiva/meiro/pull/91
+  - title: Remove songs from playlists
+    date: 2026-10-13
+    description: Added a playlist song removal action using YouTube playlist-entry IDs, with refresh and refusal feedback after the write.
+    highlights:
+      - Covered accepted writes, refused writes, invalid requests, and signed-out requests.
+    pullRequest: https://github.com/elianiva/meiro/pull/90
+  - title: Harden ffmpeg platform behavior
+    date: 2026-10-13
+    description: Hardened ffmpeg playback across platforms by restricting input protocols, hiding child console windows on Windows, and detecting process exit independently of audio-reader progress.
+    highlights:
+      - Allowed only HTTP(S), TCP, TLS, crypto, and local-file protocols.
+      - Prevented paused playback from delaying ffmpeg process reaping.
+      - Added regression coverage for the protocol allowlist and paused-reader process exit.
+    pullRequest: https://github.com/elianiva/meiro/pull/89
+    issues:
+      - https://github.com/elianiva/meiro/issues/51
+  - title: Apply relative MPRIS seeks
+    date: 2026-10-13
+    description: Fixed Linux MPRIS seeking so relative offsets apply to the current position and all seeks are clamped to track bounds.
+    highlights:
+      - Preserved the UI's absolute seek behavior while bounding D-Bus SetPosition requests.
+      - Added regression coverage for relative seeks and position bounds.
+    pullRequest: https://github.com/elianiva/meiro/pull/85
+    issues:
+      - https://github.com/elianiva/meiro/issues/37
+  - title: Reject incomplete browser imports
+    date: 2026-10-12
+    description: Made browser cookie imports consistent and safe by snapshotting Chromium databases with SQLite's online backup and rejecting incomplete browser metadata.
+    highlights:
+      - Surfaced database snapshot failures and invalid Chromium version metadata.
+      - Returned Netscape cookie scanner errors and accepted cookie lines larger than 1 MiB.
+      - Added coverage for invalid databases, long cookie values, and Chromium crypto vectors.
+    pullRequest: https://github.com/elianiva/meiro/pull/82
+    issues:
+      - https://github.com/elianiva/meiro/issues/26
+  - title: Sanitize transport error diagnostics
+    date: 2026-10-12
+    description: Reworked HTTP transport diagnostics to avoid leaking request URLs, cookies, signatures, HTML, and oversized response bodies while preserving useful short reasons.
+    highlights:
+      - Bounded non-2xx response reads and retained HTTP status codes.
+      - Preserved context cancellation and deadline errors.
+      - Added coverage for HTML, signed URLs, oversized and empty bodies, and URL redaction.
+    pullRequest: https://github.com/elianiva/meiro/pull/75
+    issues:
+      - https://github.com/elianiva/meiro/issues/46
+  - title: Make shared stream waits cancellable
+    date: 2026-10-12
+    description: Kept concurrent stream URL resolutions shared while allowing each waiting caller to cancel independently during playback, hover, and prewarm flows.
+    highlights:
+      - Cancelled obsolete playback waits when the selected track changes.
+      - Bounded hover and prewarm resolutions without breaking concurrent request sharing.
+      - Covered cancellation, successful sharing, and cancellation before a resolution starts.
+    pullRequest: https://github.com/elianiva/meiro/pull/74
+    issues:
+      - https://github.com/elianiva/meiro/issues/46
+  - title: Add macOS Now Playing artwork
+    date: 2026-10-12
+    description: Added asynchronous artwork support for macOS Now Playing, attaching bounded JPEG and PNG artwork to media items without blocking playback updates.
+    highlights:
+      - Validated image dimensions with DecodeConfig and avoided adding an x/image dependency.
+      - Cancelled obsolete artwork loads and discarded stale completions.
+      - Extrapolated the playing position when artwork finishes so timestamps remain current.
+    pullRequest: https://github.com/elianiva/meiro/pull/72
+    issues:
+      - https://github.com/elianiva/meiro/issues/45
+  - title: Clear stale MPRIS metadata
+    date: 2026-10-12
+    description: Fixed stale optional MPRIS metadata by publishing complete metadata snapshots whenever track metadata is cleared or replaced.
+    highlights:
+      - Covered PropertiesChanged signals, Get, and GetAll D-Bus paths with regression tests.
+    pullRequest: https://github.com/elianiva/meiro/pull/71
+    issues:
+      - https://github.com/elianiva/meiro/issues/45
+  - title: Reduce redundant system-media updates
+    date: 2026-10-12
+    description: Reduced redundant system-media work by skipping unchanged properties, coalescing Linux volume publications, and letting macOS extrapolate normal playback progress.
+    highlights:
+      - Preserved explicit seek notifications through seekVersion and MPRIS Seeked.
+      - Consolidated application seek paths and added focused cross-platform coverage.
+    pullRequest: https://github.com/elianiva/meiro/pull/70
+    issues:
+      - https://github.com/elianiva/meiro/issues/45
+  - title: Preserve browse continuations
+    date: 2026-10-11
+    description: Fixed YouTube browse pagination so continuation items remain in their owning shelves while page-level and shelf-level tokens are drained independently.
+    highlights:
+      - Represented unowned continuation responses as documented synthetic sections.
+      - Returned partial results after the 1000-page continuation limit.
+      - Added fixtures for simultaneous tokens, repeated-token cycles, and flattened results.
+    pullRequest: https://github.com/elianiva/meiro/pull/68
+    issues:
+      - https://github.com/elianiva/meiro/issues/15
+  - title: Debounce settings persistence writes
+    date: 2026-10-11
+    description: Debounced non-credential settings persistence by 400 ms while preserving atomic, synced writes for credentials and cookies.
+    highlights:
+      - Flushed pending state during shutdown and waited for its final write.
+      - Added deterministic coverage for coalescing, flushes, failures, and concurrent saves.
+    pullRequest: https://github.com/elianiva/meiro/pull/67
+    issues:
+      - https://github.com/elianiva/meiro/issues/22
+  - title: Cover deterministic player state transitions
+    date: 2026-10-12
+    description: Replaced device-dependent player tests with deterministic fake audio-output and ffmpeg seams covering playback state transitions and process behavior.
+    highlights:
+      - Covered seeking, failures, process reaping, missing ffmpeg, and race-safe parallel access.
+    pullRequest: https://github.com/elianiva/meiro/pull/66
+    issues:
+      - https://github.com/elianiva/meiro/issues/42
+  - title: Report broken HTTP streams
+    date: 2026-10-11
+    description: Made ffmpeg report broken HTTP streams instead of treating failures after partial audio output as a normal track ending.
+    highlights:
+      - Added xerror and a 15-second read timeout for network playback.
+      - Covered clean completion and failure-after-audio cases.
+    pullRequest: https://github.com/elianiva/meiro/pull/65
+    issues:
+      - https://github.com/elianiva/meiro/issues/39
+  - title: Cache route page state
+    date: 2026-10-09
+    description: Added a bounded LRU route cache so navigating back restores fresh page data without refetching.
+    highlights:
+      - Added a 12-entry, five-minute cache with route-location isolation.
+      - Reloaded stale, failed, loading, retried, and account-dependent pages.
+      - Prevented late async requests from updating a route after navigation.
+    pullRequest: https://github.com/elianiva/meiro/pull/60
+  - title: Handle MPRIS update failures
+    date: 2026-10-11
+    description: Converted Linux MPRIS update failures into stored session errors and disabled broken system-media sessions instead of retrying them indefinitely.
+    highlights:
+      - Added D-Bus regression coverage for closed connections, stored failures, and visible runtime panics.
+    pullRequest: https://github.com/elianiva/meiro/pull/59
+    issues:
+      - https://github.com/elianiva/meiro/issues/41
+  - title: Flush settings during shutdown
+    date: 2026-10-09
+    description: Made shutdown wait for queued settings writes before closing application resources, while logging save failures without blocking exit.
+    highlights:
+      - Added deterministic coverage for pending writes and shutdown-time save errors.
+    pullRequest: https://github.com/elianiva/meiro/pull/58
+    issues:
+      - https://github.com/elianiva/meiro/issues/28
+  - title: Harden credential storage
+    date: 2026-10-09
+    description: Hardened credential storage error handling, platform fallback behavior, and secret redaction.
+    highlights:
+      - Distinguished missing credentials from operational secret-tool failures.
+      - Reported failed credential deletion and refused persistent cookie storage on Windows without secure OS-backed storage.
+      - Redacted CookieAuth values in fmt and slog output.
+    pullRequest: https://github.com/elianiva/meiro/pull/57
+    issues:
+      - https://github.com/elianiva/meiro/issues/24
+  - title: Add Zen Browser session import
+    date: 2026-10-09
+    description: Added Zen Browser to sign-in imports and supported its native, Flatpak, and XDG profile locations.
+    highlights:
+      - Reused the browser session import flow for Zen's Firefox-compatible profiles.
+    pullRequest: https://github.com/elianiva/meiro/pull/6
+---
