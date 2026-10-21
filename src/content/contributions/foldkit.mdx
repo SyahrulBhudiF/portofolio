@@ -2,6 +2,17 @@
 title: foldkit
 repository: https://github.com/foldkit/foldkit
 entries:
+  - title: Add route transition matchers and predicates
+    date: 2026-10-20
+    description: Added a typed way to handle entering, exiting, staying, and unrelated route transitions, replacing repeated Option checks and manual tag branching with focused transition policies.
+    highlights:
+      - Added exhaustive `Transition.match` and fallback-based `Transition.matchOrElse`, with callback payloads narrowed to the selected route tag.
+      - Added `Transition.isExiting` and `Transition.isStaying` alongside the existing entry predicate and Option-returning payload helpers.
+      - Kept same-tag navigation classified as `Stayed`, including changed route parameters or search fields, so applications can decide explicitly when those changes require work.
+      - Supported constrained shared return types for composing Steps with different Effect requirements, and updated active routing examples and documentation.
+    pullRequest: https://github.com/foldkit/foldkit/pull/1701
+    issues:
+      - https://github.com/foldkit/foldkit/issues/1691
   - title: Reusable HoverIntent primitive for @foldkit/ui
     date: 2026-08-28
     description: Added a headless HoverIntent Submodel so Hover Card and Navigation Menu integrations share one interaction state machine instead of each duplicating delayed pointer intent, focus transfer, grace-period closing, and Escape handling.
