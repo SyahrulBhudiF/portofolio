@@ -23,7 +23,7 @@ export default function Contact() {
           reads; the rule above it makes this a deliberate colophon rather than
           fine print that drifted into the middle of the block. */}
       <div className="flex flex-col items-center gap-3">
-        <span aria-hidden="true" className="h-0.5 w-16 bg-[#652682]" />
+        <span aria-hidden="true" className="h-0.5 w-16 bg-accent-muted" />
         <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center font-mono text-xs text-purple-200/70">
           <span>Built with Astro, React &amp; Tailwind</span>
           {/* A 3px square rather than a middle dot: no glyph, so nothing to
@@ -35,7 +35,7 @@ export default function Contact() {
               href="https://nacila.itch.io/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#e09eff] underline decoration-[#c180df]/50 underline-offset-4 outline-none transition-colors duration-200 hover:text-white hover:decoration-white focus-visible:text-white focus-visible:decoration-white"
+              className="text-accent-bright underline decoration-accent/50 underline-offset-4 outline-none transition-colors duration-200 hover:text-white hover:decoration-white focus-visible:text-white focus-visible:decoration-white"
             >
               Nacila
             </a>
@@ -62,7 +62,7 @@ export default function Contact() {
               aria-label={label}
               target={href.startsWith("mailto:") ? undefined : "_blank"}
               rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-              className="pixel-frame flex size-11 items-center justify-center border-2 border-[#c180df] bg-[#2a1236] text-[#dcb8f0] [--pixel-notch:4px] outline-none transition-[transform,background-color,color] duration-300 ease-in-out hover:-translate-y-1 hover:bg-[#652682] hover:text-white focus-visible:-translate-y-1 focus-visible:bg-[#652682] focus-visible:text-white"
+              className="pixel-frame flex size-11 items-center justify-center border-2 border-accent bg-surface-inset text-accent-soft [--pixel-notch:4px] outline-none transition-[transform,background-color,color] duration-300 ease-in-out hover:-translate-y-1 hover:bg-accent-muted hover:text-white focus-visible:-translate-y-1 focus-visible:bg-accent-muted focus-visible:text-white"
             >
               <Icon size={20} />
             </a>

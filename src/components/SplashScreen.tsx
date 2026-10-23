@@ -7,7 +7,8 @@ const DELAY_MS = 100;
 const STAGGER_MS = 120;
 const SEGMENT_MS = 350;
 const HOLD_MS = 150;
-const BG = "linear-gradient(180deg, #0a060f 0%, #201529 55%, #361d41 100%)";
+const BG =
+  "linear-gradient(180deg, var(--scene-start) 0%, var(--scene-middle) 55%, var(--scene-end) 100%)";
 
 const HIDE_MS = DELAY_MS + STAGGER_MS * (SEGMENTS.length - 1) + SEGMENT_MS + HOLD_MS;
 

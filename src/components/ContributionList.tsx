@@ -180,7 +180,7 @@ const RepoSection = memo(({ repo, repoIndex, reduceMotion }: RepoSectionProps) =
 
   return (
     <m.section
-      className={repoIndex > 0 ? "mt-5 border-t-2 border-[#652682] pt-5" : ""}
+      className={repoIndex > 0 ? "mt-5 border-t-2 border-accent-muted pt-5" : ""}
       initial={reduceMotion ? false : { opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}

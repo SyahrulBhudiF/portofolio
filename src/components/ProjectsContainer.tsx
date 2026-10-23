@@ -64,7 +64,7 @@ const RemainingProjects = ({ projects, stars }: RemainingProjectsProps) => {
                   },
                 }}
               >
-                <PixelDiamondIcon className="size-6 text-[#e09eff]" />
+                <PixelDiamondIcon className="size-6 text-accent-bright" />
               </m.div>
             </m.div>
           </button>

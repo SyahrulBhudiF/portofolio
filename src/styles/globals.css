@@ -33,7 +33,6 @@
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
 
-  --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
 
   --color-destructive: hsl(var(--destructive));
@@ -48,6 +47,22 @@
   --color-chart-3: hsl(var(--chart-3));
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-inset: var(--surface-inset);
+  --color-surface-base: var(--surface-base);
+  --color-accent: var(--accent);
+  --color-accent-muted: var(--accent-muted);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-link: var(--accent-link);
+  --color-accent-heading: var(--accent-heading);
+  --color-scene-start: var(--scene-start);
+  --color-scene-middle: var(--scene-middle);
+  --color-scene-end: var(--scene-end);
 }
 
 /*
@@ -72,6 +87,22 @@
   :root {
     scroll-behavior: smooth;
     font-family: "Space Mono", monospace;
+
+    /* Shared portfolio palette. CSS, Astro, and React use these same colors. */
+    --surface: #3e1d4d;
+    --surface-inset: #2a1236;
+    --surface-base: #241735;
+    --accent: #c180df;
+    --accent-muted: #652682;
+    --accent-hover: #7c2f9f;
+    --accent-soft: #dcb8f0;
+    --accent-bright: #e09eff;
+    --accent-link: #d8aef0;
+    --accent-heading: #cda6ed;
+    --scene-start: #0a060f;
+    --scene-middle: #201529;
+    --scene-end: #361d41;
+
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -84,7 +115,6 @@
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -112,7 +142,6 @@
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;

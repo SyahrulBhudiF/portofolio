@@ -143,7 +143,7 @@ const ExperienceExplorer: FC<Props> = ({ groups }) => {
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.18, ease: "easeOut" }}
               >
-                <div className="flex gap-4 justify-between items-start border-b-2 border-[#652682] pb-5 max-xl:flex-col">
+                <div className="flex gap-4 justify-between items-start border-b-2 border-accent-muted pb-5 max-xl:flex-col">
                   <div className="min-w-0">
                     <p className="text-xl leading-tight text-white xl:text-2xl break-words">
                       {item.subtitle}

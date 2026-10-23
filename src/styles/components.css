@@ -30,7 +30,12 @@
   /* Uniformly scale the buffer to cover the box instead of stretching it,
      so mobile chrome height changes crop rather than distort the scene. */
   object-fit: cover;
-  background: linear-gradient(180deg, #0a060f 0%, #201529 55%, #361d41 100%);
+  background: linear-gradient(
+    180deg,
+    var(--scene-start) 0%,
+    var(--scene-middle) 55%,
+    var(--scene-end) 100%
+  );
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
@@ -41,12 +46,12 @@
 
 .text-carousel {
   font-family: "VT323", monospace;
-  text-shadow: 4px 4px 0px #cda6ed;
+  text-shadow: 4px 4px 0px var(--accent-heading);
 }
 
 .text-retro {
   font-family: "VT323", monospace;
-  text-shadow: 5px 5px 0px #cda6ed;
+  text-shadow: 5px 5px 0px var(--accent-heading);
   color: white;
 }
 
@@ -63,7 +68,7 @@
   font-size: clamp(3rem, 5vw, 3.75rem);
   font-weight: 400;
   line-height: 0.9;
-  text-shadow: 5px 5px 0 #cda6ed;
+  text-shadow: 5px 5px 0 var(--accent-heading);
 }
 
 .detail-eyebrow {
@@ -71,7 +76,7 @@
   line-height: 1.35;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgb(216 174 240 / 0.75);
+  color: color-mix(in srgb, var(--accent-link) 75%, transparent);
 }
 
 /* ==========================================================================
@@ -221,7 +226,7 @@
 
 .pixel-panel {
   --pixel-notch: 12px;
-  background-color: #3e1d4d;
+  background-color: var(--surface);
   transition: background-color 220ms ease-out;
 }
 
@@ -237,10 +242,10 @@
   --strip: 15px; /* height of the highlight/shadow strips */
   --block: 12px; /* height of the corner blocks */
   --line: 2px; /* outline drawn around every piece, as in the figma */
-  /* Same palette as the experience panels: #3e1d4d surface, #652682 accent,
+  /* Same surface and muted accent as the experience panels,
      so this card reads as part of the theme rather than a brighter outlier. */
-  --face: #3e1d4d;
-  --edge: #652682; /* highlight, above the face */
+  --face: var(--surface);
+  --edge: var(--accent-muted); /* highlight, above the face */
   --shade: #1e0d2a; /* shadow, below the face */
   --stroke: #7e3c9d; /* outline colour */
   position: relative;
@@ -304,12 +309,12 @@
 /* Project card, traced from the reference design: a flat face inside a thin
    bright outline whose four corners are cut at 45° rather than notched square.
    The design's #331642 face and #ca8de7 outline round to the theme's existing
-   #3e1d4d / #c180df, so the section keeps one palette. */
+   surface and accent, so the section keeps one palette. */
 .pixel-accent-card {
   --chamfer: 12px;
   --edge: 2px;
-  --accent-face: #3e1d4d;
-  --accent-line: #c180df;
+  --accent-face: var(--surface);
+  --accent-line: var(--accent);
   position: relative;
   isolation: isolate;
   clip-path: polygon(
@@ -413,7 +418,7 @@
 
 .pixel-tag {
   --pixel-notch: 4px;
-  background-color: #c180df;
+  background-color: var(--accent);
   transition: background-color 200ms ease-out;
 }
 
@@ -423,12 +428,12 @@
   inset: 1px;
   z-index: -1;
   clip-path: var(--pixel-notch-shape);
-  background-color: #652682;
+  background-color: var(--accent-muted);
   transition: background-color 200ms ease-out;
 }
 
 .pixel-tag:hover::before {
-  background-color: #7c2f9f;
+  background-color: var(--accent-hover);
 }
 
 /* ==========================================================================
@@ -466,26 +471,26 @@
 }
 
 .pixel-tab:hover {
-  background-color: rgba(193, 128, 223, 0.45);
+  background-color: color-mix(in srgb, var(--accent) 45%, transparent);
   color: #fff;
 }
 
 .pixel-tab:hover::before {
-  background-color: rgba(101, 38, 130, 0.55);
+  background-color: color-mix(in srgb, var(--accent-muted) 55%, transparent);
 }
 
 .pixel-tab:focus-visible {
-  outline: 2px solid #c180df;
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
 .pixel-tab[aria-selected="true"] {
-  background-color: #c180df;
+  background-color: var(--accent);
   color: #fff;
 }
 
 .pixel-tab[aria-selected="true"]::before {
-  background-color: #652682;
+  background-color: var(--accent-muted);
 }
 
 /* Contribution row: idle it is invisible, on hover it takes the same notched
@@ -513,13 +518,13 @@
    which would otherwise leave the frame stuck on after the pointer moves away. */
 .pixel-row:hover,
 .pixel-row:has(:focus-visible) {
-  background-color: #c180df;
+  background-color: var(--accent);
 }
 
-/* Same fill as the experience rail's active tab, on the same #3e1d4d surface. */
+/* Same fill and surface as the experience rail's active tab. */
 .pixel-row:hover::before,
 .pixel-row:has(:focus-visible)::before {
-  background-color: #652682;
+  background-color: var(--accent-muted);
 }
 
 .pixel-tab-label {
@@ -527,13 +532,13 @@
   font-size: 0.6875rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(193, 128, 223, 0.65);
+  color: color-mix(in srgb, var(--accent) 65%, transparent);
 }
 
 .pixel-tab-group + .pixel-tab-group {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 2px solid rgba(101, 38, 130, 0.55);
+  border-top: 2px solid color-mix(in srgb, var(--accent-muted) 55%, transparent);
 }
 
 /* ==========================================================================
@@ -552,7 +557,7 @@
   left: 0;
   width: 6px;
   height: 6px;
-  background-color: #c180df;
+  background-color: var(--accent);
 }
 
 /* ==========================================================================
@@ -573,7 +578,11 @@
   left: var(--rail-x);
   width: var(--rail-width);
   /* Pixel dashes instead of a solid line, matching the 8-bit type treatment. */
-  background-image: repeating-linear-gradient(to bottom, #652682 0 6px, transparent 6px 12px);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--accent-muted) 0 6px,
+    transparent 6px 12px
+  );
 }
 
 .pixel-timeline-node {
@@ -583,13 +592,14 @@
   left: calc(var(--rail-x) + (var(--rail-width) / 2) - var(--rail-pad) - (var(--node-size) / 2));
   width: var(--node-size);
   height: var(--node-size);
-  background-color: #3e1d4d;
-  box-shadow: inset 0 0 0 3px #652682;
+  background-color: var(--surface);
+  box-shadow: inset 0 0 0 3px var(--accent-muted);
 }
 
 .pixel-timeline-node-current {
-  background-color: #c180df;
-  box-shadow: inset 0 0 0 3px #652682, 0 0 0 3px rgba(193, 128, 223, 0.25);
+  background-color: var(--accent);
+  box-shadow: inset 0 0 0 3px var(--accent-muted), 0 0 0 3px
+    color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
 @media (max-width: 640px) {

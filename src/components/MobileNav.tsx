@@ -50,7 +50,7 @@ export default function MobileNav({ links }: Props) {
           <button
             type="button"
             aria-label={open ? "Close navigation" : "Open navigation"}
-            className="flex h-11 w-6 items-center justify-center border-2 border-r-0 border-[#c180df] bg-[#2a1236] text-[#dcb8f0] outline-none transition-colors duration-200 hover:bg-[#652682] hover:text-white focus-visible:bg-[#652682] focus-visible:text-white"
+            className="flex h-11 w-6 items-center justify-center border-2 border-r-0 border-accent bg-surface-inset text-accent-soft outline-none transition-colors duration-200 hover:bg-accent-muted hover:text-white focus-visible:bg-accent-muted focus-visible:text-white"
           >
             {open ? (
               <ChevronRight size={14} aria-hidden="true" />
@@ -64,7 +64,7 @@ export default function MobileNav({ links }: Props) {
           side="left"
           align="end"
           sideOffset={0}
-          className="w-36 border-2 border-[#c180df] bg-[#2a1236] p-1 data-[state=closed]:slide-out-to-right-4 data-[state=open]:slide-in-from-right-4"
+          className="w-36 border-2 border-accent bg-surface-inset p-1 data-[state=closed]:slide-out-to-right-4 data-[state=open]:slide-in-from-right-4"
         >
           <ul className="flex flex-col">
             {links.map((link) => {
@@ -78,8 +78,8 @@ export default function MobileNav({ links }: Props) {
                     aria-current={isActive ? "page" : undefined}
                     className={`block px-2.5 py-2 font-mono text-xs outline-none transition-colors duration-200 ${
                       isActive
-                        ? "bg-[#652682] text-white"
-                        : "text-purple-100 hover:bg-[#3e1d4d] focus-visible:bg-[#3e1d4d]"
+                        ? "bg-accent-muted text-white"
+                        : "text-purple-100 hover:bg-surface focus-visible:bg-surface"
                     }`}
                   >
                     {link.label}

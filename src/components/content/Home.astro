@@ -92,7 +92,7 @@ const portraitTiles = PORTRAIT_TILES.map(([cls, x, y, w, h]) => ({
         </div>
 
         <div class="hero-copy flex flex-col lg:w-[58%] max-lg:w-full max-lg:items-center max-lg:text-center">
-            <h1 class="pixel-name text-[#CDA6ED]" aria-label="Syahrul">
+            <h1 class="pixel-name text-accent-heading" aria-label="Syahrul">
                 <span class="pixel-bracket title-char title-c1" aria-hidden="true">&lt;</span><span class="title-char title-c2">S</span><span class="title-char title-c3">Y</span><span class="title-char title-c4">A</span><span class="title-char title-c5">H</span><span class="title-char title-c6">R</span><span class="title-char title-c7">U</span><span class="title-char title-c8">L</span><span class="pixel-bracket title-char title-c9" aria-hidden="true">/&gt;</span>
             </h1>
             <p class="real-name text-white">Bhudi Ferdiansyah</p>
@@ -252,7 +252,7 @@ const portraitTiles = PORTRAIT_TILES.map(([cls, x, y, w, h]) => ({
         line-height: 0.72;
         letter-spacing: 0.055em;
         text-transform: uppercase;
-        color: #cda6ed;
+        color: var(--accent-heading);
         text-shadow: 7px 7px 0 rgb(45 53 83 / 0.55);
         white-space: nowrap;
         transform: none;
@@ -270,7 +270,7 @@ const portraitTiles = PORTRAIT_TILES.map(([cls, x, y, w, h]) => ({
         color: #fff;
         letter-spacing: 0;
         margin-inline: 0.02em;
-        text-shadow: 5px 5px 0 #cda6ed, 8px 8px 0 rgb(45 53 83 / 0.45);
+        text-shadow: 5px 5px 0 var(--accent-heading), 8px 8px 0 rgb(45 53 83 / 0.45);
     }
 
     .real-name {
@@ -308,9 +308,9 @@ const portraitTiles = PORTRAIT_TILES.map(([cls, x, y, w, h]) => ({
         place-items: center;
         width: 3rem;
         height: 3rem;
-        color: #dcb8f0;
-        background: #2a1236;
-        border: 2px solid #c180df;
+        color: var(--accent-soft);
+        background: var(--surface-inset);
+        border: 2px solid var(--accent);
         transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
     }
 
@@ -318,7 +318,7 @@ const portraitTiles = PORTRAIT_TILES.map(([cls, x, y, w, h]) => ({
     .hero-socials a:focus-visible {
         transform: translateY(-4px);
         color: #fff;
-        background: #652682;
+        background: var(--accent-muted);
         outline: none;
     }
 
@@ -353,7 +353,7 @@ const portraitTiles = PORTRAIT_TILES.map(([cls, x, y, w, h]) => ({
         }
 
         .pixel-bracket {
-            text-shadow: 3px 3px 0 #cda6ed, 5px 5px 0 rgb(45 53 83 / 0.45);
+            text-shadow: 3px 3px 0 var(--accent-heading), 5px 5px 0 rgb(45 53 83 / 0.45);
         }
 
         .real-name {

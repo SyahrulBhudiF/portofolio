@@ -62,7 +62,7 @@ const ogImage = new URL("/og-image.png", Astro.site);
       </script>
     )}
 </head>
-<body class={`overflow-x-hidden ${scene ? "bg-[#241735]" : "bg-linear-to-b from-[#0a060f] via-[#201529] to-[#361d41] bg-fixed"}`}>
+<body class={`overflow-x-hidden ${scene ? "bg-surface-base" : "bg-linear-to-b from-scene-start via-scene-middle to-scene-end bg-fixed"}`}>
 <a href="#home" class="skip-link">Skip to main content</a>
 {scene && <PixelParallaxScene />}
 <slot/>

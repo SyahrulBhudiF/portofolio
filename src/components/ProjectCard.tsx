@@ -89,7 +89,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, slug, stars })
         ) : (
           // Faint pixel grid so a coverless card still reads as a slot rather
           // than a hole; the frame keeps the row's rhythm either way.
-          <div className="flex aspect-[16/9] items-center justify-center gap-6 bg-[#2a1236] bg-[linear-gradient(rgba(193,128,223,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(193,128,223,0.1)_1px,transparent_1px)] bg-size-[14px_14px]">
+          <div className="flex aspect-[16/9] items-center justify-center gap-6 bg-surface-inset bg-[linear-gradient(color-mix(in_srgb,var(--accent)_10%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_srgb,var(--accent)_10%,transparent)_1px,transparent_1px)] bg-size-[14px_14px]">
             {imageExists === false &&
               project.stack
                 .slice(0, 3)
@@ -178,7 +178,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, href, slug, stars })
           </p>
         )}
 
-        <div className="flex flex-wrap items-center gap-1.5 border-t-2 border-[#652682] pt-3">
+        <div className="flex flex-wrap items-center gap-1.5 border-t-2 border-accent-muted pt-3">
           <a
             href={`/projects/${slug}`}
             className="pixel-tag relative z-[2] flex w-fit items-center gap-2 px-3.5 py-1.5 text-xs text-white outline-none transition-transform duration-200 ease-out hover:-translate-y-0.5 focus-visible:-translate-y-0.5"

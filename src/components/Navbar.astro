@@ -12,7 +12,7 @@ const links = [
 ];
 ---
 
-<nav class="fixed right-0 bottom-0 left-0 z-25 flex w-full items-center justify-center rounded-t-lg bg-[#241735] shadow-md max-sm:hidden">
+<nav class="fixed right-0 bottom-0 left-0 z-25 flex w-full items-center justify-center rounded-t-lg bg-surface-base shadow-md max-sm:hidden">
     <ul class="flex justify-evenly items-center pb-5 pt-3 text-white">
         {links.map((link) => <NavbarItem client:load href={link.href} label={link.label} />)}
     </ul>
