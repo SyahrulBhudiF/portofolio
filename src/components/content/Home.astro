@@ -300,26 +300,18 @@ const portraitTiles = PORTRAIT_TILES.map(([cls, x, y, w, h]) => ({
         margin-top: 1.45rem;
     }
 
-    /* Same treatment as the contact block: .pixel-frame supplies the notched
-       silhouette, the colours come from the site palette. */
     .hero-socials a {
-        --pixel-notch: 4px;
         display: grid;
         place-items: center;
         width: 3rem;
         height: 3rem;
         color: var(--accent-soft);
-        background: var(--surface-inset);
-        border: 2px solid var(--accent);
-        transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
+        transition: transform 180ms ease, color 180ms ease;
     }
 
     .hero-socials a:hover,
     .hero-socials a:focus-visible {
         transform: translateY(-4px);
-        color: #fff;
-        background: var(--accent-muted);
-        outline: none;
     }
 
     @media (max-width: 1023px) {

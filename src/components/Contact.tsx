@@ -53,16 +53,13 @@ export default function Contact() {
         </a>
         <div className="flex gap-5">
           {socialLinks.map(({ href, label, icon: Icon }) => (
-            // .pixel-frame is the bare notched silhouette, so these stay a dark
-            // face with a light outline instead of three more filled tags
-            // competing with the CV button.
             <a
               key={label}
               href={href}
               aria-label={label}
               target={href.startsWith("mailto:") ? undefined : "_blank"}
               rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-              className="pixel-frame flex size-11 items-center justify-center border-2 border-accent bg-surface-inset text-accent-soft [--pixel-notch:4px] outline-none transition-[transform,background-color,color] duration-300 ease-in-out hover:-translate-y-1 hover:bg-accent-muted hover:text-white focus-visible:-translate-y-1 focus-visible:bg-accent-muted focus-visible:text-white"
+              className="pixel-frame flex size-11 items-center justify-center text-accent-soft outline-none transition-[transform,color] duration-300 ease-in-out hover:-translate-y-1 focus-visible:-translate-y-1"
             >
               <Icon size={20} />
             </a>

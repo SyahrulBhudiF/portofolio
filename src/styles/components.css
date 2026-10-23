@@ -80,6 +80,248 @@
 }
 
 /* ==========================================================================
+   Pixel Frame - shared stepped border for navigation and icon buttons
+   ========================================================================== */
+
+.pixel-frame,
+.pixel-frame::before {
+  clip-path: polygon(
+    var(--frame-notch) 0,
+    calc(100% - var(--frame-notch)) 0,
+    calc(100% - var(--frame-notch)) var(--frame-step),
+    calc(100% - var(--frame-step)) var(--frame-step),
+    calc(100% - var(--frame-step)) var(--frame-notch),
+    100% var(--frame-notch),
+    100% calc(100% - var(--frame-notch)),
+    calc(100% - var(--frame-step)) calc(100% - var(--frame-notch)),
+    calc(100% - var(--frame-step)) calc(100% - var(--frame-step)),
+    calc(100% - var(--frame-notch)) calc(100% - var(--frame-step)),
+    calc(100% - var(--frame-notch)) 100%,
+    var(--frame-notch) 100%,
+    var(--frame-notch) calc(100% - var(--frame-step)),
+    var(--frame-step) calc(100% - var(--frame-step)),
+    var(--frame-step) calc(100% - var(--frame-notch)),
+    0 calc(100% - var(--frame-notch)),
+    0 var(--frame-notch),
+    var(--frame-step) var(--frame-notch),
+    var(--frame-step) var(--frame-step),
+    var(--frame-notch) var(--frame-step)
+  );
+}
+
+.pixel-frame {
+  --frame-corner: 8px;
+  --frame-step: 4px;
+  --frame-edge: 2px;
+  --frame-notch: var(--frame-corner);
+  position: relative;
+  isolation: isolate;
+  border: 0;
+  background: var(--accent);
+}
+
+.pixel-frame::before {
+  --frame-notch: calc(var(--frame-corner) - var(--frame-edge));
+  content: "";
+  position: absolute;
+  inset: var(--frame-edge);
+  z-index: -1;
+  pointer-events: none;
+  background: var(--frame-face, var(--surface-inset));
+  transition: background-color 160ms ease-out;
+}
+
+.pixel-frame:is(a, button):hover,
+.pixel-frame:is(a, button):focus-visible {
+  --frame-face: var(--accent-muted);
+  color: white;
+}
+
+.pixel-frame:is(a, button):focus-visible {
+  background: white;
+  outline: none;
+}
+
+/* ==========================================================================
+   Navigation - floating pixel dock
+   ========================================================================== */
+
+.site-menu {
+  position: fixed;
+  inset-inline: 0;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  margin-inline: auto;
+  filter: drop-shadow(0 4px 0 var(--accent-muted));
+}
+
+.site-menu-frame {
+  padding: var(--frame-edge);
+}
+
+.site-menu-list {
+  display: grid;
+  grid-template-columns: repeat(5, max-content);
+  gap: 2px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+}
+
+.site-menu-link,
+.site-menu-toggle {
+  position: relative;
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  color: var(--accent-soft);
+  font-family: "Space Mono", monospace;
+  font-size: 0.75rem;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  outline: none;
+  transition: color 160ms ease-out, background-color 160ms ease-out;
+}
+
+.site-menu-link {
+  clip-path: polygon(
+    4px 0,
+    calc(100% - 4px) 0,
+    calc(100% - 4px) 4px,
+    100% 4px,
+    100% calc(100% - 4px),
+    calc(100% - 4px) calc(100% - 4px),
+    calc(100% - 4px) 100%,
+    4px 100%,
+    4px calc(100% - 4px),
+    0 calc(100% - 4px),
+    0 4px,
+    4px 4px
+  );
+}
+
+.site-menu-link::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--accent), var(--accent)) left top / 7px 2px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) left top / 2px 7px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) right top / 7px 2px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) right top / 2px 7px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) left bottom / 7px 2px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) left bottom / 2px 7px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) right bottom / 7px 2px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) right bottom / 2px 7px no-repeat;
+  opacity: 0;
+  transition: opacity 160ms ease-out;
+}
+
+.site-menu-link::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  opacity: 0;
+}
+
+.site-menu-link:hover,
+.site-menu-link:focus-visible {
+  background: var(--surface);
+  color: white;
+}
+
+.site-menu-link:hover::before,
+.site-menu-link:focus-visible::before,
+.site-menu-link[aria-current]::after {
+  opacity: 1;
+}
+
+.site-menu-link[aria-current] {
+  background: var(--accent-muted);
+  color: white;
+}
+
+.site-menu-toggle {
+  display: none;
+  min-width: 88px;
+  cursor: pointer;
+}
+
+.site-menu-toggle[aria-expanded="true"] {
+  --frame-face: var(--accent-muted);
+  color: white;
+}
+
+.site-menu-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+@media (max-width: 767px) {
+  .site-menu {
+    inset-inline: auto;
+    right: calc(12px + env(safe-area-inset-right, 0px));
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    margin: 0;
+  }
+
+  .site-menu-toggle {
+    display: flex;
+  }
+
+  .site-menu-frame {
+    display: none;
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 8px);
+    width: 184px;
+  }
+
+  .site-menu[data-open="true"] .site-menu-frame {
+    display: block;
+  }
+
+  .site-menu-list {
+    grid-template-columns: 1fr;
+    max-height: calc(100svh - 92px);
+    overflow-y: auto;
+  }
+
+  .site-menu-list .site-menu-link {
+    justify-content: flex-start;
+    gap: 10px;
+    padding-inline: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-frame::before,
+  .site-menu-link,
+  .site-menu-toggle,
+  .site-menu-link::before {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
    Retro Tech Block - 3D Card Effect
    ========================================================================== */
 
@@ -203,8 +445,7 @@
 .pixel-panel,
 .pixel-tag,
 .pixel-tab,
-.pixel-row,
-.pixel-frame {
+.pixel-row {
   --pixel-notch-shape: polygon(
     var(--pixel-notch) 0,
     calc(100% - var(--pixel-notch)) 0,

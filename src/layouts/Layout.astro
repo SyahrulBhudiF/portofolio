@@ -2,7 +2,7 @@
 import "@/styles/globals.css";
 import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
-import Navbar from "../components/Navbar.astro";
+import Navbar from "../components/Navbar";
 import PixelParallaxScene from "../components/PixelParallaxScene.astro";
 
 interface Props {
@@ -66,7 +66,7 @@ const ogImage = new URL("/og-image.png", Astro.site);
 <a href="#home" class="skip-link">Skip to main content</a>
 {scene && <PixelParallaxScene />}
 <slot/>
-<Navbar/>
+<Navbar client:load projectPage={Astro.url.pathname.startsWith("/projects/")}/>
 <SpeedInsights/>
 <Analytics/>
 </body>
