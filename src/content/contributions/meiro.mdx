@@ -2,6 +2,29 @@
 title: meiro
 repository: https://github.com/elianiva/meiro
 entries:
+  - title: Add local settings search
+    date: 2026-10-22
+    description: Added an in-place search for Settings that filters setting cards, shows an empty state when nothing matches, and restores the full list when cleared or closed.
+    highlights:
+      - Kept global music search and the Stats page unchanged.
+      - Covered Appearance options, including palette styles, hue, artwork, theme modes, and color/colour searches.
+    pullRequest: https://github.com/elianiva/meiro/pull/201
+  - title: Stabilize palette option layout
+    date: 2026-10-22
+    description: Made all five palette options the same 138×120 size and prevented hover or selected outlines from shifting their contents.
+    highlights:
+      - Added UI regression checks for consistent tile bounds and stable hover states.
+    pullRequest: https://github.com/elianiva/meiro/pull/202
+  - title: Move carousel scrollbars below card text
+    date: 2026-10-22
+    description: Added clear spacing below shelf titles and subtitles so horizontal scrollbars sit beneath card text while retaining the gap before the next section.
+    pullRequest: https://github.com/elianiva/meiro/pull/199
+  - title: Theme carousel scrollbars
+    date: 2026-10-21
+    description: Styled carousel scrollbars to match the active Material theme with a slimmer primary-colour thumb, aligned them with shelf content, and added spacing before the next section.
+    highlights:
+      - Made carousel scrollbars visible on Home.
+    pullRequest: https://github.com/elianiva/meiro/pull/189
   - title: Show volume control in narrow player bars
     date: 2026-10-19
     description: Kept the mute control visible in narrow player bars and opened a vertical volume slider on hover, while retaining the horizontal slider in wider layouts.
