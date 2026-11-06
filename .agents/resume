@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+
+# Restore the env template if a stale snapshot or manual cleanup removed it.
+if [ ! -f .env ] && [ -f .env.example ]; then
+  cp -- .env.example .env
+fi

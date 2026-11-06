@@ -24,7 +24,12 @@ pnpm-debug.log*
 .idea/
 .vscode/
 
-.agents/
+.agents/*
+!.agents/setup
+!.agents/resume
 .claude/
 .junie/
 .kiro/
+
+# orb portal metadata
+.amp/portals/*

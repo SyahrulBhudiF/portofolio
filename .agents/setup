@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+started_at=$SECONDS
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+
+step() {
+  printf "\n==> %s (%ss)\n" "$1" "$((SECONDS - started_at))"
+}
+
+step "Checking Bun"
+if ! command -v bun >/dev/null 2>&1; then
+  echo "bun is required but was not found in PATH" >&2
+  exit 1
+fi
+bun --version
+
+step "Installing dependencies"
+bun install --frozen-lockfile
+
+step "Generating Astro types"
+bun run astro sync
+
+step "Preparing environment file"
+if [ ! -f .env ]; then
+  cp -- .env.example .env
+fi
+
+printf "\nSetup finished in %ss\n" "$((SECONDS - started_at))"
