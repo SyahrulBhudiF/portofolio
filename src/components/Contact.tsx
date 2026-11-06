@@ -24,22 +24,21 @@ export default function Contact() {
           fine print that drifted into the middle of the block. */}
       <div className="flex flex-col items-center gap-3">
         <span aria-hidden="true" className="h-0.5 w-16 bg-accent-muted" />
-        <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center font-mono text-xs text-purple-200/70">
-          <span>Built with Astro, React &amp; Tailwind</span>
-          {/* A 3px square rather than a middle dot: no glyph, so nothing to
-              mis-encode, and it matches the pixel motif. */}
-          <span aria-hidden="true" className="size-[3px] bg-purple-300/40 max-sm:hidden" />
-          <span>
-            Art by{" "}
-            <a
-              href="https://nacila.itch.io/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent-bright underline decoration-accent/50 underline-offset-4 outline-none transition-colors duration-200 hover:text-white hover:decoration-white focus-visible:text-white focus-visible:decoration-white"
-            >
-              Nacila
-            </a>
-          </span>
+        <p className="text-center font-mono text-xs text-purple-200/70">
+          Built with Astro, React &amp; Tailwind
+        </p>
+        {/* The art credit gets its own line and a marker-style highlight behind
+            the name, so the artist reads as a feature rather than fine print. */}
+        <p className="flex items-baseline gap-2 font-mono text-sm text-purple-200/85">
+          Art by
+          <a
+            href="https://nacila.itch.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[linear-gradient(transparent_45%,var(--accent-muted)_45%)] px-1 font-['VT323'] text-3xl leading-none tracking-[0.08em] text-accent-bright uppercase outline-none transition-colors duration-200 hover:text-white focus-visible:text-white"
+          >
+            Nacila
+          </a>
         </p>
       </div>
       <div className="flex flex-col items-center gap-6">

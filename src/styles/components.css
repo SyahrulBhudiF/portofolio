@@ -81,53 +81,24 @@
 }
 
 /* ==========================================================================
-   Pixel Frame - shared stepped border for navigation and icon buttons
+   Pixel Frame - navigation and icon buttons, same notched 1px border as
+   .pixel-tag (shape comes from the shared --pixel-notch-shape below)
    ========================================================================== */
 
-.pixel-frame,
-.pixel-frame::before {
-  clip-path: polygon(
-    var(--frame-notch) 0,
-    calc(100% - var(--frame-notch)) 0,
-    calc(100% - var(--frame-notch)) var(--frame-step),
-    calc(100% - var(--frame-step)) var(--frame-step),
-    calc(100% - var(--frame-step)) var(--frame-notch),
-    100% var(--frame-notch),
-    100% calc(100% - var(--frame-notch)),
-    calc(100% - var(--frame-step)) calc(100% - var(--frame-notch)),
-    calc(100% - var(--frame-step)) calc(100% - var(--frame-step)),
-    calc(100% - var(--frame-notch)) calc(100% - var(--frame-step)),
-    calc(100% - var(--frame-notch)) 100%,
-    var(--frame-notch) 100%,
-    var(--frame-notch) calc(100% - var(--frame-step)),
-    var(--frame-step) calc(100% - var(--frame-step)),
-    var(--frame-step) calc(100% - var(--frame-notch)),
-    0 calc(100% - var(--frame-notch)),
-    0 var(--frame-notch),
-    var(--frame-step) var(--frame-notch),
-    var(--frame-step) var(--frame-step),
-    var(--frame-notch) var(--frame-step)
-  );
-}
-
 .pixel-frame {
-  --frame-corner: 8px;
-  --frame-step: 4px;
-  --frame-edge: 2px;
-  --frame-notch: var(--frame-corner);
-  position: relative;
-  isolation: isolate;
+  --pixel-notch: 4px;
+  --frame-edge: 1px;
   border: 0;
   background: var(--accent);
 }
 
 .pixel-frame::before {
-  --frame-notch: calc(var(--frame-corner) - var(--frame-edge));
   content: "";
   position: absolute;
   inset: var(--frame-edge);
   z-index: -1;
   pointer-events: none;
+  clip-path: var(--pixel-notch-shape);
   background: var(--frame-face, var(--surface-inset));
   transition: background-color 160ms ease-out;
 }
@@ -446,7 +417,10 @@
 .pixel-panel,
 .pixel-tag,
 .pixel-tab,
-.pixel-row {
+.pixel-row,
+/* :where() keeps this at zero specificity, so the dock's own position rules
+   earlier in the file (e.g. the mobile `position: absolute`) still win. */
+:where(.pixel-frame) {
   --pixel-notch-shape: polygon(
     var(--pixel-notch) 0,
     calc(100% - var(--pixel-notch)) 0,
