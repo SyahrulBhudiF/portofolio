@@ -1,13 +1,13 @@
+import { AnimatePresence } from "framer-motion";
+import * as m from "framer-motion/m";
+import { ChevronDown, LucideCalendar1, LucideMapPinned } from "lucide-react";
+import { type FC, useState } from "react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible.tsx";
 import { compactRange } from "@/lib/duration";
-import { AnimatePresence } from "framer-motion";
-import * as m from "framer-motion/m";
-import { ChevronDown, LucideCalendar1, LucideMapPinned } from "lucide-react";
-import { type FC, useState } from "react";
 
 interface Props {
   title: string;

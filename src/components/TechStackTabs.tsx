@@ -1,7 +1,7 @@
-import TechStackItem from "@/components/ui/TechStackItem";
-import { AnimatePresence, LazyMotion, domAnimation, useReducedMotion } from "framer-motion";
+import { AnimatePresence, domAnimation, LazyMotion, useReducedMotion } from "framer-motion";
 import * as m from "framer-motion/m";
 import { type FC, type KeyboardEvent, useRef, useState } from "react";
+import TechStackItem from "@/components/ui/TechStackItem";
 
 export interface TechStackCategoryData {
   title: string;

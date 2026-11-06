@@ -1,11 +1,11 @@
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { createCardVariants } from "@/lib/animations";
-import type { ProjectMeta } from "@/model/projects";
 import { useInView } from "framer-motion";
 import * as m from "framer-motion/m";
 import { ExternalLink } from "lucide-react";
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { createCardVariants } from "@/lib/animations";
+import type { ProjectMeta } from "@/model/projects";
 import GitHubStars from "./GitHubStars";
 
 /** Every card shows at most this many badges; the rest collapse into a count. */

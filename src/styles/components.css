@@ -37,6 +37,7 @@
     var(--scene-end) 100%
   );
   image-rendering: pixelated;
+  /* biome-ignore lint/suspicious/noDuplicateProperties: crisp-edges is a fallback for browsers without pixelated */
   image-rendering: crisp-edges;
 }
 

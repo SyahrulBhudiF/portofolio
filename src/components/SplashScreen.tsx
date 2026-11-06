@@ -1,4 +1,4 @@
-import { AnimatePresence, LazyMotion, domAnimation, useReducedMotion } from "framer-motion";
+import { AnimatePresence, domAnimation, LazyMotion, useReducedMotion } from "framer-motion";
 import * as m from "framer-motion/m";
 import { useEffect, useState } from "react";
 

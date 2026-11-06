@@ -1,10 +1,10 @@
-import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible.tsx";
-import type { Project } from "@/model/projects";
-import { AnimatePresence, LazyMotion, domMax } from "framer-motion";
+import { AnimatePresence, domMax, LazyMotion } from "framer-motion";
 import * as m from "framer-motion/m";
 import { useState } from "react";
-import ProjectCard from "./ProjectCard";
+import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible.tsx";
+import type { Project } from "@/model/projects";
 import PixelDiamondIcon from "./icons/PixelDiamondIcon";
+import ProjectCard from "./ProjectCard";
 
 interface ProjectsContainerProps {
   initialProjects: Project[];

@@ -1,12 +1,12 @@
+import { AnimatePresence, domMax, LazyMotion, useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
+import { ChevronDown, ChevronsDown, ExternalLink } from "lucide-react";
+import { type FC, memo, useCallback, useState } from "react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible.tsx";
-import { AnimatePresence, LazyMotion, domMax, useReducedMotion } from "framer-motion";
-import * as m from "framer-motion/m";
-import { ChevronDown, ChevronsDown, ExternalLink } from "lucide-react";
-import { type FC, memo, useCallback, useState } from "react";
 import PixelCommitIcon from "./icons/PixelCommitIcon";
 import PixelIssueIcon from "./icons/PixelIssueIcon";
 import PixelPullRequestIcon from "./icons/PixelPullRequestIcon";
@@ -201,6 +201,7 @@ const RepoSection = memo(({ repo, repoIndex, reduceMotion }: RepoSectionProps) =
             <ExternalLink size={13} aria-hidden="true" className="shrink-0 text-purple-200" />
           </a>
           <span
+            role="img"
             className="flex shrink-0 items-center gap-1 font-mono text-xs text-purple-200/90"
             aria-label={`${repo.stars} GitHub stars`}
           >

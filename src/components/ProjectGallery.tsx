@@ -1,8 +1,8 @@
-import Magnetic from "@/components/ui/Magnetic";
-import { LazyMotion, domAnimation, useReducedMotion } from "framer-motion";
+import { domAnimation, LazyMotion, useReducedMotion } from "framer-motion";
 import * as m from "framer-motion/m";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { type CSSProperties, type FC, useCallback, useEffect, useRef, useState } from "react";
+import Magnetic from "@/components/ui/Magnetic";
 
 export interface GalleryImage {
   src: string;

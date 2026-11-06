@@ -1,5 +1,5 @@
-import TechStackItem from "@/components/ui/TechStackItem";
 import type { FC } from "react";
+import TechStackItem from "@/components/ui/TechStackItem";
 
 export interface TechStackCategoryData {
   title: string;

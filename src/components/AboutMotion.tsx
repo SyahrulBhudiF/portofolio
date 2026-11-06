@@ -1,9 +1,9 @@
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { createFadeUpVariants } from "@/lib/animations";
-import { LazyMotion, domAnimation } from "framer-motion";
+import { domAnimation, LazyMotion } from "framer-motion";
 import * as m from "framer-motion/m";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { createFadeUpVariants } from "@/lib/animations";
 
 interface Props {
   children: ReactNode;

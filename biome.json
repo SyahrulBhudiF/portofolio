@@ -1,15 +1,12 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
+  "$schema": "https://biomejs.dev/schemas/2.6.5/schema.json",
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "complexity": {
         "noExtraBooleanCast": "error",
-        "noMultipleSpacesInRegularExpressionLiterals": "error",
         "noUselessCatch": "error",
         "noUselessConstructor": "error",
         "noUselessFragments": "error",
@@ -18,9 +15,9 @@
         "noUselessRename": "error",
         "noUselessTernary": "error",
         "noVoid": "error",
-        "noWith": "error",
         "useLiteralKeys": "error",
-        "useOptionalChain": "error"
+        "useOptionalChain": "error",
+        "noAdjacentSpacesInRegex": "error"
       },
       "correctness": {
         "noConstAssign": "error",
@@ -31,15 +28,16 @@
         "noUnreachable": "error",
         "noUnusedVariables": "warn",
         "useExhaustiveDependencies": "warn",
-        "useHookAtTopLevel": "error"
+        "useHookAtTopLevel": "error",
+        "useValidTypeof": "error"
       },
       "security": {
-        "noDangerouslySetInnerHtml": "warn"
+        "noDangerouslySetInnerHtml": "warn",
+        "noBlankTarget": "error"
       },
       "style": {
         "noNegationElse": "warn",
         "noParameterAssign": "warn",
-        "noVar": "error",
         "useBlockStatements": "off",
         "useConst": "error",
         "useShorthandFunctionType": "error",
@@ -55,7 +53,6 @@
         "noCommentText": "error",
         "noCompareNegZero": "error",
         "noConfusingLabels": "error",
-        "noConsoleLog": "off",
         "noControlCharactersInRegex": "error",
         "noDebugger": "error",
         "noDoubleEquals": "error",
@@ -74,11 +71,12 @@
         "noShadowRestrictedNames": "error",
         "noUnsafeNegation": "error",
         "useGetterReturn": "error",
-        "useValidTypeof": "error"
+        "noWith": "error",
+        "noVar": "error",
+        "noConsole": { "level": "off", "options": { "allow": ["log"] } }
       },
       "a11y": {
         "noAriaUnsupportedElements": "warn",
-        "noBlankTarget": "error",
         "useAltText": "warn",
         "useAnchorContent": "warn",
         "useAriaPropsForRole": "warn",
@@ -101,6 +99,14 @@
     "lineEnding": "lf",
     "attributePosition": "auto"
   },
+  "css": {
+    "formatter": {
+      "enabled": false
+    },
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
   "javascript": {
     "formatter": {
       "quoteStyle": "double",
@@ -120,10 +126,11 @@
   },
   "overrides": [
     {
-      "include": ["*.astro"],
+      "includes": ["**/*.astro"],
       "linter": {
         "rules": {
           "correctness": {
+            "noUnusedImports": "off",
             "noUnusedVariables": "off"
           }
         }
@@ -131,15 +138,17 @@
     }
   ],
   "files": {
-    "ignore": [
-      "node_modules",
-      "dist",
-      ".astro",
-      ".vite",
-      "*.min.js",
-      "*.min.css",
-      "public",
-      "bun.lockb"
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/.astro",
+      "!**/.vite",
+      "!**/*.min.js",
+      "!**/*.min.css",
+      "!**/public",
+      "!**/bun.lockb",
+      "!**/*.md"
     ]
   },
   "vcs": {
