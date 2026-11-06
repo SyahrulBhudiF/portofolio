@@ -2,6 +2,61 @@
 title: meiro
 repository: https://github.com/elianiva/meiro
 entries:
+  - title: Leave Shift+scroll to the shelf
+    date: 2026-11-03
+    description: Stopped Shift+scroll at the top of Home from triggering pull-to-refresh so the shelf under the pointer receives the gesture and scrolls horizontally.
+    highlights:
+      - Kept pull-to-refresh limited to ordinary vertical scrolls from the top with no Shift or momentum.
+      - Added a regression test that verifies the Shift gesture neither pulls nor reloads the page.
+    pullRequest: https://github.com/elianiva/meiro/pull/284
+    issues:
+      - https://github.com/elianiva/meiro/issues/278
+  - title: Sync downloaded playlists on page load
+    date: 2026-11-03
+    description: Synced downloaded albums and playlists with their current page so songs added after the download are saved and queued, and the Download button reflects the new total.
+    highlights:
+      - Left already-downloaded songs alone and kept the collection in place instead of moving it to the top of Downloads.
+      - Covered later playlist continuations and added a regression test for a song added after the initial download.
+    pullRequest: https://github.com/elianiva/meiro/pull/281
+    issues:
+      - https://github.com/elianiva/meiro/issues/279
+  - title: Add dislike and optional auto-skip
+    date: 2026-10-31
+    description: Added dislike controls to the player and song menus, with like and dislike replacing each other, plus an opt-in setting to skip known disliked tracks when advancing the queue.
+    highlights:
+      - Kept explicitly selected tracks playable and bounded repeat-queue searches.
+      - Applied auto-skip only to tracks with an unambiguous disliked rating.
+    pullRequest: https://github.com/elianiva/meiro/pull/255
+    issues:
+      - https://github.com/elianiva/meiro/issues/252
+  - title: Hot reload settings.json
+    date: 2026-10-30
+    description: Watched settings.json at runtime so external writes from tools such as matugen and pywal reload theme colours and other live settings without restarting the app.
+    highlights:
+      - Used fsnotify on the parent directory with a 100 ms debounce, filtering to settings.json and falling back to a one-second poll.
+      - Ignored partially written files and left the app's own debounced writes alone so external checks cannot revert a user change.
+      - Covered atomic writes and unrelated file events with regression tests.
+    pullRequest: https://github.com/elianiva/meiro/pull/246
+    issues:
+      - https://github.com/elianiva/meiro/issues/244
+  - title: Open Search from a chosen suggestion
+    date: 2026-10-27
+    description: Fixed suggested queries so choosing one from Home or Explore opens the Search page and shows the results, matching what pressing Enter already did.
+    highlights:
+      - Closed the suggestions panel and kept the chosen query in the field and search history.
+    pullRequest: https://github.com/elianiva/meiro/pull/226
+  - title: Report songs already in a playlist
+    date: 2026-10-27
+    description: Read YouTube's add-anyway offer to distinguish a duplicate from a refused write, closing the picker and showing a toast that the song is already in the playlist.
+    highlights:
+      - Kept every other refused write reporting its original error.
+    pullRequest: https://github.com/elianiva/meiro/pull/225
+  - title: Keep search inputs stable on focus
+    date: 2026-10-23
+    description: Reserved the same 2 px border space in every shared search bar so focus recolours the border without shifting the input contents.
+    highlights:
+      - Added a click-focus regression test covering the global, Settings, and playlist search inputs.
+    pullRequest: https://github.com/elianiva/meiro/pull/205
   - title: Add local settings search
     date: 2026-10-22
     description: Added an in-place search for Settings that filters setting cards, shows an empty state when nothing matches, and restores the full list when cleared or closed.

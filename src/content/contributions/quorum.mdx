@@ -1,0 +1,73 @@
+---
+title: quorum
+repository: https://github.com/elianiva/quorum
+entries:
+  - title: Show inbound Load Balancer routing and stable Node labels
+    date: 2026-11-05
+    description: Gave every Node one stable label across the Board, Inspector, Routes, Dashboard, mail, and history, and added an always-visible Inbound summary that names the Load Balancer routing to an App Server.
+    highlights:
+      - Assigned Node ordinals once at placement and normalized old saves without changing replay hashes.
+      - Added quick actions that reveal and centre the Load Balancer from the Inbound row and Routes targets.
+      - Replaced raw Node sample ids with human labels.
+    pullRequest: https://github.com/elianiva/quorum/pull/32
+    issues:
+      - https://github.com/elianiva/quorum/issues/31
+  - title: Break component load down by operation
+    date: 2026-11-04
+    description: Added a Traffic & load panel to every component that accepts traffic, breaking inbound traffic down by operation and upstream source with a one-day session history for inspecting past spikes.
+    highlights:
+      - Exposed offered arrivals per operation on Nodes and carried traffic per operation on Links.
+      - Added selectable history samples with deltas against the previous sample and the sources that fed them.
+      - Required a measured constraint before recommending a change, and kept history in session state rather than the save.
+    pullRequest: https://github.com/elianiva/quorum/pull/18
+  - title: Connect rewrite proposals to Stack migrations
+    date: 2026-11-04
+    description: Sent rewrite mail proposals into the existing Stack tradeoff with the migration's Dev Hour cost, slowdown and rollout risks, and a Start migration action instead of dropping the player on Team.
+    highlights:
+      - Kept Review and Cancel side-effect free, and pointed locked languages at their Research node.
+      - Added Zig and Haskell as Series A runtime research with hiring, migration, icons, glossary, and French and Chinese copy.
+    pullRequest: https://github.com/elianiva/quorum/pull/16
+  - title: Stop board rendering beneath Research
+    date: 2026-11-04
+    description: Paused the board ticker and skipped card updates while Research covers the board, keeping the Simulation running and resuming the existing canvas when Research closes.
+    highlights:
+      - Respected suspension when Research opens before Pixi finishes loading.
+      - Verified zero WebGL draw calls while covered and the clock continuing to advance.
+    pullRequest: https://github.com/elianiva/quorum/pull/15
+  - title: Keep phone alerts clear of the bottom controls
+    date: 2026-11-04
+    description: Stacked phone mail previews and postmortems above the Inbox button and dock, and moved toasts and panels so alerts no longer cover each other or the controls.
+    highlights:
+      - Kept desktop corners and reserved the toast's height on short screens, with the shift respecting Reduce motion.
+      - Made the Settings body scroll when the panel shrinks so the Copy button stays reachable.
+    pullRequest: https://github.com/elianiva/quorum/pull/13
+    issues:
+      - https://github.com/elianiva/quorum/issues/12
+  - title: Collect Payments without opening the Inspector
+    date: 2026-11-03
+    description: Stopped Payments collection from selecting the node, so the Inspector stays closed for both the card tap and the footer Collect button.
+    highlights:
+      - Kept an empty Payments drawer opening the Inspector and left another open Node's Inspector untouched.
+    pullRequest: https://github.com/elianiva/quorum/pull/4
+  - title: Drag the Research tree to navigate
+    date: 2026-11-03
+    description: Let mouse users grab and pan the Research tree in both directions without changing its layout, while keeping clicks, trackpad, and wheel scrolling working.
+    highlights:
+      - Distinguished a drag from a click so selecting a research node still works.
+    pullRequest: https://github.com/elianiva/quorum/pull/6
+  - title: Unlock Challenges in a global sequence
+    date: 2026-11-03
+    description: Opened the first Challenge from the start and unlocked each subsequent Challenge after the previous one is completed, including across Era boundaries.
+    highlights:
+      - Kept completed Challenges replayable and the daily drill open, and redirected locked Challenge URLs to the list.
+      - Updated progression documentation and added regression coverage.
+    pullRequest: https://github.com/elianiva/quorum/pull/5
+  - title: Move engineers between teams by dragging
+    date: 2026-11-03
+    description: Added drag-and-drop transfers between teams with edge auto-scrolling and a drop target that follows teams moving under the pointer.
+    highlights:
+      - Kept the move button and keyboard drag controls, with the founder staying in Core.
+    pullRequest: https://github.com/elianiva/quorum/pull/8
+    issues:
+      - https://github.com/elianiva/quorum/issues/9
+---
