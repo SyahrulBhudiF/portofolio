@@ -8,6 +8,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible.tsx";
 import { compactRange } from "@/lib/duration";
+import InlineText from "./ui/InlineText";
 
 interface Props {
   title: string;
@@ -107,7 +108,7 @@ const ExperienceCard: FC<Props> = ({
                   <ul className="pixel-list mt-4 space-y-2">
                     {description.map((item) => (
                       <li key={item.slice(0, 40)} className="text-sm leading-relaxed text-white/90">
-                        {item}
+                        <InlineText text={item} />
                       </li>
                     ))}
                   </ul>

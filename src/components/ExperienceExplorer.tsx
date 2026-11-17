@@ -4,6 +4,7 @@ import { LucideCalendar1, LucideMapPinned } from "lucide-react";
 import { type FC, type KeyboardEvent, useMemo, useRef, useState } from "react";
 import { compactRange } from "@/lib/duration";
 import ExperienceCard from "./ExperienceCard";
+import InlineText from "./ui/InlineText";
 
 export interface ExperienceItem {
   title: string;
@@ -179,7 +180,7 @@ const ExperienceExplorer: FC<Props> = ({ groups }) => {
                 <ul className="pixel-list mt-5 space-y-2.5">
                   {item.description.map((line) => (
                     <li key={line.slice(0, 40)} className="text-sm text-white/90 leading-relaxed">
-                      {line}
+                      <InlineText text={line} />
                     </li>
                   ))}
                 </ul>
