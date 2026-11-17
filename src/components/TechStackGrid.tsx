@@ -20,17 +20,17 @@ const TechStackGrid: FC<Props> = ({ categories }) => {
   if (categories.length === 0) return null;
 
   return (
-    <ul className="flex w-full flex-col gap-5 md:gap-6">
+    <ul className="flex w-full flex-col gap-7 md:gap-9">
       {categories.map((category) => (
         <li
           key={category.title}
-          className="grid gap-x-6 gap-y-2 md:grid-cols-[minmax(0,8.5rem)_minmax(0,1fr)] md:items-baseline"
+          className="grid gap-x-8 gap-y-3 md:grid-cols-[minmax(0,8.5rem)_minmax(0,1fr)] md:items-baseline"
         >
           <p className="font-mono text-[0.6875rem] tracking-[0.18em] text-purple-300/60 uppercase md:pt-1.5">
             {category.title}
           </p>
 
-          <div className="flex flex-wrap gap-1.5 md:gap-2.5">
+          <div className="flex flex-wrap gap-2 md:gap-3">
             {category.items.map((tech) => (
               <TechStackItem
                 key={tech.name}
