@@ -1,0 +1,23 @@
+---
+company: "Sobat Bisnis Group"
+position: "Backend Developer"
+duration: "Oct 2026 - Present"
+location: "Jakarta Selatan, Indonesia"
+order: -2
+description:
+  - "Embedded with **PT ParagonCorp**'s engineering team, maintaining and extending its Express.js warehouse management system across its Indonesian warehouses. Fixed production bugs and refactored legacy modules so daily order, allocation, and dispatch flows kept running, including on-site hypercare during double-date campaigns such as 11.11."
+  - "Built warehouse-to-warehouse order transfer from scratch, running in a single transaction with row-level locking and full rollback if the destination can't be allocated. Eliminated race conditions that could create duplicate orders when transfers ran simultaneously, and protected picking, shipping, and auto-sort flows from touching already-transferred orders."
+  - "Fixed a dispatch bug in warehouses running multiple conveyor machines, where gates with the same number on different machines overwrote each other's configuration, gave dispatchers wrong credit, and left orders out of dispatch documents. Reworked the data model, API, and conveyor scan/validation flow, and safely backfilled existing gates."
+  - "Improved order allocation so orders go to the least busy picking zone instead of the lowest configuration ID, balancing picking workload across zones."
+technologies:
+  - "Node.js"
+  - "Express.js"
+  - "PostgreSQL"
+  - "Sequelize"
+  - "Redis"
+  - "Jest"
+  - "Docker"
+tags:
+  - "Hybrid"
+  - "Contract"
+---
