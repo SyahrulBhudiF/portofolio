@@ -25,7 +25,8 @@ export default function Contact() {
       <div className="flex flex-col items-center gap-3">
         <span aria-hidden="true" className="h-0.5 w-16 bg-accent-muted" />
         <p className="text-center font-mono text-xs text-purple-200/70">
-          Built with Astro, React &amp; Tailwind
+          built end to end with astro, react &amp; tailwind. hand-placed pixels, more coffee than
+          sense.
         </p>
         {/* The art credit gets its own line and a marker-style highlight behind
             the name, so the artist reads as a feature rather than fine print. */}
