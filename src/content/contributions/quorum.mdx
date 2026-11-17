@@ -2,6 +2,61 @@
 title: quorum
 repository: https://github.com/elianiva/quorum
 entries:
+  - title: Give every Pattern option its own line
+    date: 2026-11-16
+    description: Split twelve Pattern pages that packed several strategies into one "How it works" paragraph, so each load balancing policy, cache fix, and deployment strategy reads as its own line in English, Spanish, and Japanese.
+    highlights:
+      - Flagged paragraphs with three or more bolded items or a "There are N..." enumeration, leaving conceptual prose alone.
+      - Kept every link, heading, and island unchanged across the three locales.
+    pullRequest: https://github.com/elianiva/quorum/pull/58
+  - title: Fit the Read Replica hint and link every Pattern replica
+    date: 2026-11-16
+    description: Shrank the unlinked-replica hint from a full sentence to "Link a Database" so it fits the 216px card, and linked a Database into all seven Pattern Designs that drew a replica without one.
+    highlights:
+      - Added a test that refuses a Design whose Read Replica has no Database linked.
+      - Updated the wiki copy in English, Spanish, and Japanese.
+    pullRequest: https://github.com/elianiva/quorum/pull/59
+  - title: Pan the board with a trackpad flick
+    date: 2026-11-16
+    description: Let a two-finger trackpad swipe pan the Board sideways while vertical swipes still zoom, with a 0.28 s glide after the fingers leave and a 32 ms wait so macOS and Windows momentum is not doubled.
+    highlights:
+      - Stopped the glide on a press, a zoom, or a new gesture.
+      - Kept read-only wiki boards scrolling the page unless Ctrl or Cmd is held.
+    pullRequest: https://github.com/elianiva/quorum/pull/57
+  - title: Add Zig and Haskell frameworks and global developer tools
+    date: 2026-11-09
+    description: Added four frameworks (Jetzig, Tokamak, Servant, IHP) and four global developer tools with research nodes, tree marks, and French, Japanese, and Chinese copy, bringing the catalog to 31 frameworks and 203 research items.
+    highlights:
+      - Added a dominance test that keeps every language's framework options distinct.
+      - Fixed the feature-flag tests for delayed propagation and the Room socket test's module reset.
+    pullRequest: https://github.com/elianiva/quorum/pull/44
+  - title: Make the Runtime and Framework pickers searchable
+    date: 2026-11-07
+    description: Replaced the 28-option segmented grids with searchable dropdowns that filter by name or language, keep locked options disabled, and preview a pinned runtime as Proposed on the tradeoff card.
+    highlights:
+      - Reused the same control for the Realtime Hub's runtime picker.
+      - Added copy in English, French, Japanese, and Simplified Chinese.
+    pullRequest: https://github.com/elianiva/quorum/pull/37
+  - title: Add seven frameworks across four languages
+    date: 2026-11-07
+    description: Added Hono, Elysia, Koa, AdonisJS, CodeIgniter, Sanic, and Rocket to the Frameworks track, each with a research node, brand mark, and French, Japanese, and Chinese copy.
+    highlights:
+      - Drew Elysia's mark from its own logo in brand pink because Simple Icons has none.
+      - Gave Koa the foreground color because its brand is near black.
+    pullRequest: https://github.com/elianiva/quorum/pull/36
+  - title: Fix HUD runway clipping and reorder the Study queue
+    date: 2026-11-06
+    description: Widened the Company HUD so the net change and runway note stop clipping at the right edge, and added drag-and-drop reordering to the Study queue while keeping progress and the existing move and cancel controls.
+    highlights:
+      - Ellipsized extreme runways and kept the full value in the title.
+      - Reused the Team panel's drop ring and kept keyboard drag support.
+    pullRequest: https://github.com/elianiva/quorum/pull/35
+  - title: Stop the Inspector reusing another Node's controls
+    date: 2026-11-06
+    description: Keyed the Inspector by the Node it inspects so changing the selection rebuilds its controls with the new Node's handlers instead of keeping the previous Node's Region buttons.
+    highlights:
+      - Covered the Inspector key and moving two Nodes to different regions with regression tests.
+    pullRequest: https://github.com/elianiva/quorum/pull/34
   - title: Show inbound Load Balancer routing and stable Node labels
     date: 2026-11-05
     description: Gave every Node one stable label across the Board, Inspector, Routes, Dashboard, mail, and history, and added an always-visible Inbound summary that names the Load Balancer routing to an App Server.
